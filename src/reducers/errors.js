@@ -1,15 +1,15 @@
-// import { GET_ERRORS, CLEAR_ERRORS, UNAUTHENTICATE } from "../actions/types";
+import { GET_ERRORS, CLEAR_ERRORS, UNAUTHENTICATE } from "../actions/types";
 
 const initialState = {};
 export default (state = initialState, action) => {
-  //   const { errors, type } = action;
-  //   switch (type) {
-  //     case GET_ERRORS:
-  //       return { ...errors };
-  //     case UNAUTHENTICATE:
-  //     case CLEAR_ERRORS:
-  //       return {};
-  //     default:
-  //       return state;
-  //   }
+  const { errors, type } = action;
+  switch (type) {
+    case GET_ERRORS:
+      return { ...errors };
+    case UNAUTHENTICATE:
+    case CLEAR_ERRORS:
+      return {};
+    default:
+      return state;
+  }
 };
