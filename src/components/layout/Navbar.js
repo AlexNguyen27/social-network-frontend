@@ -20,11 +20,21 @@ const Navbar = () => {
     </ul>
   );
 
-  const loginButton = (
+  // const loginButton = (
+  //   <ul className="navbar-nav">
+  //     <li className="nav-item">
+  //       <Link className="nav-link" to="/staffLogin">
+  //         Login
+  //       </Link>
+  //     </li>
+  //   </ul>
+  // );
+
+  const signUpButton = (
     <ul className="navbar-nav">
       <li className="nav-item">
-        <Link className="nav-link" to="/staffLogin">
-          Login
+        <Link className="nav-link" to="/signup">
+          Sign up
         </Link>
       </li>
     </ul>
@@ -50,8 +60,13 @@ const Navbar = () => {
           {/* Login */}
           <Fragment>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/staffLogin">
-                Staff
+              <NavLink className="nav-link" to="/login/teacher">
+                Teacher
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/login/admin">
+                Admin
               </NavLink>
             </li>
             {/* <li className="nav-item">
@@ -61,7 +76,8 @@ const Navbar = () => {
             </li> */}
           </Fragment>
         </ul>
-        {loginButton}
+        {/* {loginButton} */}
+        {signUpButton}
       </div>
     </nav>
   );

@@ -8,14 +8,16 @@ import { Button, Container } from "@material-ui/core";
 import PageTitle from "../../custom/PageTitle";
 import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 
-const StaffLogin = ({ errors, history, loginUser, match }) => {
+const Signup = ({ errors, history, loginUser, match }) => {
   // FORM DATA STATE
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    fullname: "",
+    email: "",
   });
 
-  const { username, password } = formData;
+  const { username, password, email, fullname } = formData;
 
   // Click button Login
   const onSubmit = (e) => {
@@ -38,22 +40,40 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
       <Grid item xs={12} sm={5}>
         <form onSubmit={(e) => onSubmit(e)}>
           <PageTitle
-            title={
-              match.path === "/login/admin" ? "Admin Login" : "Teacher Login"
-            }
+            title="Create an account"
             center="true"
           />
           <TextFieldInputWithHeader
-            header="Staff ID"
+            header="Username"
             name="username"
             className="mt-0"
             fullWidth
             value={username}
             onChange={onChange}
             error={errors.username}
-            placeholder="Enter Staff ID"
+            placeholder="Enter Username"
+          />
+          <TextFieldInputWithHeader
+            header="Email"
+            name="email"
+            className="mt-0"
+            fullWidth
+            value={email}
+            onChange={onChange}
+            error={errors.email}
+            placeholder="Enter Email"
           />
 
+          <TextFieldInputWithHeader
+            header="Fullname"
+            name="fullname"
+            className="mt-0"
+            fullWidth
+            value={fullname}
+            onChange={onChange}
+            error={errors.fullname}
+            placeholder="Enter Fullname"
+          />
           <TextFieldInputWithHeader
             header="Password"
             name="password"
@@ -72,7 +92,7 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
               color="primary"
               type="submit"
             >
-              Login
+              Sign up
             </Button>
           </div>
         </form>
@@ -84,4 +104,4 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
 const mapStateToProps = (state) => ({
   errors: state.errors,
 });
-export default connect(mapStateToProps, { })(withRouter(StaffLogin));
+export default connect(mapStateToProps, {})(withRouter(Signup));

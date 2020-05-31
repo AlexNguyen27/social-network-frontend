@@ -6,14 +6,16 @@ import Container from '@material-ui/core/Container';
 // Route
 import NotFound from "../layout/NotFound";
 import StaffLogin from "../pages/auth/StaffLogin";
+import Signup from "../pages/auth/Signup";
 
 const RouterList = () => {
   return (
     <Container>
       <Switch>
         <Route exact path="/" component={StaffLogin} />
-        <Route exact path="/staffLogin" component={StaffLogin} />
-
+        <Route exact path="/login/teacher" component={StaffLogin} />
+        <Route exact path="/login/admin" component={StaffLogin} />
+        <Route exact path="/signup" component={Signup} />
       </Switch>
     </Container>
   );
