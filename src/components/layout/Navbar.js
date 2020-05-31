@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import Colors from "../../constants/Colors";
 
 const Navbar = () => {
   const isAuthenticated = true;
@@ -41,7 +42,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark" style={{ background: "#40356F"}}>
+    <nav className="navbar navbar-expand-md navbar-dark" style={{ background: Colors.purple}}>
       <Link className="navbar-brand" to="">
         Elearning English
       </Link>

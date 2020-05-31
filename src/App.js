@@ -25,7 +25,7 @@ function App() {
       <Router>
         <Fragment>
           <Navbar />
-          <Landing />
+          {/* <Landing /> */}
           <RouterList />
           <Footer />
         </Fragment>
