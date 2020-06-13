@@ -1,47 +1,52 @@
-import React, { Fragment, useState, useEffect } from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import Colors from "../../constants/Colors";
-import Badge from "@material-ui/core/Badge";
-import SearchIcon from "@material-ui/icons/Search";
-import FeaturedPlayListIcon from "@material-ui/icons/FeaturedPlayList";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import ClassIcon from "@material-ui/icons/Class";
-import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import ArtTrackIcon from "@material-ui/icons/ArtTrack";
-import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
-import HelpIcon from "@material-ui/icons/Help";
+import React, { Fragment, useState, useEffect } from 'react';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Swal from 'sweetalert2';
+// MATERIAL CORE
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import Menu from '@material-ui/core/Menu';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Badge from '@material-ui/core/Badge';
+
+// MATERIAL ICONS
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import MailIcon from '@material-ui/icons/Mail';
+import Colors from '../../constants/Colors';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import ArtTrackIcon from '@material-ui/icons/ArtTrack';
+import HelpIcon from '@material-ui/icons/Help';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+// ACTION
+import { logoutUser } from '../../store/actions/auth';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    display: 'flex',
   },
   appBar: {
     background: Colors.purple,
-    transition: theme.transitions.create(["margin", "width"], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -49,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -58,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: "none",
+    display: 'none',
   },
   drawer: {
     width: drawerWidth,
@@ -69,17 +74,17 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerHeader: {
     // background: Colors.red,
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -87,16 +92,16 @@ const useStyles = makeStyles((theme) => ({
   },
   contentShift: {
     // background: Colors.accent,
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
   },
   sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
     },
   },
   grow: {
@@ -104,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashBoard = (props) => {
+const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -119,10 +124,10 @@ const DashBoard = (props) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [drawerId, setDrawerId] = useState("allCourses");
+  const [drawerId, setDrawerId] = useState('allCourses');
 
-  const menuId = "primary-search-account-menu";
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const menuId = 'primary-search-account-menu';
+  const mobileMenuId = 'primary-search-account-menu-mobile';
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -133,7 +138,8 @@ const DashBoard = (props) => {
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-    props.history.push("/login/teacher");
+
+    history.push('/login');
   };
 
   const handleMenuClose = () => {
@@ -145,13 +151,29 @@ const DashBoard = (props) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const logout = () => {
+    Swal.fire({
+      title: `Are you sure to logout?`,
+      text: '',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Sure',
+    }).then((result) => {
+      if (result.value) {
+        logoutUser();
+        history.push('/login');
+      }
+    });
+  };
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={() => setAnchorEl(null)}
     >
@@ -163,30 +185,30 @@ const DashBoard = (props) => {
   const renderSetting = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMobileMenuOpen}
       onClose={() => setMobileMoreAnchorEl(null)}
     >
       <MenuItem disabled onClick={handleMobileMenuClose}>
         Setting
       </MenuItem>
-      <MenuItem onClick={handleMobileMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={() => logout()}>Logout</MenuItem>
     </Menu>
   );
 
   const renderContent = (drawerId) => {
-    if (drawerId === "allCourses") {
+    if (drawerId === 'allCourses') {
       return <p>All Courses</p>;
     }
 
-    if (drawerId === "yourCourses") {
+    if (drawerId === 'yourCourses') {
       return <p>Your Courses</p>;
     }
 
-    if (drawerId === "chart") {
+    if (drawerId === 'chart') {
       return <p>Chart</p>;
     }
     return (
@@ -223,6 +245,11 @@ const DashBoard = (props) => {
       </Fragment>
     );
   };
+
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -295,7 +322,7 @@ const DashBoard = (props) => {
         <div className={classes.drawerHeader}>
           <strong>ELEARNING ENGLISH</strong>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
+            {theme.direction === 'ltr' ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
@@ -307,7 +334,7 @@ const DashBoard = (props) => {
           <ListItem
             button
             key="allCourses"
-            onClick={() => setDrawerId("allCourses")}
+            onClick={() => setDrawerId('allCourses')}
           >
             <ListItemIcon>
               <AccountBalanceIcon />
@@ -317,14 +344,14 @@ const DashBoard = (props) => {
           <ListItem
             button
             key="yourCourses"
-            onClick={() => setDrawerId("yourCourses")}
+            onClick={() => setDrawerId('yourCourses')}
           >
             <ListItemIcon>
               <ArtTrackIcon />
             </ListItemIcon>
             <ListItemText primary="Your Courses" />
           </ListItem>
-          <ListItem button key="chart" onClick={() => setDrawerId("chart")}>
+          <ListItem button key="chart" onClick={() => setDrawerId('chart')}>
             <ListItemIcon>
               <BarChartIcon />
             </ListItemIcon>
@@ -333,26 +360,32 @@ const DashBoard = (props) => {
         </List>
         <Divider />
         <List>
-          <ListItem button key="Help" onClick={() => setDrawerId("")}>
+          <ListItem button key="Help" onClick={() => setDrawerId('')}>
             <ListItemIcon>
               <HelpIcon />
             </ListItemIcon>
             <ListItemText primary="Help" />
           </ListItem>
-          <ListItem button key="Notifications" onClick={() => setDrawerId("")}>
+          <ListItem button key="Notifications" onClick={() => setDrawerId('')}>
             <ListItemIcon>
               <NotificationsIcon />
             </ListItemIcon>
             <ListItemText
               primary="Notifications"
-              onClick={() => setDrawerId("")}
+              onClick={() => setDrawerId('')}
             />
           </ListItem>
-          <ListItem button key="Mails"  onClick={() => setDrawerId("")}>
+          <ListItem button key="Mails" onClick={() => setDrawerId('')}>
             <ListItemIcon>
               <MailIcon />
             </ListItemIcon>
             <ListItemText primary="Mail" />
+          </ListItem>
+          <ListItem button key="Logout" onClick={() => logout()}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Drawer>
@@ -367,5 +400,7 @@ const DashBoard = (props) => {
     </div>
   );
 };
-
-export default DashBoard;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+export default connect(mapStateToProps, { logoutUser })(DashBoard);

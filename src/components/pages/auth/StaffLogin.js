@@ -1,19 +1,27 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { Redirect, withRouter, matchPath } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import { Button, Container } from "@material-ui/core";
+import React, { Fragment, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, withRouter, matchPath } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { Button, Container } from '@material-ui/core';
 
 // COMPONENT
-import PageTitle from "../../custom/PageTitle";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
-import Landing from "../../layout/Landing";
+import PageTitle from '../../custom/PageTitle';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
+import Landing from '../../layout/Landing';
 
-const StaffLogin = ({ errors, history, loginUser, match }) => {
+// ACTION
+import { loginUser } from '../../../store/actions/auth';
+const StaffLogin = ({
+  errors,
+  history,
+  loginUser,
+  auth: { isAuthenticated },
+  match,
+}) => {
   // FORM DATA STATE
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   const { username, password } = formData;
@@ -22,8 +30,9 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    history.push("/dashboard");
-    // loginUser(formData);
+
+    // history.push('/dashboard');
+    loginUser(formData);
   };
 
   // Save on change input value
@@ -34,18 +43,17 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
     });
   };
 
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <Fragment>
       <Landing />
       <Grid container justify="center">
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={4}>
           <form onSubmit={(e) => onSubmit(e)}>
-            <PageTitle
-              title={
-                match.path === "/login/admin" ? "Admin Login" : "Teacher Login"
-              }
-              center="true"
-            />
+            <PageTitle title="Staff Login" center="true" />
             <TextFieldInputWithHeader
               header="Staff ID"
               name="username"
@@ -53,7 +61,7 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
               fullWidth
               value={username}
               onChange={onChange}
-              error={errors.username}
+              error={errors.message}
               placeholder="Enter Staff ID"
             />
 
@@ -63,7 +71,7 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
               placeholder="Enter Password"
               type="password"
               value={password}
-              error={errors.password}
+              error={errors.message}
               className="mt-0"
               fullWidth
               onChange={onChange}
@@ -87,5 +95,6 @@ const StaffLogin = ({ errors, history, loginUser, match }) => {
 
 const mapStateToProps = (state) => ({
   errors: state.errors,
+  auth: state.auth,
 });
-export default connect(mapStateToProps, {})(withRouter(StaffLogin));
+export default connect(mapStateToProps, { loginUser })(withRouter(StaffLogin));

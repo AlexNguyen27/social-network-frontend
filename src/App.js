@@ -14,24 +14,52 @@ import Landing from './components/layout/Landing';
 import RouterList from './components/layout/RouterList';
 import Footer from './components/layout/Footer';
 
+import './css/index.css';
+import { logoutUser } from './store/actions/auth';
+
 // Check if token is expired
 if (localStorage.token) {
+  const decoded = jwt_decode(localStorage.token.replace('Bearer ', ''));
+  const currentTime = Date.now() / 1000;
+  console.log(decoded.exp);
+  console.log(currentTime);
+  console.log(decoded.exp < currentTime);
+  if (decoded.exp < currentTime) {
+    store.dispatch(logoutUser());
+  } else {
+    // if (!decoded.studentId) {
+    //   store.dispatch({
+    //     type: AUTHENTICATE,
+    //     user: decoded,
+    //     token: localStorage.token
+    //   });
+    // } else {
+    //   store.dispatch({
+    //     type: AUTHENTICATE_STUDENT,
+    //     user: decoded,
+    //     token: localStorage.token
+    //   });
+    // }
+  }
 }
+
+// todo
+// create footer with copyright getyear
 
 function App() {
   return (
     <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Router>
-        <Fragment>
-          <Navbar />
-          {/* <Landing /> */}
-          <RouterList />
-          <Footer />
-        </Fragment>
-      </Router>
-    </PersistGate>
-  </Provider>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <Fragment>
+            <Navbar />
+            {/* <Landing /> */}
+            <RouterList />
+            <Footer />
+          </Fragment>
+        </Router>
+      </PersistGate>
+    </Provider>
   );
 }
 

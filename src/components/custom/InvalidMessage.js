@@ -1,8 +1,10 @@
-import React from "react";
+import React from 'react';
 
 const InvalidMessage = ({ error }) => {
-  return error && error !== "" ? (
-    <div className="invalidFeedback">{error}</div>
+  return error && error !== '' ? (
+    <div className="invalidFeedback" style={{ color: 'red' }}>
+      {error}
+    </div>
   ) : null;
 };
 

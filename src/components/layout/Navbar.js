@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import Colors from "../../constants/Colors";
+import React, { Fragment } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Colors from '../../constants/Colors';
 
 const Navbar = () => {
   const isAuthenticated = true;
@@ -42,7 +42,10 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark" style={{ background: Colors.purple}}>
+    <nav
+      className="navbar navbar-expand-md navbar-dark"
+      style={{ background: Colors.purple }}
+    >
       <Link className="navbar-brand" to="">
         Elearning English
       </Link>
@@ -61,15 +64,15 @@ const Navbar = () => {
           {/* Login */}
           <Fragment>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/login/teacher">
-                Teacher
+              <NavLink className="nav-link" to="/login">
+                Staff
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/login/admin">
+            {/* <li className="nav-item">
+              <NavLink className="nav-link" to="/login">
                 Admin
               </NavLink>
-            </li>
+            </li> */}
             {/* <li className="nav-item">
               <NavLink className="nav-link" to="/studentLogin">
                 Student
