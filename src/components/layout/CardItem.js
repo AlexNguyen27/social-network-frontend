@@ -8,6 +8,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import { truncateMultilineString } from '../../utils/formatString';
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -17,24 +19,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Card = () => {
+const CardItem = ({ course }) => {
   const classes = useStyles();
 
+  const { name, description, image } = course;
   return (
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="https://www.google.com/url?sa=i&url=https%3A%2F%2Falison.com%2Fcourse%2Ffundamentals-of-english-grammar&psig=AOvVaw0Qe8QLiXZRMeV3jhsvnXkW&ust=1592135556289000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCOC8qqbd_ukCFQAAAAAdAAAAABAD"
+          image="https://cdn01.alison-static.net/courses/183/alison_courseware_intro_183.jpg"
           title="Contemplative Reptile"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {truncateMultilineString(description, 140)}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -50,4 +52,4 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default CardItem;

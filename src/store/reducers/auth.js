@@ -37,7 +37,6 @@ export default function (state = initialState, action) {
       // Remove token from local storage
       localStorage.removeItem('token');
       return initialState;
-
     default:
       return state;
   }

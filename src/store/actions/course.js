@@ -1,26 +1,29 @@
-import { GET_COURSES, UNAUTHENTICATE } from './types';
+import axios from '../../utils/axios';
+import logoutDispatch from '../../utils/logoutDispatch';
 
-const initialState = {
-  courses: [],
-  course_detail: {},
-};
+import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE, GET_COURSES } from './types';
 
-export default function (state = initialState, action) {
-  const { type, courses, course_detail } = action;
-  switch (type) {
-    case GET_COURSES:
-      return {
-        ...state,
-        courses,
-      };
-    case GET_COURSE_DETAIL:
-      return {
-        ...state,
-        detail: { ...state.course_detail, ...course_detail },
-      };
-    case UNAUTHENTICATE:
-      return initialState;
-    default:
-      return state;
+import { logoutUser } from './auth';
+// GET majors data
+export const getCourses = (setLoading) => async (dispatch) => {
+  try {
+    const res = await axios.get('/api/courses', {
+      headers: { Authorization: localStorage.token },
+    });
+
+    console.log(res);
+
+    dispatch({
+      type: GET_COURSES,
+      courses: res.data.data,
+    });
+
+    setLoading(false);
+  } catch (error) {
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
   }
-}
+};

@@ -35,6 +35,9 @@ import ArtTrackIcon from '@material-ui/icons/ArtTrack';
 import HelpIcon from '@material-ui/icons/Help';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+// COMPONENT
+import Courses from './courses/Courses';
+
 // ACTION
 import { logoutUser } from '../../store/actions/auth';
 
@@ -73,13 +76,24 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    // background: Colors.red,
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+  },
+  header: {
+    background: Colors.light_purple,
+    fontWeight: 550,
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '16px',
+    minHeight: '54px',
+    padding: theme.spacing(0, 1),
+    // necessary for content to b
+    justifyContent: 'flex-start',
+    marginBottom: '20px',
   },
   content: {
     flexGrow: 1,
@@ -201,15 +215,30 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
 
   const renderContent = (drawerId) => {
     if (drawerId === 'allCourses') {
-      return <p>All Courses</p>;
+      return (
+        <>
+          <div className={classes.header}>Dashboard / Courses</div>
+          <Courses />
+        </>
+      );
     }
 
     if (drawerId === 'yourCourses') {
-      return <p>Your Courses</p>;
+      return (
+        <>
+          <div className={classes.header}>Dashboard / Your Courses</div>
+          <Courses />
+        </>
+      );
     }
 
-    if (drawerId === 'chart') {
-      return <p>Chart</p>;
+    if (drawerId === 'statistics') {
+      return (
+        <>
+          <div className={classes.header}>Dashboard / Statistics</div>
+          <Courses />
+        </>
+      );
     }
     return (
       <Fragment>
@@ -351,11 +380,15 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
             </ListItemIcon>
             <ListItemText primary="Your Courses" />
           </ListItem>
-          <ListItem button key="chart" onClick={() => setDrawerId('chart')}>
+          <ListItem
+            button
+            key="statistics"
+            onClick={() => setDrawerId('statistics')}
+          >
             <ListItemIcon>
               <BarChartIcon />
             </ListItemIcon>
-            <ListItemText primary="Chart" />
+            <ListItemText primary="Statistics" />
           </ListItem>
         </List>
         <Divider />
@@ -394,7 +427,6 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader}> HELLO</div>
         {renderContent(drawerId)}
       </main>
     </div>

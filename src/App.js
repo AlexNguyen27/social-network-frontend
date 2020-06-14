@@ -24,23 +24,23 @@ if (localStorage.token) {
   console.log(decoded.exp);
   console.log(currentTime);
   console.log(decoded.exp < currentTime);
-  if (decoded.exp < currentTime) {
-    store.dispatch(logoutUser());
-  } else {
-    // if (!decoded.studentId) {
-    //   store.dispatch({
-    //     type: AUTHENTICATE,
-    //     user: decoded,
-    //     token: localStorage.token
-    //   });
-    // } else {
-    //   store.dispatch({
-    //     type: AUTHENTICATE_STUDENT,
-    //     user: decoded,
-    //     token: localStorage.token
-    //   });
-    // }
-  }
+  // if (decoded.exp < currentTime) {
+  //   store.dispatch(logoutUser());
+  // } else {
+  // if (!decoded.studentId) {
+  //   store.dispatch({
+  //     type: AUTHENTICATE,
+  //     user: decoded,
+  //     token: localStorage.token
+  //   });
+  // } else {
+  //   store.dispatch({
+  //     type: AUTHENTICATE_STUDENT,
+  //     user: decoded,
+  //     token: localStorage.token
+  //   });
+  // }
+  // }
 }
 
 // todo

@@ -44,9 +44,9 @@ const Navbar = () => {
   return (
     <nav
       className="navbar navbar-expand-md navbar-dark"
-      style={{ background: Colors.purple }}
+      style={{ background: Colors.purple, minHeight: '64px' }}
     >
-      <Link className="navbar-brand" to="">
+      <Link className="navbar-brand" to="/login">
         Elearning English
       </Link>
 

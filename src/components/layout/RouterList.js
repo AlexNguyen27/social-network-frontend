@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import NotFound from '../layout/NotFound';
 import StaffLogin from '../pages/auth/StaffLogin';
 import Signup from '../pages/auth/Signup';
+import Courses from '../pages/courses/Courses';
 import DashBoard from '../pages/DashBoard';
 
 const RouterList = () => {
@@ -16,7 +17,8 @@ const RouterList = () => {
         <Route exact path="/" component={StaffLogin} />
         <Route exact path="/login" component={StaffLogin} />
         <Route exact path="/signup" component={Signup} />
-        <Route exact path="/dashboard" component={DashBoard} />
+        <Route path="/dashboard" component={DashBoard} />
+        <Route path="/dashboard/allCourses" component={Courses} />
       </Switch>
     </Container>
   );
