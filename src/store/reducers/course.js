@@ -1,29 +1,36 @@
 import {
   GET_COURSES,
   GET_COURSE_DETAIL,
+  GET_USER_COURSES,
   UNAUTHENTICATE,
-} from '../actions/types';
+} from "../actions/types";
 
 const initialState = {
-  courses: [],
+  all_courses: {},
+  user_courses: {},
   course_detail: {},
 };
 
 export default function (state = initialState, action) {
-  const { type, courses, course_detail } = action;
+  const { type, all_courses, user_courses, course_detail } = action;
   switch (type) {
     case GET_COURSES:
       return {
         ...state,
-        courses,
+        all_courses,
+      };
+    case GET_USER_COURSES:
+      return {
+        ...state,
+        user_courses,
       };
     case GET_COURSE_DETAIL:
       return {
         ...state,
-        detail: { ...state.course_detail, ...course_detail },
+        course_detail: { ...state.course_detail, ...course_detail },
       };
     case UNAUTHENTICATE:
-      return state;
+      return initialState;
     default:
       return state;
   }

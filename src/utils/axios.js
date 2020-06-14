@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export default axios.create({
-  //   baseURL: "https://mycollege-dev.herokuapp.com/"
-  baseURL: 'http://localhost:8080/',
+    baseURL: "http://c047ad08cf57.ngrok.io/"
+  // baseURL: 'http://localhost:8080/',
+
 });

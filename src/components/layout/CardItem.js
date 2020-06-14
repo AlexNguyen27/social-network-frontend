@@ -31,7 +31,7 @@ const CardItem = ({ course }) => {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="https://cdn01.alison-static.net/courses/183/alison_courseware_intro_183.jpg"
+          image={image}
           title="Contemplative Reptile"
         />
         <CardContent>

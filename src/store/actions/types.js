@@ -6,3 +6,5 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 export const GET_COURSES = 'GET_COURSES';
 export const GET_COURSE_DETAIL = 'GET_COURSE_DETAIL';
+
+export const GET_USER_COURSES = 'GET_USER_COURSES';

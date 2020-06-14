@@ -14,7 +14,7 @@ const ProtectedRoute = ({
   const page = (props) => {
     if (isAuthenticated) {
       if (
-        isAdmin ||
+        isAdmin || isTeacher ||
         (authorized && !isTeacher) ||
         (student && isTeacher) ||
         (authorized === undefined && !isTeacher)

@@ -1,58 +1,60 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import React, { Fragment, useState, useEffect } from "react";
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import Swal from "sweetalert2";
 // MATERIAL CORE
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ListItem from '@material-ui/core/ListItem';
-import Menu from '@material-ui/core/Menu';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Badge from '@material-ui/core/Badge';
+import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import ListItem from "@material-ui/core/ListItem";
+import Menu from "@material-ui/core/Menu";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuItem from "@material-ui/core/MenuItem";
+import Badge from "@material-ui/core/Badge";
 
 // MATERIAL ICONS
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import MailIcon from '@material-ui/icons/Mail';
-import Colors from '../../constants/Colors';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import ArtTrackIcon from '@material-ui/icons/ArtTrack';
-import HelpIcon from '@material-ui/icons/Help';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import MailIcon from "@material-ui/icons/Mail";
+import Colors from "../../constants/Colors";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import ArtTrackIcon from "@material-ui/icons/ArtTrack";
+import HelpIcon from "@material-ui/icons/Help";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
-import { Breadcrumbs, BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
-import { Link, NavLink } from 'react-router-dom';
+import { Breadcrumbs, BreadcrumbsItem } from "react-breadcrumbs-dynamic";
+import { Link, NavLink } from "react-router-dom";
 
 // COMPONENT
-import Courses from './courses/Courses';
+import Courses from "./courses/Courses";
+import UserCourses from "./courses/UserCourses";
+import ViewCourse from "./courses/ViewCourse";
 
 // ACTION
-import { logoutUser } from '../../store/actions/auth';
+import { logoutUser } from "../../store/actions/auth";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
     background: Colors.purple,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -69,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -79,29 +81,29 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   header: {
     background: Colors.light_purple,
     fontWeight: 550,
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '16px',
-    minHeight: '54px',
+    display: "flex",
+    alignItems: "center",
+    fontSize: "16px",
+    minHeight: "54px",
     padding: theme.spacing(0, 1),
     // necessary for content to b
-    justifyContent: 'flex-start',
-    marginBottom: '20px',
+    justifyContent: "flex-start",
+    marginBottom: "20px",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -109,16 +111,16 @@ const useStyles = makeStyles((theme) => ({
   },
   contentShift: {
     // background: Colors.accent,
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
   },
   sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex",
     },
   },
   grow: {
@@ -146,10 +148,10 @@ const DashBoard = ({
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [drawerId, setDrawerId] = useState('allCourses');
+  const [drawerId, setDrawerId] = useState("allCourses");
 
-  const menuId = 'primary-search-account-menu';
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const menuId = "primary-search-account-menu";
+  const mobileMenuId = "primary-search-account-menu-mobile";
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -161,7 +163,7 @@ const DashBoard = ({
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
 
-    history.push('/login');
+    history.push("/login");
   };
 
   const handleMenuClose = () => {
@@ -176,26 +178,30 @@ const DashBoard = ({
   const logout = () => {
     Swal.fire({
       title: `Are you sure to logout?`,
-      text: '',
-      type: 'warning',
+      text: "",
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Sure',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Sure",
     }).then((result) => {
       if (result.value) {
         logoutUser();
-        history.push('/login');
+        history.push("/login");
       }
     });
   };
+
+  // useEffect(() => {
+  //   logoutUser();
+  // }, []);
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={() => setAnchorEl(null)}
     >
@@ -207,10 +213,10 @@ const DashBoard = ({
   const renderSetting = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={() => setMobileMoreAnchorEl(null)}
     >
@@ -223,30 +229,28 @@ const DashBoard = ({
 
   const renderContent = (drawerId) => {
     if (match.params.courseId) {
-      return <h1>hello</h1>;
+      return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (drawerId === 'allCourses') {
+    if (drawerId === "allCourses") {
       return (
         <>
           <div className={classes.header}>Dashboard / Courses</div>
-          <h1>all course</h1>
-          <Courses />
+          <Courses match={match}/>
         </>
       );
     }
 
-    if (drawerId === 'yourCourses') {
+    if (drawerId === "yourCourses") {
       return (
         <>
           <div className={classes.header}>Dashboard / Your Courses</div>
-          <h1>Your course</h1>
-          <Courses />
+          <UserCourses />
         </>
       );
     }
 
-    if (drawerId === 'statistics') {
+    if (drawerId === "statistics") {
       return (
         <>
           <div className={classes.header}>Dashboard / Statistics</div>
@@ -295,41 +299,59 @@ const DashBoard = ({
 
   const navList1 = [
     {
-      key: 'allCourses',
+      key: "allCourses",
       icon: <AccountBalanceIcon />,
-      to: '/all-courses',
-      title: 'All Course',
+      to: "/all-courses",
+      title: "All Courses",
     },
     {
-      key: 'yourCourses',
+      key: "yourCourses",
       icon: <ArtTrackIcon />,
-      to: '/your-courses',
-      title: 'Your Courses',
+      to: "/your-courses",
+      title: "Your Courses",
     },
     {
-      key: 'statistics',
+      key: "statistics",
       icon: <BarChartIcon />,
-      to: '/statistics',
-      title: 'Statistics',
+      to: "/statistics",
+      title: "Statistics",
     },
   ];
 
   const navList2 = [
-    { key: 'help', icon: <HelpIcon />, to: '/help', title: 'Help' },
+    { key: "help", icon: <HelpIcon />, to: "/help", title: "Help" },
     {
-      key: 'Notifications',
+      key: "Notifications",
       icon: <NotificationsIcon />,
-      to: '/notifications',
-      title: 'Notifications',
+      to: "/notifications",
+      title: "Notifications",
     },
-    { key: 'Mails', icon: <MailIcon />, to: '/mails', title: 'Mails' },
+    { key: "Mails", icon: <MailIcon />, to: "/mails", title: "Mails" },
     {
-      key: 'Logout',
+      key: "Logout",
       icon: <ExitToAppIcon />,
-      title: 'Logout',
+      title: "Logout",
       onClick: () => logout(),
     },
   ];
+
+  const formatUrl = (url) => {
+    const test = url
+      .split("/")
+      .pop()
+      .replace(/[^a-zA-Z0-9]/g, " ");
+    const res = test
+      .toLowerCase()
+      .split(" ")
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
+    //   console.log(res, res === "Courseid")
+    // if (res === "Courseid") {
+    //   return "Course";
+    // }
+    return res.replace('id', '');
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -350,7 +372,7 @@ const DashBoard = ({
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Elearning English
+            {formatUrl(match.path)}
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
@@ -402,7 +424,7 @@ const DashBoard = ({
         <div className={classes.drawerHeader}>
           <strong>ELEARNING ENGLISH</strong>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? (
+            {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />

@@ -5,23 +5,22 @@ import Grid from "@material-ui/core/Grid";
 
 import CardItem from "../../layout/CardItem";
 import PageLoader from "../../custom/PageLoader";
-import { getCourses } from "../../../store/actions/course";
+import { getUserCourses } from "../../../store/actions/course";
 import { clearErrors } from "../../../store/actions/common";
 
-const Courses = ({
+const UserCourses = ({
   match,
-  all_courses,
+  user_courses,
   clearErrors,
-  getCourses,
+  getUserCourses,
   auth: { user },
 }) => {
   const [loading, setLoading] = useState(true);
 
   // INITIALIZE MODULE LIST
   useEffect(() => {
-    getCourses(setLoading);
+    getUserCourses(setLoading, user.id);
     return () => {
-      console.log(all_courses);
       clearErrors();
     };
   }, []);
@@ -31,10 +30,10 @@ const Courses = ({
     <PageLoader loading={loading}>
       <h1>{console.log(match)}</h1>
       <Grid container spacing={3}>
-        {all_courses &&
-          Object.keys(all_courses).map((key) => (
+        {user_courses &&
+          Object.keys(user_courses).map((key) => (
             <Grid item xs={4} md={3} spacing={3}>
-              <CardItem course={all_courses[key].course} />
+              <CardItem course={user_courses[key]} />
             </Grid>
           ))}
       </Grid>
@@ -45,6 +44,6 @@ const Courses = ({
 const mapStateToProps = (state) => ({
   errors: state.errors,
   auth: state.auth,
-  all_courses: state.course.all_courses,
+  user_courses: state.course.user_courses,
 });
-export default connect(mapStateToProps, { clearErrors, getCourses })(Courses);
+export default connect(mapStateToProps, { clearErrors, getUserCourses })(UserCourses);

@@ -5,6 +5,6 @@ import course from './course';
 
 export default combineReducers({
   auth,
-  errors,
   course,
+  errors,
 });

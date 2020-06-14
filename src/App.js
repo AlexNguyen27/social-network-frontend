@@ -25,6 +25,10 @@ if (localStorage.token) {
   console.log(decoded.exp);
   console.log(currentTime);
   console.log(decoded.exp < currentTime);
+  // store.dispatch(logoutUser());
+
+
+
   // if (decoded.exp < currentTime) {
   //   store.dispatch(logoutUser());
   // } else {
@@ -44,7 +48,7 @@ if (localStorage.token) {
   // }
 }
 
-// todo
+// TODO
 // create footer with copyright getyear
 
 function App() {
@@ -55,7 +59,7 @@ function App() {
           <Fragment>
             <Navbar />
             <RouterList />
-            <Footer />
+            {/* <Footer /> */}
           </Fragment>
         </Router>
       </PersistGate>

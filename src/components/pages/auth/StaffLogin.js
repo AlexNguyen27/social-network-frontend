@@ -44,7 +44,7 @@ const StaffLogin = ({
   };
 
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/all-courses" />;
   }
 
   return (

@@ -1,4 +1,5 @@
 export function truncateMultilineString(text, maxLength) {
+  if (!text) return '';
   if (text.length <= maxLength) return text;
   const descriptionArr = text.split(' ');
   const wordArr = [];
