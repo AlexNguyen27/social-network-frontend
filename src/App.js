@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+// import { connect } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import jwt_decode from 'jwt-decode';
@@ -53,7 +54,6 @@ function App() {
         <Router>
           <Fragment>
             <Navbar />
-            {/* <Landing /> */}
             <RouterList />
             <Footer />
           </Fragment>

@@ -35,6 +35,9 @@ import ArtTrackIcon from '@material-ui/icons/ArtTrack';
 import HelpIcon from '@material-ui/icons/Help';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import { Breadcrumbs, BreadcrumbsItem } from 'react-breadcrumbs-dynamic';
+import { Link, NavLink } from 'react-router-dom';
+
 // COMPONENT
 import Courses from './courses/Courses';
 
@@ -123,7 +126,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
+const DashBoard = ({
+  history,
+  logoutUser,
+  auth: { isAuthenticated },
+  match,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -214,10 +222,15 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
   );
 
   const renderContent = (drawerId) => {
+    if (match.params.courseId) {
+      return <h1>hello</h1>;
+    }
+
     if (drawerId === 'allCourses') {
       return (
         <>
           <div className={classes.header}>Dashboard / Courses</div>
+          <h1>all course</h1>
           <Courses />
         </>
       );
@@ -227,6 +240,7 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
       return (
         <>
           <div className={classes.header}>Dashboard / Your Courses</div>
+          <h1>Your course</h1>
           <Courses />
         </>
       );
@@ -279,6 +293,43 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
     return <Redirect to="/login" />;
   }
 
+  const navList1 = [
+    {
+      key: 'allCourses',
+      icon: <AccountBalanceIcon />,
+      to: '/all-courses',
+      title: 'All Course',
+    },
+    {
+      key: 'yourCourses',
+      icon: <ArtTrackIcon />,
+      to: '/your-courses',
+      title: 'Your Courses',
+    },
+    {
+      key: 'statistics',
+      icon: <BarChartIcon />,
+      to: '/statistics',
+      title: 'Statistics',
+    },
+  ];
+
+  const navList2 = [
+    { key: 'help', icon: <HelpIcon />, to: '/help', title: 'Help' },
+    {
+      key: 'Notifications',
+      icon: <NotificationsIcon />,
+      to: '/notifications',
+      title: 'Notifications',
+    },
+    { key: 'Mails', icon: <MailIcon />, to: '/mails', title: 'Mails' },
+    {
+      key: 'Logout',
+      icon: <ExitToAppIcon />,
+      title: 'Logout',
+      onClick: () => logout(),
+    },
+  ];
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -360,66 +411,33 @@ const DashBoard = ({ history, logoutUser, auth: { isAuthenticated } }) => {
         </div>
         <Divider />
         <List>
-          <ListItem
-            button
-            key="allCourses"
-            onClick={() => setDrawerId('allCourses')}
-          >
-            <ListItemIcon>
-              <AccountBalanceIcon />
-            </ListItemIcon>
-            <ListItemText primary="All Course" />
-          </ListItem>
-          <ListItem
-            button
-            key="yourCourses"
-            onClick={() => setDrawerId('yourCourses')}
-          >
-            <ListItemIcon>
-              <ArtTrackIcon />
-            </ListItemIcon>
-            <ListItemText primary="Your Courses" />
-          </ListItem>
-          <ListItem
-            button
-            key="statistics"
-            onClick={() => setDrawerId('statistics')}
-          >
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Statistics" />
-          </ListItem>
+          {navList1.map((item) => (
+            <ListItem
+              button
+              key={item.key}
+              component={Link}
+              to={item.to}
+              onClick={() => setDrawerId(item.key)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.title} />
+            </ListItem>
+          ))}
         </List>
         <Divider />
         <List>
-          <ListItem button key="Help" onClick={() => setDrawerId('')}>
-            <ListItemIcon>
-              <HelpIcon />
-            </ListItemIcon>
-            <ListItemText primary="Help" />
-          </ListItem>
-          <ListItem button key="Notifications" onClick={() => setDrawerId('')}>
-            <ListItemIcon>
-              <NotificationsIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Notifications"
-              onClick={() => setDrawerId('')}
-            />
-          </ListItem>
-          <ListItem button key="Mails" onClick={() => setDrawerId('')}>
-            <ListItemIcon>
-              <MailIcon />
-            </ListItemIcon>
-            <ListItemText primary="Mail" />
-          </ListItem>
-          <ListItem button key="Logout" onClick={() => logout()}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          {navList2.map((item) => (
+            <ListItem
+              button
+              key={item.key}
+              component={Link}
+              to={item.to}
+              onClick={item.onClick || (() => setDrawerId(item.key))}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.title} />
+            </ListItem>
+          ))}
         </List>
       </Drawer>
       <main

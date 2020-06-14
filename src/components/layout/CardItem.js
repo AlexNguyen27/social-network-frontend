@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -20,9 +22,10 @@ const useStyles = makeStyles({
 });
 
 const CardItem = ({ course }) => {
+  const history = useHistory();
   const classes = useStyles();
 
-  const { name, description, image } = course;
+  const { id, name, description, image } = course;
   return (
     <Card className={classes.root}>
       <CardActionArea>
@@ -33,7 +36,7 @@ const CardItem = ({ course }) => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {name}
+            {truncateMultilineString(name, 16)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {truncateMultilineString(description, 140)}
@@ -41,12 +44,16 @@ const CardItem = ({ course }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => history.push(`${window.location.pathname}/${id}`)}
+        >
+          Detail
         </Button>
-        <Button size="small" color="primary">
+        {/* <Button size="small" color="primary">
           Learn More
-        </Button>
+        </Button> */}
       </CardActions>
     </Card>
   );

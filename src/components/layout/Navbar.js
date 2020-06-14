@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
 
+import Landing from './Landing';
+
 const Navbar = () => {
   const isAuthenticated = true;
   const logoutButton = (
@@ -42,48 +44,51 @@ const Navbar = () => {
   );
 
   return (
-    <nav
-      className="navbar navbar-expand-md navbar-dark"
-      style={{ background: Colors.purple, minHeight: '64px' }}
-    >
-      <Link className="navbar-brand" to="/login">
-        Elearning English
-      </Link>
-
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#collapsibleNavbar"
+    <>
+      <nav
+        className="navbar navbar-expand-md navbar-dark"
+        style={{ background: Colors.purple, minHeight: '64px' }}
       >
-        <span className="navbar-toggler-icon" />
-      </button>
+        <Link className="navbar-brand" to="/login">
+          Elearning English
+        </Link>
 
-      <div className="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul className="navbar-nav mr-auto">
-          {/* Login */}
-          <Fragment>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/login">
-                Staff
-              </NavLink>
-            </li>
-            {/* <li className="nav-item">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapsibleNavbar"
+        >
+          <span className="navbar-toggler-icon" />
+        </button>
+
+        <div className="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul className="navbar-nav mr-auto">
+            {/* Login */}
+            <Fragment>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/login">
+                  Staff
+                </NavLink>
+              </li>
+              {/* <li className="nav-item">
               <NavLink className="nav-link" to="/login">
                 Admin
               </NavLink>
             </li> */}
-            {/* <li className="nav-item">
+              {/* <li className="nav-item">
               <NavLink className="nav-link" to="/studentLogin">
                 Student
               </NavLink>
             </li> */}
-          </Fragment>
-        </ul>
-        {/* {loginButton} */}
-        {signUpButton}
-      </div>
-    </nav>
+            </Fragment>
+          </ul>
+          {/* {loginButton} */}
+          {signUpButton}
+        </div>
+      </nav>
+      {!isAuthenticated && <Landing />}
+    </>
   );
 };
 
