@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button } from '@material-ui/core';
 
-import CardItem from "../../layout/CardItem";
-import PageLoader from "../../custom/PageLoader";
+import CardItem from '../../layout/CardItem';
+import PageLoader from '../../custom/PageLoader';
 import {
   getUserCourses,
   deleteCourse,
   getCourseById,
-} from "../../../store/actions/course";
-import { clearErrors } from "../../../store/actions/common";
-import Swal from "sweetalert2";
-import AddCourseModal from "./AddCourseModal";
-import EditCourseModal from "./EditCourseModal";
+} from '../../../store/actions/course';
+import { clearErrors } from '../../../store/actions/common';
+import Swal from 'sweetalert2';
+import AddCourseModal from './AddCourseModal';
+import EditCourseModal from './EditCourseModal';
 
 const UserCourses = ({
   match,
@@ -31,7 +31,7 @@ const UserCourses = ({
   // MODAL STATE
   const [modalAdd, setModalAdd] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
-  const [courseId, setCourseId] = useState();
+  const [courseData, setCourseData] = useState();
 
   // INITIALIZE MODULE LIST
   useEffect(() => {
@@ -46,21 +46,22 @@ const UserCourses = ({
     Swal.fire({
       title: `Are you sure to delete ?`,
       text: "You won't be able to revert this!",
-      type: "warning",
+      type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.value) {
         deleteCourse(courseId);
       }
     });
   };
-  const onEditCourse = (courseId) => {
-    console.log(courseId);
+  const onEditCourse = (courseData) => {
+    console.log(courseData);
     setModalEdit(true);
-    setCourseId(courseId);
+    setCourseData(courseData);
+    getCourseById(setLoading, courseData.id);
   };
 
   return (
@@ -92,7 +93,7 @@ const UserCourses = ({
                 <Button
                   size="small"
                   color="secondary"
-                  onClick={() => onEditCourse(key)}
+                  onClick={() => onEditCourse(user_courses[key].course)}
                 >
                   Edit
                 </Button>
@@ -111,7 +112,7 @@ const UserCourses = ({
       <EditCourseModal
         modal={modalEdit}
         setModal={setModalEdit}
-        courseId={courseId}
+        courseData={courseData}
       />
     </PageLoader>
   );

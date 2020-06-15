@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { green } from "@material-ui/core/colors";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { green } from '@material-ui/core/colors';
+import { useDispatch } from 'react-redux';
 
 import {
   TextField,
@@ -11,14 +11,14 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { getCourseById, editCourse } from "../../../store/actions/course";
-import { clearErrors } from "../../../store/actions/common";
+import { getCourseById, editCourse } from '../../../store/actions/course';
+import { clearErrors } from '../../../store/actions/common';
 
 // COMPONENTS
-import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Button from '@material-ui/core/Button';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
 
 import {
   Row,
@@ -28,14 +28,14 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
-import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
-import PageLoader from "../../custom/PageLoader";
+} from 'reactstrap';
+import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
+import PageLoader from '../../custom/PageLoader';
 
 const GreenRadio = withStyles({
   root: {
     color: green[400],
-    "&$checked": {
+    '&$checked': {
       color: green[600],
     },
   },
@@ -47,25 +47,21 @@ const EditCourseModal = ({
   clearErrors,
   modal,
   setModal,
-  courseId,
-  course_detail,
-  getCourseById,
+  courseData,
   editCourse,
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    name: course_detail ? course_detail.course.name : "",
-    description: course_detail ? course_detail.course.description : "",
+    name: courseData ? courseData.name : '',
+    description: courseData ? courseData.description : '',
   });
 
-  const [isActive, setIsActive] = useState(
-    course_detail ? course_detail.course.active : false
-  );
+  const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
-    name: course_detail ? course_detail.course.image : "",
-    file: course_detail ? course_detail.course.image : "",
+    name: '',
+    file: '',
   });
 
   const { name, description } = formData;
@@ -84,8 +80,8 @@ const EditCourseModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      if (formData[key].trim() === "") {
-        error[key] = "This field is required";
+      if (formData[key].trim() === '') {
+        error[key] = 'This field is required';
       }
     });
 
@@ -95,10 +91,14 @@ const EditCourseModal = ({
       errors: error,
     });
 
-    if (JSON.stringify(error) === "{}") {
-      editCourse(courseId, name, description, image.file, isActive).then((t) =>
-        console.log(t)
-      );
+    if (JSON.stringify(error) === '{}') {
+      editCourse(
+        courseData.id,
+        name,
+        description,
+        image.file,
+        isActive
+      ).then((t) => console.log(t));
     }
   };
 
@@ -111,7 +111,7 @@ const EditCourseModal = ({
   };
 
   const handleChangeActive = (event) => {
-    if (event.target.value === "true") {
+    if (event.target.value === 'true') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -119,7 +119,7 @@ const EditCourseModal = ({
   };
 
   const handleCapture = ({ target }) => {
-    console.log("target-----", target);
+    console.log('target-----', target);
     const fileReader = new FileReader();
     // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
@@ -137,13 +137,22 @@ const EditCourseModal = ({
   };
 
   useEffect(() => {
-    getCourseById(setLoading, courseId);
-  }, [courseId]);
+    setFormData({
+      name: courseData ? courseData.name : '',
+      description: courseData ? courseData.description : '',
+    });
+
+    setIsActive(courseData ? courseData.active : false);
+    setImage({
+      name: courseData ? courseData.image : '',
+      file: courseData ? BASE_URL + courseData.image : '',
+    });
+  }, [courseData]);
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
       <ModalHeader toggle={() => closeModal()}>
-        Edit Course {course_detail.course.name}
+        Edit Course {console.log(image.file)} {name}
       </ModalHeader>
       <PageLoader loading={loading}>
         {/** MODAL BODY */}
@@ -158,7 +167,6 @@ const EditCourseModal = ({
                   fullWidth
                   value={name}
                   onChange={onChange}
-                  defaultValue={course_detail.course.name}
                   error={errors.name}
                 />
               </Col>
@@ -174,21 +182,19 @@ const EditCourseModal = ({
                   onChange={onChange}
                   variant="outlined"
                   error={errors.description}
-                  defaultValue={course_detail.course.description}
                 />
               </Col>
             </Row>
             <Row className="py-2 px-3">
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  Puclic your new course?{" "}
+                  Puclic your new course?{' '}
                 </FormLabel>
                 <RadioGroup
                   aria-label="Public"
                   name="isActive"
                   value={isActive}
                   onChange={(e) => handleChangeActive(e)}
-                  defaultValue={course_detail.course.active}
                 >
                   <FormControlLabel
                     value={false}
@@ -211,7 +217,7 @@ const EditCourseModal = ({
                     accept="image/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </Button>
               </Col>

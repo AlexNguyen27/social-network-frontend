@@ -38,14 +38,17 @@ const CardItem = ({ course, children }) => {
           <Typography gutterBottom variant="h5" component="h2">
             {truncateMultilineString(name, 16)}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            style={{ wordBreak: 'break-word' }}
+          >
             {truncateMultilineString(description, 140)}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        {children}
-      </CardActions>
+      <CardActions>{children}</CardActions>
     </Card>
   );
 };
