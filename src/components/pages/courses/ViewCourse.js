@@ -128,12 +128,12 @@ const ViewCourse = ({
                       </IconButton>
                     </Col>
                     <Col
-                      xs="8" lg="9" xl="10"
+                      xs="8" lg="9"
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
                     </Col>
-                    <Col xs="3" lg="2" xl="1">
+                    <Col xs="3" lg="2">
                       <Row>
                         <IconButton color="default" onClick={() => onEditLecture(lectures[key])}>
                           <EditIcon />

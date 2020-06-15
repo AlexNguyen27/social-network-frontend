@@ -85,7 +85,7 @@ const ControlCard = ({ course, auth: { user } }) => {
         </CardContent>
 
         <div className={classes.controls}>
-          <Row>
+          <Row  className="p-3">
             {isCurrentuser && (
               <>
                 <Col>
@@ -98,20 +98,20 @@ const ControlCard = ({ course, auth: { user } }) => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button color="primary" variant="contained">
+                  <Button color="default" variant="contained">
                     {active ? "Public" : "Private"}
                   </Button>
                 </Col>
               </>
             )}
           </Row>
-          <Row className="mt-3">
+          {/* <Row className="mt-3">
             <Col>
               <Button variant="contained" color="default">
                 Statistics
               </Button>
             </Col>
-          </Row>
+          </Row> */}
 
           <AddLectureModal modal={modal} setModal={setModal} />
         </div>

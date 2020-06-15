@@ -45,6 +45,8 @@ import ViewCourse from "./courses/ViewCourse";
 
 // ACTION
 import { logoutUser } from "../../store/actions/auth";
+import MultipleSummary from "./statistics/MultipleSummary";
+import Statistics from "./statistics/Statistics";
 
 const drawerWidth = 240;
 
@@ -250,7 +252,7 @@ const DashBoard = ({
       return (
         <>
           <div className={classes.header}>Dashboard / Statistics</div>
-          <Courses />
+          <Statistics />
         </>
       );
     }

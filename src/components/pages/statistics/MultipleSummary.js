@@ -25,39 +25,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "My First dataset",
-      backgroundColor: "rgba(255,99,132,0.2)",
-      borderColor: "rgba(255,99,132,1)",
-      borderWidth: 1,
-      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-      hoverBorderColor: "rgba(255,99,132,1)",
-      data: [65, 59, 80, 81, 56, 55, 40],
-    },
-  ],
-};
+// const data = {
+//   labels: ["January", "February", "March", "April", "May", "June", "July"],
+//   datasets: [
+//     {
+//       label: "My First dataset",
+//       backgroundColor: "rgba(255,99,132,0.2)",
+//       borderColor: "rgba(255,99,132,1)",
+//       borderWidth: 1,
+//       hoverBackgroundColor: "rgba(255,99,132,0.4)",
+//       hoverBorderColor: "rgba(255,99,132,1)",
+//       data: [65, 59, 80, 81, 56, 55, 40],
+//     },
+//   ],
+// };
 
-const MultipleSummary = () => {
+const MultipleSummary = ({ courseName, totalStudentEnroll}) => {
   const classes = useStyles();
   // Array option of question
-  const options = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
-  let optionLabels = options.map((option) => option.text);
-  const totalAnswers = [65, 59, 80, 81, 56, 55, 40];
+  // const options = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  // ];
+  const options = courseName;
+  // let optionLabels = options.map((option) => option.text);
+  // const totalAnswers = [65, 59, 80, 81, 56, 55, 40];
 
+  const totalAnswers = totalStudentEnroll;
   // PIE CHART
   const dataPie = {
-    labels: optionLabels,
+    labels: options,
     datasets: [
       {
         data: totalAnswers,
@@ -69,7 +71,7 @@ const MultipleSummary = () => {
 
   // LINE CHART
   const dataLine = {
-    labels: optionLabels,
+    labels: options,
     datasets: [
       {
         label: `Student answers`,
@@ -98,7 +100,7 @@ const MultipleSummary = () => {
 
   // BAR CHART
   const dataBar = {
-    labels: optionLabels,
+    labels: options,
     datasets: [
       {
         label: `Student answers`,
@@ -161,7 +163,7 @@ const MultipleSummary = () => {
             </RadioGroup>
           </FormControl>
         </Col>
-        <Col md={7}>
+        <Col md={9}>
           {
             {
               1: (
