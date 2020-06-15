@@ -5,6 +5,8 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import VideoCard from "../../custom/VideoCard";
 import { BASE_URL } from "../../../store/actions/types";
+import { Button } from "@material-ui/core";
+import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,23 +38,14 @@ const ViewLecture = ({ lectureId, lectures }) => {
             src={lectureData ? `${BASE_URL}/video/${lectureData.video}` : ""}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Paper className={classes.paper}>xs=6</Paper>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary">
+            <QuestionAnswerIcon className="mr-2"/>
+            Add New Question
+          </Button>
         </Grid>
-        <Grid item xs={6}>
-          <Paper className={classes.paper}>xs=6</Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>No testing</Paper>
         </Grid>
       </Grid>
     </div>

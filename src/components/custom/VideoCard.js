@@ -14,7 +14,7 @@ import DownloadButton from "./DownloadButton";
 const VideoCard = (props) => {
   return (
     <Player playsInline poster={props.poster} src={props.src}>
-      <BigPlayButton position="center" />
+      <BigPlayButton position="center" className="my-class" />
       <ControlBar autoHide={false}>
         <VolumeMenuButton />
         <ReplayControl seconds={10} order={1.1} />

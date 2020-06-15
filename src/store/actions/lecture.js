@@ -6,9 +6,37 @@ import {
   EDIT_LECTURE,
   CLEAR_ERRORS,
   GET_ERRORS,
+  GET_LECTURES,
 } from "./types";
 import Swal from "sweetalert2";
 import { logoutUser } from "./auth";
+import { arrayToObject } from "../../utils/commonFunction";
+
+// export const getLecturesByCourseId = (setLoading, courseId) => async (dispatch) => {
+//   try {
+//     const lecturesArray = await axios.get(`/api/lectures/courses/${courseId}`, {
+//       headers: { Authorization: localStorage.token },
+//     });
+
+//     console.log(lecturesArray);
+
+//     const lecturesObject = arrayToObject(lecturesArray.data.data);
+
+//     dispatch({
+//       type: GET_LECTURES,
+//       lectures: lecturesObject,
+//     });
+
+//     setLoading(false);
+//   } catch (error) {
+//     console.log(error);
+//     logoutUser(dispatch, error);
+//     dispatch({
+//       type: GET_ERRORS,
+//       errors: error.response.data,
+//     });
+//   }
+// };
 
 // DELETE LECTURE
 export const deleteLecture = (lectureId) => async (dispatch) => {
@@ -44,9 +72,13 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
 };
 
 // ADD NEW Course
-export const addNewLecture = (courseId, name, description, image, video) => async (
-  dispatch
-) => {
+export const addNewLecture = (
+  courseId,
+  name,
+  description,
+  image,
+  video
+) => async (dispatch) => {
   try {
     // TODO
     // add description
@@ -125,33 +157,35 @@ export const editLecture = (
       }
     );
 
-    const imageData = new FormData();
-    imageData.append("file", image);
-    const lectureWithImage = await axios.post(
-      `api/lectures/upload/${lectureId}`,
-      imageData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: localStorage.token,
-        },
-      }
-    );
+    if (image !== "same") {
+      const imageData = new FormData();
+      imageData.append("file", image);
+      const lectureWithImage = await axios.post(
+        `api/lectures/upload/${lectureId}`,
+        imageData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.token,
+          },
+        }
+      );
+    }
 
-    const videoData = new FormData();
-    videoData.append("file", video);
-    const lectureWithVideo = await axios.post(
-      `api/lectures/upload/${lectureId}`,
-      videoData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: localStorage.token,
-        },
-      }
-    );
-
-    console.log("iamge res----------", lectureWithImage);
+    if (video !== "same") {
+      const videoData = new FormData();
+      videoData.append("file", video);
+      const lectureWithVideo = await axios.post(
+        `api/lectures/upload/${lectureId}`,
+        videoData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.token,
+          },
+        }
+      );
+    }
 
     dispatch({
       type: EDIT_LECTURE,

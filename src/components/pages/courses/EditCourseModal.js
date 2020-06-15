@@ -61,7 +61,7 @@ const EditCourseModal = ({
   const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
     name: "",
-    file: {},
+    file: "same",
   });
 
   const { name, description } = formData;
@@ -147,7 +147,7 @@ const EditCourseModal = ({
     setIsActive(courseData ? courseData.active : false);
     setImage({
       name: courseData ? courseData.image : "",
-      file: {},
+      file: "same",
     });
   }, [courseData]);
 

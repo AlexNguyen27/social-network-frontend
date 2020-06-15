@@ -64,6 +64,15 @@ const EditLectureModal = ({
       name: lectureData ? lectureData.name : "",
       description: lectureData ? lectureData.description : "",
     });
+    setImage({
+      name: lectureData ? lectureData.image : '',
+      file: 'same'
+    })
+
+    setVideo({
+      name: lectureData ? lectureData.video : '',
+      file: 'same'
+    })
   }, [lectureData]);
 
   const { name, description } = formData;

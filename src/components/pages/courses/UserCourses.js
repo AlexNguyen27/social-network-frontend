@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button } from "@material-ui/core";
 
-import CardItem from '../../layout/CardItem';
-import PageLoader from '../../custom/PageLoader';
+import CardItem from "../../layout/CardItem";
+import PageLoader from "../../custom/PageLoader";
 import {
   getUserCourses,
   deleteCourse,
   getCourseById,
-} from '../../../store/actions/course';
-import { clearErrors } from '../../../store/actions/common';
-import Swal from 'sweetalert2';
-import AddCourseModal from './AddCourseModal';
-import EditCourseModal from './EditCourseModal';
+} from "../../../store/actions/course";
+import { clearErrors } from "../../../store/actions/common";
+import Swal from "sweetalert2";
+import AddCourseModal from "./AddCourseModal";
+import EditCourseModal from "./EditCourseModal";
 
 const UserCourses = ({
   match,
@@ -23,6 +23,7 @@ const UserCourses = ({
   getUserCourses,
   deleteCourse,
   getCourseById,
+  course_detail,
   auth: { user },
 }) => {
   const history = useHistory();
@@ -46,11 +47,11 @@ const UserCourses = ({
     Swal.fire({
       title: `Are you sure to delete ?`,
       text: "You won't be able to revert this!",
-      type: 'warning',
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
         deleteCourse(courseId);
@@ -122,6 +123,7 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
   auth: state.auth,
   user_courses: state.course.user_courses,
+  course_detail: state.course.course_detail,
 });
 export default connect(mapStateToProps, {
   clearErrors,

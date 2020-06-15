@@ -10,6 +10,7 @@ import {
   ADD_LECTURE,
   DELETE_LECTURE,
   EDIT_LECTURE,
+  // GET_LECTURES,
 } from "../actions/types";
 
 const initialState = {
@@ -29,6 +30,7 @@ export default function (state = initialState, action) {
     user_courses,
     course_detail,
     selectedId,
+    // lectures,
     newCourse,
   } = action;
   switch (type) {
@@ -77,7 +79,14 @@ export default function (state = initialState, action) {
         ...state,
         course_detail: {},
       };
-
+    // case GET_LECTURES: 
+    //   return {
+    //     ...state,
+    //     course_detail: {
+    //       ...state.course_detail,
+    //       lectures
+    //     }
+    //   }
     case ADD_LECTURE:
     case EDIT_LECTURE:
       const newLecture = action.newLecture;

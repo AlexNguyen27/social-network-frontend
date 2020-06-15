@@ -11,7 +11,6 @@ import {
   CLEAR_ERRORS,
   ADD_COURSE,
   EDIT_COURSE,
-  REMOVE_COURSE_DETAIL,
 } from "./types";
 
 import { logoutUser } from "./auth";
@@ -74,9 +73,18 @@ export const getUserCourses = (setLoading, userId) => async (dispatch) => {
 export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
   const { all_courses } = getState().course;
   try {
-    console.log("here", all_courses[id]);
-    const lectureToObj = arrayToObject(all_courses[id].course.letures);
-    console.log(lectureToObj);
+    // console.log("here", all_courses[id]);
+
+    // const coursesArray = await axios.get(`/api/courses/courses/${id}`, {
+    //   headers: { Authorization: localStorage.token },
+    // });
+
+    const lecturesArray = await axios.get(`/api/lectures/courses/${id}`, {
+      headers: { Authorization: localStorage.token },
+    });
+    // console.log(lecturesArray);
+    const lecturesObject = arrayToObject(lecturesArray.data.data);
+    // console.log(lectureToObj);
     const {
       id: courseId,
       image,
@@ -85,6 +93,7 @@ export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
       name,
       totalStudentEnroll,
     } = all_courses[id].course;
+
     const courseInfo = {
       id: courseId,
       image,
@@ -98,9 +107,14 @@ export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
       course_detail: {
         course: courseInfo,
         teacher: all_courses[id].teacher,
-        lectures: lectureToObj,
+        lectures: lecturesObject,
       },
     });
+
+    // dispatch({
+    //   type: GET_LECTURES,
+    //   lectures: ,
+    // });
 
     setLoading(false);
   } catch (error) {
@@ -215,7 +229,6 @@ export const editCourse = (
   isActive
 ) => async (dispatch) => {
   try {
-    console.log("file namge---=", imageFile);
     const res = await axios.put(
       `api/courses/${courseId}`,
       {
@@ -228,22 +241,22 @@ export const editCourse = (
       }
     );
 
-    // TODO
-    // UPLOAD FILE
-    const fileData = new FormData();
-    fileData.append("file", imageFile);
-    const courseWithImage = axios
-      .post(`api/courses/upload/${courseId}`, fileData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: localStorage.token,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      });
-
     // TODO : FIX RETURN VALUE KHI UPLOAD IMAGE
+    if (imageFile !== "same") {
+      const fileData = new FormData();
+      fileData.append("file", imageFile);
+      const courseWithImage = await axios.post(
+        `api/courses/upload/${courseId}`,
+        fileData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.token,
+          },
+        }
+      );
+    }
+
     dispatch({
       type: EDIT_COURSE,
       newCourse: res.data.data,
@@ -253,8 +266,8 @@ export const editCourse = (
       type: CLEAR_ERRORS,
     });
 
-    // using sweetalert2
     Swal.fire({
+      // using sweetalert2
       position: "center",
       type: "success",
       title: "Your work has been saved",
