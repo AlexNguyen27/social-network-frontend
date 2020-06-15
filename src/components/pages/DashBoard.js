@@ -54,6 +54,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    margin: 0
   },
   appBar: {
     background: Colors.purple,

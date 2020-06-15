@@ -31,7 +31,13 @@ const Courses = ({
       <Grid container spacing={3}>
         {all_courses &&
           Object.keys(all_courses).map((key) => (
-            <Grid item xs={4} md={3} spacing={3}>
+            <Grid
+              item
+              style={{ display: "inline-grid" }}
+              xs={4}
+              md={3}
+              spacing={3}
+            >
               <CardItem course={all_courses[key].course}>
                 <Button
                   size="small"

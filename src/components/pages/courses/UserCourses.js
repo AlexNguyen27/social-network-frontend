@@ -80,7 +80,13 @@ const UserCourses = ({
         </Grid>
         {user_courses &&
           Object.keys(user_courses).map((key) => (
-            <Grid item xs={4} md={3} spacing={3}>
+            <Grid
+              style={{ display: "inline-grid" }}
+              item
+              xs={4}
+              md={3}
+              spacing={3}
+            >
               <CardItem course={user_courses[key].course}>
                 <Button
                   size="small"
