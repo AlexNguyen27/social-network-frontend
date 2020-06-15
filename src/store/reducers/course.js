@@ -64,11 +64,11 @@ export default function (state = initialState, action) {
         ...state,
         all_courses: {
           ...state.all_courses,
-          [newCourse.id]: { course: newCourse },
+          [newCourse.course.id]: newCourse,
         },
         user_courses: {
           ...state.user_courses,
-          [newCourse.id]: { course: newCourse },
+          [newCourse.course.id]: newCourse,
         },
       };
 

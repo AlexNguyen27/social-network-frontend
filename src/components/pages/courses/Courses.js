@@ -28,7 +28,6 @@ const Courses = ({
 
   return (
     <PageLoader loading={loading}>
-      <h1>herer</h1>
       <Grid container spacing={3}>
         {all_courses &&
           Object.keys(all_courses).map((key) => (

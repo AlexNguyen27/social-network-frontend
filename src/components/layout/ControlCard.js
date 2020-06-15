@@ -46,7 +46,7 @@ const ControlCard = ({ course, auth: { user } }) => {
 
   const { course: courseDetail, teacher } = course;
 
-  const { name, description, active } = courseDetail;
+  const { name, description, active, totalStudentEnroll } = courseDetail;
   const [modal, setModal] = useState(false);
 
   const getToday = () => {
@@ -58,8 +58,8 @@ const ControlCard = ({ course, auth: { user } }) => {
     return (today = mm + "/" + dd + "/" + yyyy);
   };
 
-  // const isCurrentuser = teacher.id === user.id;
-  const isCurrentuser = true;
+  const isCurrentuser = teacher.id === user.id;
+  // const isCurrentuser = true;
 
   return (
     <Card className={classes.root}>
@@ -76,11 +76,15 @@ const ControlCard = ({ course, auth: { user } }) => {
           <Typography variant="h6" color="textSecondary">
             <p>{description}</p>
           </Typography>
-          <Typography component="h6" variant="body1">
+          <hr/>
+          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
             Created by: {teacher.fullname}
           </Typography>
-          <Typography component="h6" variant="body1">
+          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
             Last Updated: {getToday()}
+          </Typography>
+          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
+            {totalStudentEnroll} Student enrolled 
           </Typography>
         </CardContent>
 

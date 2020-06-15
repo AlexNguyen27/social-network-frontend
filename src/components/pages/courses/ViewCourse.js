@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -14,7 +15,7 @@ import { getCourseById } from "../../../store/actions/course";
 import PageLoader from "../../custom/PageLoader";
 import { IconButton } from "@material-ui/core";
 import { deleteLecture } from "../../../store/actions/lecture";
-import EditLectureModel from '../lectures/EditLectureModel';
+import EditLectureModel from "../lectures/EditLectureModel";
 import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +38,9 @@ const ViewCourse = ({
   courseId,
   course_detail,
   deleteLecture,
+  auth: { user },
 }) => {
+  const history = useHistory();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
 
@@ -70,8 +73,8 @@ const ViewCourse = ({
   const onEditLecture = (lecture) => {
     setModalEdit(true);
     setLectureData(lecture);
-    console.log('lecutre----', lecture);
-  }
+    console.log("lecutre----", lecture);
+  };
 
   return (
     <PageLoader loading={loading}>
@@ -120,7 +123,13 @@ const ViewCourse = ({
                       xs="1"
                       style={{ display: "flex", alignItems: "center" }}
                     >
-                      <IconButton>
+                      <IconButton
+                        onClick={() =>
+                          history.push(
+                            `${window.location.pathname}/lectures/${key}`
+                          )
+                        }
+                      >
                         <PlayCircleFilledIcon
                           color="primary"
                           fontSize="large"
@@ -128,30 +137,40 @@ const ViewCourse = ({
                       </IconButton>
                     </Col>
                     <Col
-                      xs="8" lg="9"
+                      xs="8"
+                      lg="9"
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
                     </Col>
-                    <Col xs="3" lg="2">
-                      <Row>
-                        <IconButton color="default" onClick={() => onEditLecture(lectures[key])}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="secondary"
-                          onClick={() => onDeleteLecture(key)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Row>
-                    </Col>
+                    {user.id === course_detail.teacher.id && (
+                      <Col xs="3" lg="2">
+                        <Row>
+                          <IconButton
+                            color="default"
+                            onClick={() => onEditLecture(lectures[key])}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => onDeleteLecture(key)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Row>
+                      </Col>
+                    )}
                   </Row>
                 </Paper>
               </Grid>
             ))}
         </Grid>
-        <EditLectureModel setModal={setModalEdit} modal={modalEdit} lectureData={lectureData}/>
+        <EditLectureModel
+          setModal={setModalEdit}
+          modal={modalEdit}
+          lectureData={lectureData}
+        />
       </div>
     </PageLoader>
   );
@@ -159,6 +178,7 @@ const ViewCourse = ({
 
 const mapStateToProps = (state) => ({
   course_detail: state.course.course_detail,
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { getCourseById, deleteLecture })(

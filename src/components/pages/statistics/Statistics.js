@@ -12,10 +12,11 @@ const Statistics = ({ user_courses }) => {
   );
 
   const courseNameArr = userCourses.map((course) => course.course.name);
-  const totalStudentEnrollArr = userCourses.map((course) => 10);
+  const totalStudentEnrollArr = userCourses.map((course) => course.totalStudentEnroll ? course.totalStudentEnroll : 10);
 
   return (
     <>
+        <h4>Statistics of students who have studied your course</h4>
       <MultipleSummary
         courseName={courseNameArr}
         totalStudentEnroll={totalStudentEnrollArr}

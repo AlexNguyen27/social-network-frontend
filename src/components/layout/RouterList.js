@@ -19,7 +19,11 @@ const RouterList = (props) => {
         <Route exact path="/login" component={StaffLogin} />
         <Route exact path="/signup" component={Signup} />
         <ProtectedRoute exact path="/all-courses" component={DashBoard} />
+        <ProtectedRoute exact path="/all-courses/:courseId" component={DashBoard} />
         <ProtectedRoute exact path="/your-courses" component={DashBoard} />
+        <ProtectedRoute exact path="/your-courses/:courseId" component={DashBoard} />
+        <ProtectedRoute exact path="/your-courses/:courseId/lectures/:lectureId" component={DashBoard} />
+        <ProtectedRoute exact path="/all-courses/:courseId/lectures/:lectureId" component={DashBoard} />
         <ProtectedRoute exact path="/statistics" component={DashBoard} />
         <ProtectedRoute exact path="/help" component={DashBoard} />
         <ProtectedRoute exact path="/notifications" component={DashBoard} />

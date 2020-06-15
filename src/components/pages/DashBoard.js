@@ -47,6 +47,7 @@ import ViewCourse from "./courses/ViewCourse";
 import { logoutUser } from "../../store/actions/auth";
 import MultipleSummary from "./statistics/MultipleSummary";
 import Statistics from "./statistics/Statistics";
+import ViewLecture from "./lectures/ViewLecture";
 
 const drawerWidth = 240;
 
@@ -226,20 +227,26 @@ const DashBoard = ({
   );
 
   const renderContent = (drawerId) => {
+    console.log("match----", match);
+    if (match.params.lectureId) {
+      return <ViewLecture />;
+    }
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (drawerId === "allCourses" || match.path === "/all-courses") {
+    console.log(match.path);
+    console.log(drawerId);
+    if (match.path === "/all-courses") {
       return (
         <>
-          <div className={classes.header}>Dashboard / Courses</div>
+          <div className={classes.header}>Dashboard / All Courses</div>
           <Courses match={match} />
         </>
       );
     }
 
-    if (drawerId === "yourCourses" || match.path === "/your-courses") {
+    if (match.path === "/your-courses") {
       return (
         <>
           <div className={classes.header}>Dashboard / Your Courses</div>
@@ -248,7 +255,7 @@ const DashBoard = ({
       );
     }
 
-    if (drawerId === "statistics") {
+    if (match.path === "/statistics") {
       return (
         <>
           <div className={classes.header}>Dashboard / Statistics</div>
