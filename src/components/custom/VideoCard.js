@@ -13,12 +13,7 @@ import {
 import DownloadButton from "./DownloadButton";
 const VideoCard = (props) => {
   return (
-    <Player
-      autoPlay
-      playsInline
-      poster="../../images/logo.png"
-      src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
-    >
+    <Player playsInline poster={props.poster} src={props.src}>
       <BigPlayButton position="center" />
       <ControlBar autoHide={false}>
         <VolumeMenuButton />

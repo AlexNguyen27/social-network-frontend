@@ -166,21 +166,20 @@ export const addNewCourse = (
     );
 
     const newCourse = res.data.data;
-    // console.log(newCourse)
-    // // TODO:
-    // // UPLOAD IMAGE FILE
-    // // error when change api
-    // const courseWithImage = (
-    //   await axios.post(
-    //     `api/courses/upload/${newCourse.id}`,
-    //     {
-    //       file: imageFile
-    //     },
-    //     {
-    //       headers: { Authorization: localStorage.token },
-    //     }
-    //   )
-    // );
+    // TODO
+    // UPLOAD FILE
+    const fileData = new FormData();
+    fileData.append("file", imageFile);
+    const courseWithImage = await axios.post(
+      `api/courses/upload/${newCourse.course.id}`,
+      fileData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.token,
+        },
+      }
+    );
 
     dispatch({
       type: ADD_COURSE,

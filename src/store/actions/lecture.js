@@ -44,7 +44,7 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
 };
 
 // ADD NEW Course
-export const addNewLecture = (courseId, name, description) => async (
+export const addNewLecture = (courseId, name, description, image, video) => async (
   dispatch
 ) => {
   try {
@@ -61,6 +61,21 @@ export const addNewLecture = (courseId, name, description) => async (
     );
 
     const newLecture = res.data.data;
+
+    const imageData = new FormData();
+    imageData.append("file", image);
+    const lectureWithImage = await axios.post(
+      `api/lectures/upload/${newLecture.id}`,
+      imageData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.token,
+        },
+      }
+    );
+
+    console.log("iamge res----------", lectureWithImage);
     dispatch({
       type: ADD_LECTURE,
       newLecture,
@@ -88,9 +103,13 @@ export const addNewLecture = (courseId, name, description) => async (
 };
 
 // EDIT Course NAME
-export const editLecture = (lectureId, name, description) => async (
-  dispatch
-) => {
+export const editLecture = (
+  lectureId,
+  name,
+  description,
+  image,
+  video
+) => async (dispatch) => {
   try {
     // TODO
     // add description
@@ -100,9 +119,39 @@ export const editLecture = (lectureId, name, description) => async (
         name,
       },
       {
-        headers: { Authorization: localStorage.token },
+        headers: {
+          Authorization: localStorage.token,
+        },
       }
     );
+
+    const imageData = new FormData();
+    imageData.append("file", image);
+    const lectureWithImage = await axios.post(
+      `api/lectures/upload/${lectureId}`,
+      imageData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.token,
+        },
+      }
+    );
+
+    const videoData = new FormData();
+    videoData.append("file", video);
+    const lectureWithVideo = await axios.post(
+      `api/lectures/upload/${lectureId}`,
+      videoData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.token,
+        },
+      }
+    );
+
+    console.log("iamge res----------", lectureWithImage);
 
     dispatch({
       type: EDIT_LECTURE,

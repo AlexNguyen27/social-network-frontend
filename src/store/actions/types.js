@@ -1,4 +1,4 @@
-export const BASE_URL = "http://62e99c58c51f.ngrok.io/upload/images/";
+export const BASE_URL = "https://f9bc542597c5.ngrok.io/upload";
 
 export const AUTHENTICATE = "AUTHENTICATE";
 export const UNAUTHENTICATE = "UNAUTHENTICATE";

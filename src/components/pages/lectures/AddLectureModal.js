@@ -57,8 +57,8 @@ const AddLectureModal = ({
 
   const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
-    name: '',
-    file: '',
+    name: "",
+    file: "",
   });
 
   const [video, setVideo] = useState({
@@ -72,7 +72,10 @@ const AddLectureModal = ({
   const closeModal = () => {
     setModal(false);
     clearErrors();
-    setFormData({});
+    setFormData({
+      name: "",
+      description: "",
+    });
   };
 
   // HANDLE ON SUBMIT FROM ADD NEW GROUP
@@ -81,13 +84,23 @@ const AddLectureModal = ({
 
     const error = {};
 
+    console.log(formData);
     Object.keys(formData).map((key) => {
+      console.log(formData[key]);
       if (formData[key].trim() === "") {
         error[key] = "This field is required";
+        console.log("ror", error);
       }
     });
 
-    // console.log(error);
+    if (image.name.trim() === "") {
+      error.image = "Please select an image!";
+    }
+
+    if (video.name.trim() === "") {
+      error.video = "Please select an video!";
+    }
+    console.log(error);
     dispatch({
       type: GET_ERRORS,
       errors: error,
@@ -96,7 +109,7 @@ const AddLectureModal = ({
     if (JSON.stringify(error) === "{}") {
       console.log(formData);
       // addNewCourse(name, description, image.file, isActive);
-      addNewLecture(courseId, name, description);
+      addNewLecture(courseId, name, description, image.file, video.file);
     }
   };
 
@@ -109,28 +122,18 @@ const AddLectureModal = ({
   };
 
   const handleCapture = ({ target }) => {
-    console.log("target-----", target);
-    const fileReader = new FileReader();
-    // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
-    // TODO
-    // ONLY UPLOAD TYPE image/*
-    fileReader.readAsDataURL(target.files[0]);
-    console.log(target.files[0]);
-    fileReader.onload = (e) => {
-      console.log(e.target);
-      if (target.accept.includes("image")) {
-        setImage({
-          name: fileName,
-          file: e.target.result,
-        });
-      } else {
-        setVideo({
-          name: fileName,
-          file: e.targer.result,
-        });
-      }
-    };
+    if (target.accept.includes("image")) {
+      setImage({
+        name: fileName,
+        file: target.files[0],
+      });
+    } else {
+      setVideo({
+        name: fileName,
+        file: target.files[0],
+      });
+    }
   };
 
   return (
@@ -182,10 +185,15 @@ const AddLectureModal = ({
             <Col xs="7" className="text-break">
               <h6>{image.name}</h6>
             </Col>
-            {/* <MediaCapture /> */}
           </Row>
-
-          <Row className="py-1">
+          {errors.image && (
+            <Row>
+              <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                {errors.image}
+              </p>
+            </Row>
+          )}
+          <Row className="py-1 mt-2">
             <Col xs="5">
               <Button variant="contained" component="label">
                 Upload Video
@@ -200,8 +208,14 @@ const AddLectureModal = ({
             <Col xs="7" className="text-break">
               <h6>{video.name}</h6>
             </Col>
-            {/* <MediaCapture /> */}
           </Row>
+          {errors.image && (
+            <Row>
+              <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                {errors.image}
+              </p>
+            </Row>
+          )}
         </ModalBody>
 
         {/** MODAL FOOTER */}

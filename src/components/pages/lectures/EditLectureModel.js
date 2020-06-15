@@ -72,7 +72,10 @@ const EditLectureModal = ({
   const closeModal = () => {
     setModal(false);
     clearErrors();
-    setFormData({});
+    setFormData({
+      name: "",
+      description: "",
+    });
   };
 
   // HANDLE ON SUBMIT FROM ADD NEW GROUP
@@ -82,11 +85,19 @@ const EditLectureModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      console.log('formdata----', formData[key])
-      if (formData[key] && formData[key].trim() === "") {
+      console.log(formData[key]);
+      if (!formData[key] || formData[key].trim() === "") {
         error[key] = "This field is required";
       }
     });
+
+    if (image.name.trim() === "") {
+      error.image = "Please select an image!";
+    }
+
+    if (video.name.trim() === "") {
+      error.video = "Please select an video!";
+    }
 
     // console.log(error);
     dispatch({
@@ -95,7 +106,7 @@ const EditLectureModal = ({
     });
 
     if (JSON.stringify(error) === "{}") {
-      editLecture(lectureData.id, name, description);
+      editLecture(lectureData.id, name, description, image.file, video.file);
     }
   };
 
@@ -108,28 +119,18 @@ const EditLectureModal = ({
   };
 
   const handleCapture = ({ target }) => {
-    console.log("target-----", target);
-    const fileReader = new FileReader();
-    // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
-    // TODO
-    // ONLY UPLOAD TYPE image/*
-    fileReader.readAsDataURL(target.files[0]);
-    console.log(target.files[0]);
-    fileReader.onload = (e) => {
-      console.log(e.target);
-      if (target.accept.includes("image")) {
-        setImage({
-          name: fileName,
-          file: e.target.result,
-        });
-      } else {
-        setVideo({
-          name: fileName,
-          file: e.targer.result,
-        });
-      }
-    };
+    if (target.accept.includes("image")) {
+      setImage({
+        name: fileName,
+        file: target.files[0],
+      });
+    } else {
+      setVideo({
+        name: fileName,
+        file: target.files[0],
+      });
+    }
   };
 
   return (
@@ -166,7 +167,7 @@ const EditLectureModal = ({
                 />
               </Col>
             </Row>
-            <Row className="py-1">
+            <Row className="py-1 mt-2">
               <Col xs="5">
                 <Button variant="contained" component="label">
                   Upload Image
@@ -178,10 +179,17 @@ const EditLectureModal = ({
                   />
                 </Button>
               </Col>
-              <Col xs="7" className="text-break">
+              <Col xs="7" className="text-break d-flex align-items-center">
                 <h6>{image.name}</h6>
-              </Col>  
+              </Col>
             </Row>
+            {errors.image && (
+              <Row>
+                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                  {errors.image}
+                </p>
+              </Row>
+            )}
             <Row className="py-1">
               <Col xs="5">
                 <Button variant="contained" component="label">
@@ -194,10 +202,17 @@ const EditLectureModal = ({
                   />
                 </Button>
               </Col>
-              <Col xs="7" className="text-break">
+              <Col xs="7" className="text-break d-flex align-items-center">
                 <h6>{video.name}</h6>
               </Col>
             </Row>
+            {errors.video && (
+              <Row>
+                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                  {errors.video}
+                </p>
+              </Row>
+            )}
           </ModalBody>
 
           {/** MODAL FOOTER */}

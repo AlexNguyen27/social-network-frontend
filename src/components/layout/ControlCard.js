@@ -14,6 +14,7 @@ import { Row, Col } from "reactstrap";
 
 import FiveStars from "../custom/FiveStars";
 import AddLectureModal from "../pages/lectures/AddLectureModal";
+import { BASE_URL } from "../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,12 +61,11 @@ const ControlCard = ({ course, auth: { user } }) => {
 
   const isCurrentuser = teacher.id === user.id;
   // const isCurrentuser = true;
-
   return (
     <Card className={classes.root}>
       <CardMedia
         className={classes.cover}
-        image={courseDetail.image || ""}
+        image={`${BASE_URL}/images/${courseDetail.image}` || ""}
         title={name}
       />
       <div className={classes.details}>

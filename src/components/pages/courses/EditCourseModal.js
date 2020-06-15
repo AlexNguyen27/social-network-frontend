@@ -70,7 +70,10 @@ const EditCourseModal = ({
   const closeModal = () => {
     setModal(false);
     clearErrors();
-    setFormData({});
+    setFormData({
+      name: "",
+      description: "",
+    });
   };
 
   // HANDLE ON SUBMIT FROM ADD NEW GROUP
@@ -119,20 +122,7 @@ const EditCourseModal = ({
   };
 
   const handleCapture = ({ target }) => {
-    console.log("target-----", target);
-    const fileReader = new FileReader();
-    // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
-    // TODO
-    // console.log(target.files[0]);
-    // const fileData = new FormData();
-    // fileData.append("file", target.files[0], fileName);
-
-    // var form_data = new FormData();
-    // form_data.append("file", target.files[0]);
-    // console.log(form_data);
-
-    // const options = { content: fileData };
     setImage({
       name: fileName,
       file: target.files[0],

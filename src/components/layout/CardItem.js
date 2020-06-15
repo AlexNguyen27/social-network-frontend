@@ -32,7 +32,7 @@ const CardItem = ({ course, children }) => {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={`${BASE_URL}${image}`}
+          image={`${BASE_URL}/images/${image}`}
           title="Contemplative Reptile"
         />
         <CardContent>

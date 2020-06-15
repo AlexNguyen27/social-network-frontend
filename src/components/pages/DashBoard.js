@@ -229,14 +229,12 @@ const DashBoard = ({
   const renderContent = (drawerId) => {
     console.log("match----", match);
     if (match.params.lectureId) {
-      return <ViewLecture />;
+      return <ViewLecture lectureId={match.params.lectureId} />;
     }
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    console.log(match.path);
-    console.log(drawerId);
     if (match.path === "/all-courses") {
       return (
         <>

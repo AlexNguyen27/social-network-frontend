@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import VideoCard from "../../custom/VideoCard";
+import { BASE_URL } from "../../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,42 +17,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const db = {
-  alternative: [
-    {
-      title: "Smells Like Teen Spirit",
-      artist: "Nirvana",
-      videoId: "hTWKbfoikeg",
-      rank: 1,
-    },
-    {
-      title: "Black",
-      artist: "Perl Jame",
-      videoId: "4q9UafsiQ6k",
-      rank: 2,
-    },
-    {
-      title: "Mr. Jones",
-      artist: "Counting Crows",
-      videoId: "-oqAU5VxFWs",
-      rank: 3,
-    },
-    {
-      title: "Zombie",
-      artist: "The Cranberries",
-      videoId: "6Ejga4kJUts",
-      rank: 4,
-    },
-  ],
-};
-
-const ViewLecture = () => {
+const ViewLecture = ({ lectureId, lectures }) => {
   const classes = useStyles();
+  const [lectureData, setLectureData] = useState();
+
+  useEffect(() => {
+    setLectureData(lectures[lectureId]);
+  });
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-            <VideoCard/>
+          <VideoCard
+            poster={
+              lectureData ? `${BASE_URL}/images/${lectureData.image}` : ""
+            }
+            src={lectureData ? `${BASE_URL}/video/${lectureData.video}` : ""}
+          />
         </Grid>
         <Grid item xs={6}>
           <Paper className={classes.paper}>xs=6</Paper>
@@ -75,4 +59,7 @@ const ViewLecture = () => {
   );
 };
 
-export default ViewLecture;
+const mapStateToProps = (state) => ({
+  lectures: state.course.course_detail.lectures,
+});
+export default connect(mapStateToProps, null)(ViewLecture);

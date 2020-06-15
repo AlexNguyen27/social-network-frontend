@@ -66,7 +66,10 @@ const AddCourseModal = ({
   const closeModal = () => {
     setModal(false);
     clearErrors();
-    setFormData({});
+    setFormData({
+      name: "",
+      description: "",
+    });
   };
 
   // HANDLE ON SUBMIT FROM ADD NEW GROUP
@@ -109,21 +112,11 @@ const AddCourseModal = ({
   };
 
   const handleCapture = ({ target }) => {
-    console.log("target-----", target);
-    const fileReader = new FileReader();
-    // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
-    // TODO
-    // ONLY UPLOAD TYPE image/*
-    fileReader.readAsDataURL(target.files[0]);
-    console.log(target.files[0]);
-    fileReader.onload = (e) => {
-      console.log(e.target);
-      setImage({
-        name: fileName,
-        file: e.target.result,
-      });
-    };
+    setImage({
+      name: fileName,
+      file: target.files[0],
+    });
   };
 
   return (
