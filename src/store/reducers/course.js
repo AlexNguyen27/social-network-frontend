@@ -92,7 +92,7 @@ export default function (state = initialState, action) {
         },
       };
     case DELETE_LECTURE:
-      const newLecturesObj = action.course_detail.lectures;
+      const newLecturesObj = state.course_detail.lectures;
       delete newLecturesObj[action.lectureId];
 
       return {

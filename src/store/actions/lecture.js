@@ -1,6 +1,12 @@
 import axios from "../../utils/axios";
 import logoutDispatch from "../../utils/logoutDispatch";
-import { DELETE_LECTURE, ADD_LECTURE, EDIT_LECTURE, CLEAR_ERRORS, GET_ERRORS } from "./types";
+import {
+  DELETE_LECTURE,
+  ADD_LECTURE,
+  EDIT_LECTURE,
+  CLEAR_ERRORS,
+  GET_ERRORS,
+} from "./types";
 import Swal from "sweetalert2";
 import { logoutUser } from "./auth";
 
@@ -13,7 +19,7 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
 
     dispatch({
       type: DELETE_LECTURE,
-      lectureId,
+      lectureId: lectureId,
     });
 
     dispatch({
@@ -28,6 +34,7 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
       timer: 1500,
     });
   } catch (error) {
+    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -71,7 +78,7 @@ export const addNewLecture = (courseId, name, description) => async (
       timer: 1500,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,

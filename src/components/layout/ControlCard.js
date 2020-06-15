@@ -77,7 +77,7 @@ const ControlCard = ({ course, auth: { user } }) => {
             <p>{description}</p>
           </Typography>
           <Typography component="h6" variant="body1">
-            Created by: {""}
+            Created by: {teacher.fullname}
           </Typography>
           <Typography component="h6" variant="body1">
             Last Updated: {getToday()}

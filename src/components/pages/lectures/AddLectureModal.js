@@ -55,11 +55,16 @@ const AddLectureModal = ({
     description: "",
   });
 
-  // const [isActive, setIsActive] = useState(false);
-  // const [image, setImage] = useState({
-  //   name: '',
-  //   file: '',
-  // });
+  const [isActive, setIsActive] = useState(false);
+  const [image, setImage] = useState({
+    name: '',
+    file: '',
+  });
+
+  const [video, setVideo] = useState({
+    name: "",
+    file: "",
+  });
 
   const { name, description } = formData;
 
@@ -103,13 +108,30 @@ const AddLectureModal = ({
     });
   };
 
-  // const handleChangeActive = (event) => {
-  //   if (event.target.value === 'true') {
-  //     setIsActive(true);
-  //   } else {
-  //     setIsActive(false);
-  //   }
-  // };
+  const handleCapture = ({ target }) => {
+    console.log("target-----", target);
+    const fileReader = new FileReader();
+    // const name = target.accept.includes("image") ? "images" : "videos";
+    const fileName = target.files[0].name;
+    // TODO
+    // ONLY UPLOAD TYPE image/*
+    fileReader.readAsDataURL(target.files[0]);
+    console.log(target.files[0]);
+    fileReader.onload = (e) => {
+      console.log(e.target);
+      if (target.accept.includes("image")) {
+        setImage({
+          name: fileName,
+          file: e.target.result,
+        });
+      } else {
+        setVideo({
+          name: fileName,
+          file: e.targer.result,
+        });
+      }
+    };
+  };
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
@@ -144,6 +166,41 @@ const AddLectureModal = ({
                 error={errors.description}
               />
             </Col>
+          </Row>
+          <Row className="py-1">
+            <Col xs="5">
+              <Button variant="contained" component="label">
+                Upload Image
+                <input
+                  accept="image/*"
+                  type="file"
+                  onChange={handleCapture}
+                  style={{ display: "none" }}
+                />
+              </Button>
+            </Col>
+            <Col xs="7" className="text-break">
+              <h6>{image.name}</h6>
+            </Col>
+            {/* <MediaCapture /> */}
+          </Row>
+
+          <Row className="py-1">
+            <Col xs="5">
+              <Button variant="contained" component="label">
+                Upload Video
+                <input
+                  accept="video/*"
+                  type="file"
+                  onChange={handleCapture}
+                  style={{ display: "none" }}
+                />
+              </Button>
+            </Col>
+            <Col xs="7" className="text-break">
+              <h6>{video.name}</h6>
+            </Col>
+            {/* <MediaCapture /> */}
           </Row>
         </ModalBody>
 

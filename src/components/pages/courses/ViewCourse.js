@@ -6,8 +6,16 @@ import Grid from "@material-ui/core/Grid";
 import ControlCard from "../../layout/ControlCard";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import { Row, Col } from "reactstrap";
+
 import { getCourseById } from "../../../store/actions/course";
 import PageLoader from "../../custom/PageLoader";
+import { IconButton } from "@material-ui/core";
+import { deleteLecture } from "../../../store/actions/lecture";
+import EditLectureModel from '../lectures/EditLectureModel';
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,18 +26,53 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     fontSize: "16px",
   },
+  centered: {
+    display: "flex",
+    alignItems: "center",
+  },
 }));
 
-const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
+const ViewCourse = ({
+  getCourseById,
+  courseId,
+  course_detail,
+  deleteLecture,
+}) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('------------herer')
+    console.log("------------herer");
     getCourseById(setLoading, courseId);
   }, [courseId]);
 
+  const [modalEdit, setModalEdit] = useState(false);
+  const [lectureData, setLectureData] = useState();
   const { lectures } = course_detail || [];
+
+  // HANDLE ON DELETE Course
+  const onDeleteLecture = (lectureId) => {
+    Swal.fire({
+      title: `Are you sure to delete ?`,
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        deleteLecture(lectureId);
+      }
+    });
+  };
+
+  const onEditLecture = (lecture) => {
+    setModalEdit(true);
+    setLectureData(lecture);
+    console.log('lecutre----', lecture);
+  }
+
   return (
     <PageLoader loading={loading}>
       <div className={classes.root}>
@@ -37,29 +80,6 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
           <Grid item xs={12}>
             <ControlCard course={course_detail} />
           </Grid>
-          {/* <Grid container spacing={3}> */}
-          {/* <Grid item xs={12}>
-          <Paper className={classes.paper} style={{ fontSize: "20px" }}>
-            Welcome to LearnEnglish
-          </Paper>
-          <Paper className={classes.paper}>
-            Learn English online using our high-quality resources to quickly
-            improve your English. This website is created for adult learners of
-            English by the British Council, the world's English teaching
-            experts.
-          </Paper>
-          <Paper className={classes.paper}>
-            Start by taking our free English test to help you find your level.
-            Then find lessons and resources to improve your English skills. Get
-            more practice to improve your general English with our extended
-            listening and reading materials. At any time, use the grammar and
-            vocabulary sections to help and support your learning.
-          </Paper>
-          <Paper className={classes.paper}>
-            Find out more about our range of online classes and courses to
-            improve your English.
-          </Paper>
-        </Grid> */}
           <Grid item xs={12}>
             <Paper className={classes.paper} style={{ fontSize: "20px" }}>
               What you will learn
@@ -95,21 +115,43 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
             Object.keys(lectures).map((key) => (
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
-                  <Grid container spacing={3}>
-                    <Grid item>
-                      <PlayCircleFilledIcon color="primary" fontSize="large" />
-                    </Grid>
-                    <Grid
-                      item
+                  <Row>
+                    <Col
+                      xs="1"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <IconButton>
+                        <PlayCircleFilledIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Col>
+                    <Col
+                      xs="8" lg="9" xl="10"
                       style={{ display: "flex", alignItems: "center" }}
                     >
                       <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
-                    </Grid>
-                  </Grid>
+                    </Col>
+                    <Col xs="3" lg="2" xl="1">
+                      <Row>
+                        <IconButton color="default" onClick={() => onEditLecture(lectures[key])}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="secondary"
+                          onClick={() => onDeleteLecture(key)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Row>
+                    </Col>
+                  </Row>
                 </Paper>
               </Grid>
             ))}
         </Grid>
+        <EditLectureModel setModal={setModalEdit} modal={modalEdit} lectureData={lectureData}/>
       </div>
     </PageLoader>
   );
@@ -119,4 +161,6 @@ const mapStateToProps = (state) => ({
   course_detail: state.course.course_detail,
 });
 
-export default connect(mapStateToProps, { getCourseById })(ViewCourse);
+export default connect(mapStateToProps, { getCourseById, deleteLecture })(
+  ViewCourse
+);

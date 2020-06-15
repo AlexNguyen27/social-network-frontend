@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { green } from '@material-ui/core/colors';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { green } from "@material-ui/core/colors";
+import { useDispatch } from "react-redux";
 
 import {
   TextField,
@@ -11,14 +11,15 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-import { getCourseById, editCourse } from '../../../store/actions/course';
-import { clearErrors } from '../../../store/actions/common';
+import { getCourseById } from "../../../store/actions/course";
+import { editLecture } from "../../../store/actions/lecture";
+import { clearErrors } from "../../../store/actions/common";
 
 // COMPONENTS
-import Button from '@material-ui/core/Button';
-import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
+import Button from "@material-ui/core/Button";
+import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 
 import {
   Row,
@@ -28,41 +29,42 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from 'reactstrap';
-import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
-import PageLoader from '../../custom/PageLoader';
+} from "reactstrap";
+import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
+import PageLoader from "../../custom/PageLoader";
 
-const GreenRadio = withStyles({
-  root: {
-    color: green[400],
-    '&$checked': {
-      color: green[600],
-    },
-  },
-  checked: {},
-})((props) => <Radio color="default" {...props} />);
-
-const EditCourseModal = ({
+const EditLectureModal = ({
   errors,
   clearErrors,
   modal,
   setModal,
-  courseData,
-  editCourse,
+  lectureData,
+  editLecture,
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    name: courseData ? courseData.name : '',
-    description: courseData ? courseData.description : '',
+    name: "",
+    description: "",
   });
 
-  const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
-    name: '',
-    file: '',
+    name: "",
+    file: "",
   });
+
+  const [video, setVideo] = useState({
+    name: "",
+    file: "",
+  });
+
+  useEffect(() => {
+    setFormData({
+      name: lectureData ? lectureData.name : "",
+      description: lectureData ? lectureData.description : "",
+    });
+  }, [lectureData]);
 
   const { name, description } = formData;
 
@@ -80,8 +82,9 @@ const EditCourseModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      if (formData[key].trim() === '') {
-        error[key] = 'This field is required';
+      console.log('formdata----', formData[key])
+      if (formData[key] && formData[key].trim() === "") {
+        error[key] = "This field is required";
       }
     });
 
@@ -91,14 +94,8 @@ const EditCourseModal = ({
       errors: error,
     });
 
-    if (JSON.stringify(error) === '{}') {
-      editCourse(
-        courseData.id,
-        name,
-        description,
-        image.file,
-        isActive
-      ).then((t) => console.log(t));
+    if (JSON.stringify(error) === "{}") {
+      editLecture(lectureData.id, name, description);
     }
   };
 
@@ -110,16 +107,8 @@ const EditCourseModal = ({
     });
   };
 
-  const handleChangeActive = (event) => {
-    if (event.target.value === 'true') {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  };
-
   const handleCapture = ({ target }) => {
-    console.log('target-----', target);
+    console.log("target-----", target);
     const fileReader = new FileReader();
     // const name = target.accept.includes("image") ? "images" : "videos";
     const fileName = target.files[0].name;
@@ -129,31 +118,23 @@ const EditCourseModal = ({
     console.log(target.files[0]);
     fileReader.onload = (e) => {
       console.log(e.target);
-      setImage({
-        name: fileName,
-        file: e.target.result,
-      });
+      if (target.accept.includes("image")) {
+        setImage({
+          name: fileName,
+          file: e.target.result,
+        });
+      } else {
+        setVideo({
+          name: fileName,
+          file: e.targer.result,
+        });
+      }
     };
   };
 
-  useEffect(() => {
-    setFormData({
-      name: courseData ? courseData.name : '',
-      description: courseData ? courseData.description : '',
-    });
-
-    setIsActive(courseData ? courseData.active : false);
-    setImage({
-      name: courseData ? courseData.image : '',
-      file: courseData ? BASE_URL + courseData.image : '',
-    });
-  }, [courseData]);
-
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>
-        Edit Course {name}
-      </ModalHeader>
+      <ModalHeader toggle={() => closeModal()}>Edit Lecture {name}</ModalHeader>
       <PageLoader loading={loading}>
         {/** MODAL BODY */}
         <Form onSubmit={(e) => onSubmit(e)}>
@@ -185,44 +166,36 @@ const EditCourseModal = ({
                 />
               </Col>
             </Row>
-            <Row className="py-2 px-3">
-              <FormControl component="fieldset">
-                <FormLabel component="legend">
-                  Puclic your new course?{' '}
-                </FormLabel>
-                <RadioGroup
-                  aria-label="Public"
-                  name="isActive"
-                  value={isActive}
-                  onChange={(e) => handleChangeActive(e)}
-                >
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="Private"
-                  />
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio />}
-                    label="Public"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </Row>
             <Row className="py-1">
-              <Col xs="4">
+              <Col xs="5">
                 <Button variant="contained" component="label">
-                  Upload File
+                  Upload Image
                   <input
                     accept="image/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: 'none' }}
+                    style={{ display: "none" }}
                   />
                 </Button>
               </Col>
-              <Col xs="8" className="text-break">
+              <Col xs="7" className="text-break">
                 <h6>{image.name}</h6>
+              </Col>  
+            </Row>
+            <Row className="py-1">
+              <Col xs="5">
+                <Button variant="contained" component="label">
+                  Upload Video
+                  <input
+                    accept="video/*"
+                    type="file"
+                    onChange={handleCapture}
+                    style={{ display: "none" }}
+                  />
+                </Button>
+              </Col>
+              <Col xs="7" className="text-break">
+                <h6>{video.name}</h6>
               </Col>
             </Row>
           </ModalBody>
@@ -251,6 +224,6 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
   getCourseById,
-  editCourse,
+  editLecture,
   clearErrors,
-})(EditCourseModal);
+})(EditLectureModal);
