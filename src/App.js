@@ -22,9 +22,9 @@ import { logoutUser } from './store/actions/auth';
 if (localStorage.token) {
   const decoded = jwt_decode(localStorage.token.replace('Bearer ', ''));
   const currentTime = Date.now() / 1000;
-  console.log(decoded.exp);
-  console.log(currentTime);
-  console.log(decoded.exp < currentTime);
+  // console.log(decoded.exp);
+  // console.log(currentTime);
+  // console.log(decoded.exp < currentTime);
   // store.dispatch(logoutUser());
 
 

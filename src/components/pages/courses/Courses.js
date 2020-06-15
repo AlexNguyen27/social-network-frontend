@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-
-import Grid from "@material-ui/core/Grid";
+import { useHistory } from "react-router-dom";
+import { Grid, Button } from "@material-ui/core";
 
 import CardItem from "../../layout/CardItem";
 import PageLoader from "../../custom/PageLoader";
@@ -16,7 +16,7 @@ const Courses = ({
   auth: { user },
 }) => {
   const [loading, setLoading] = useState(true);
-
+  const history = useHistory();
   // INITIALIZE MODULE LIST
   useEffect(() => {
     getCourses(setLoading);
@@ -29,12 +29,22 @@ const Courses = ({
   // const test = Array.from(Array(10).keys());
   return (
     <PageLoader loading={loading}>
-      <h1>{console.log(match)}</h1>
+      <h1>herer</h1>
       <Grid container spacing={3}>
         {all_courses &&
           Object.keys(all_courses).map((key) => (
             <Grid item xs={4} md={3} spacing={3}>
-              <CardItem course={all_courses[key].course} />
+              <CardItem course={all_courses[key].course}>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() =>
+                    history.push(`${window.location.pathname}/${key}`)
+                  }
+                >
+                  Detail
+                </Button>
+              </CardItem>
             </Grid>
           ))}
       </Grid>

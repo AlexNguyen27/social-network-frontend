@@ -191,10 +191,6 @@ const DashBoard = ({
       }
     });
   };
-
-  // useEffect(() => {
-  //   logoutUser();
-  // }, []);
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -232,16 +228,16 @@ const DashBoard = ({
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (drawerId === "allCourses") {
+    if (drawerId === "allCourses" || match.path === "/all-courses") {
       return (
         <>
           <div className={classes.header}>Dashboard / Courses</div>
-          <Courses match={match}/>
+          <Courses match={match} />
         </>
       );
     }
 
-    if (drawerId === "yourCourses") {
+    if (drawerId === "yourCourses" || match.path === "/your-courses") {
       return (
         <>
           <div className={classes.header}>Dashboard / Your Courses</div>
@@ -345,11 +341,7 @@ const DashBoard = ({
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(" ");
-    //   console.log(res, res === "Courseid")
-    // if (res === "Courseid") {
-    //   return "Course";
-    // }
-    return res.replace('id', '');
+    return res.replace("id", "");
   };
 
   return (

@@ -41,10 +41,9 @@ const ControlCard = ({ course, auth: { user } }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  console.log(course);
   const { course: courseDetail, teacher } = course;
 
-  const { image, name, description, active } = courseDetail;
+  const { name, description, active } = courseDetail;
 
   const getToday = () => {
     var today = new Date();
@@ -55,10 +54,12 @@ const ControlCard = ({ course, auth: { user } }) => {
     return (today = mm + "/" + dd + "/" + yyyy);
   };
 
-  const isCurrentuser = teacher.id === user.id;
+  // const isCurrentuser = teacher.id === user.id;
+  const isCurrentuser = true;
+
   return (
     <Card className={classes.root}>
-      <CardMedia className={classes.cover} image={image} title={name} />
+      <CardMedia className={classes.cover} image={courseDetail.image || ""} title={name} />
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
@@ -68,7 +69,7 @@ const ControlCard = ({ course, auth: { user } }) => {
             <p>{description}</p>
           </Typography>
           <Typography component="h6" variant="body1">
-            Created by: {teacher.fullname}
+            Created by: {""} 
           </Typography>
           <Typography component="h6" variant="body1">
             Last Updated: {getToday()}

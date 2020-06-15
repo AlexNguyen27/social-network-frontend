@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const CardItem = ({ course }) => {
+const CardItem = ({ course, children }) => {
   const history = useHistory();
   const classes = useStyles();
 
@@ -44,13 +44,14 @@ const CardItem = ({ course }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button
+        {children}
+        {/* <Button
           size="small"
           color="primary"
           onClick={() => history.push(`${window.location.pathname}/${id}`)}
         >
           Detail
-        </Button>
+        </Button> */}
         {/* <Button size="small" color="primary">
           Learn More
         </Button> */}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -7,6 +7,7 @@ import ControlCard from "../../layout/ControlCard";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 
 import { getCourseById } from "../../../store/actions/course";
+import PageLoader from "../../custom/PageLoader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(1, 3),
-    // textAlign: "center",
     color: theme.palette.text.secondary,
     fontSize: "16px",
   },
@@ -22,20 +22,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCourseById(courseId);
-  }, []);
+    console.log('------------herer')
+    getCourseById(setLoading, courseId);
+  }, [courseId]);
 
-  const { letures } = course_detail.course;
+  const { letures } = course_detail.course || [];
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <ControlCard course={course_detail} />
-        </Grid>
-        {/* <Grid container spacing={3}> */}
-        {/* <Grid item xs={12}>
+    <PageLoader loading={loading}>
+      <div className={classes.root}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <ControlCard course={course_detail} />
+          </Grid>
+          {/* <Grid container spacing={3}> */}
+          {/* <Grid item xs={12}>
           <Paper className={classes.paper} style={{ fontSize: "20px" }}>
             Welcome to LearnEnglish
           </Paper>
@@ -57,64 +60,58 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
             improve your English.
           </Paper>
         </Grid> */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper} style={{ fontSize: "20px" }}>
-            What you will learn
-          </Paper>
-          <Paper className={classes.paper}>
-            You will learn over 1000 vital English words, expressions and
-            idioms, and how to use them in real life.
-          </Paper>
-          <Paper className={classes.paper}>
-            You will learn to think in English and to speak English fluently.
-            (in Intermediate level)
-          </Paper>
-          <Paper className={classes.paper}>
-            You will learn the most important English grammar with tons of
-            English speaking practice.
-          </Paper>
-          <Paper className={classes.paper}>
-            You will learn to read in English and to spell English words
-            intuitively
-          </Paper>
-          <Paper className={classes.paper}>
-            You will learn to understand movies and TV shows in English.
-          </Paper>
-        </Grid>
-        {/* </Grid> */}
-        <Grid item xs={6}>
-          <h4>Course Content</h4>
-        </Grid>
-        <Grid item xs={6} style={{ display: 'flex', alignItems: 'center'}}>
-          <h6 >{letures && letures.length} Lectures</h6>
-        </Grid>
-        {letures &&
-          letures.map((lecture) => (
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Grid container spacing={3}>
-                  <Grid item>
-                    <PlayCircleFilledIcon color="primary" fontSize="large"/>
+          <Grid item xs={12}>
+            <Paper className={classes.paper} style={{ fontSize: "20px" }}>
+              What you will learn
+            </Paper>
+            <Paper className={classes.paper}>
+              You will learn over 1000 vital English words, expressions and
+              idioms, and how to use them in real life.
+            </Paper>
+            <Paper className={classes.paper}>
+              You will learn to think in English and to speak English fluently.
+              (in Intermediate level)
+            </Paper>
+            <Paper className={classes.paper}>
+              You will learn the most important English grammar with tons of
+              English speaking practice.
+            </Paper>
+            <Paper className={classes.paper}>
+              You will learn to read in English and to spell English words
+              intuitively
+            </Paper>
+            <Paper className={classes.paper}>
+              You will learn to understand movies and TV shows in English.
+            </Paper>
+          </Grid>
+          {/* </Grid> */}
+          <Grid item xs={6}>
+            <h4>Course Content</h4>
+          </Grid>
+          <Grid item xs={6} style={{ display: "flex", alignItems: "center" }}>
+            <h6>{letures && letures.length} Lectures</h6>
+          </Grid>
+          {letures &&
+            letures.map((lecture) => (
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Grid container spacing={3}>
+                    <Grid item>
+                      <PlayCircleFilledIcon color="primary" fontSize="large" />
+                    </Grid>
+                    <Grid
+                      item
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <h6 style={{ margin: 0 }}>{lecture.name}</h6>
+                    </Grid>
                   </Grid>
-                  <Grid item style={{ display: 'flex', alignItems: 'center'}}><h6 style={{margin: 0}}>{lecture.name}</h6></Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-          ))}
-        {/* <Grid item xs={12}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid> */}
-        {/* <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
+                </Paper>
+              </Grid>
+            ))}
         </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>xs=3</Paper>
-        </Grid> */}
-      </Grid>
-    </div>
+      </div>
+    </PageLoader>
   );
 };
 

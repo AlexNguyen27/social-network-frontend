@@ -50,7 +50,7 @@ const Signup = ({
       }
     });
 
-    console.log(error);
+    // console.log(error);
     dispatch({
       type: GET_ERRORS,
       errors: error,
