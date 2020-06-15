@@ -45,16 +45,6 @@ const CardItem = ({ course, children }) => {
       </CardActionArea>
       <CardActions>
         {children}
-        {/* <Button
-          size="small"
-          color="primary"
-          onClick={() => history.push(`${window.location.pathname}/${id}`)}
-        >
-          Detail
-        </Button> */}
-        {/* <Button size="small" color="primary">
-          Learn More
-        </Button> */}
       </CardActions>
     </Card>
   );

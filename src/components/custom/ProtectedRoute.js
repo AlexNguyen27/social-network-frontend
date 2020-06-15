@@ -19,10 +19,8 @@ const ProtectedRoute = ({
         (student && isTeacher) ||
         (authorized === undefined && !isTeacher)
       ) {
-        // console.log('return hererer');
         return <Component {...props} dispatch={dispatch} />;
       }
-      // console.log('return not found');
       return (
         <NotFound
           alertText="Unauthorized"
@@ -30,7 +28,6 @@ const ProtectedRoute = ({
         />
       );
     }
-    // console.log('redirect');
     return <Redirect to="/login" />;
   };
 

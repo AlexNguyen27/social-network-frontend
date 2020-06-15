@@ -72,9 +72,7 @@ export const getUserCourses = (setLoading, userId) => async (dispatch) => {
 };
 
 export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
-  console.log("herer----------------------", id);
   const { all_courses } = getState().course;
-  console.log("----here", id);
   try {
     dispatch({
       type: GET_COURSE_DETAIL,

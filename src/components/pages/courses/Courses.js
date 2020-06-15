@@ -26,7 +26,6 @@ const Courses = ({
     };
   }, []);
 
-  // const test = Array.from(Array(10).keys());
   return (
     <PageLoader loading={loading}>
       <h1>herer</h1>
