@@ -7,12 +7,19 @@ import {
   ADD_COURSE,
   EDIT_COURSE,
   REMOVE_COURSE_DETAIL,
+  ADD_LECTURE,
+  DELETE_LECTURE,
+  EDIT_LECTURE,
 } from "../actions/types";
 
 const initialState = {
   all_courses: {},
   user_courses: {},
-  course_detail: {},
+  course_detail: {
+    course: {},
+    teacher: {},
+    lectures: {},
+  },
 };
 
 export default function (state = initialState, action) {
@@ -69,6 +76,31 @@ export default function (state = initialState, action) {
       return {
         ...state,
         course_detail: {},
+      };
+
+    case ADD_LECTURE:
+    case EDIT_LECTURE:
+      const newLecture = action.newLecture;
+      return {
+        ...state,
+        course_detail: {
+          ...state.course_detail,
+          lectures: {
+            ...state.course_detail.lectures,
+            [newLecture.id]: newLecture,
+          },
+        },
+      };
+    case DELETE_LECTURE:
+      const newLecturesObj = action.course_detail.lectures;
+      delete newLecturesObj[action.lectureId];
+
+      return {
+        ...state,
+        course_detail: {
+          ...state.course_detail,
+          lectures: newLecturesObj,
+        },
       };
     case UNAUTHENTICATE:
       return initialState;

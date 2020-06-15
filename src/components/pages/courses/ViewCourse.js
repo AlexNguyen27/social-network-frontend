@@ -29,7 +29,7 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
     getCourseById(setLoading, courseId);
   }, [courseId]);
 
-  const { letures } = course_detail.course || [];
+  const { lectures } = course_detail || [];
   return (
     <PageLoader loading={loading}>
       <div className={classes.root}>
@@ -89,10 +89,10 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
             <h4>Course Content</h4>
           </Grid>
           <Grid item xs={6} style={{ display: "flex", alignItems: "center" }}>
-            <h6>{letures && letures.length} Lectures</h6>
+            <h6>{lectures && Object.keys(lectures).length} Lectures</h6>
           </Grid>
-          {letures &&
-            letures.map((lecture) => (
+          {lectures &&
+            Object.keys(lectures).map((key) => (
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <Grid container spacing={3}>
@@ -103,7 +103,7 @@ const ViewCourse = ({ getCourseById, courseId, course_detail }) => {
                       item
                       style={{ display: "flex", alignItems: "center" }}
                     >
-                      <h6 style={{ margin: 0 }}>{lecture.name}</h6>
+                      <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
                     </Grid>
                   </Grid>
                 </Paper>

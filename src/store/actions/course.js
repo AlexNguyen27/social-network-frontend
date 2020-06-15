@@ -74,9 +74,26 @@ export const getUserCourses = (setLoading, userId) => async (dispatch) => {
 export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
   const { all_courses } = getState().course;
   try {
+    console.log("here", all_courses[id]);
+    const lectureToObj = arrayToObject(all_courses[id].course.letures);
+    console.log(lectureToObj);
+    const { id: courseId, image, description, active, name } = all_courses[
+      id
+    ].course;
+    const courseInfo = {
+      id: courseId,
+      image,
+      description,
+      active,
+      name,
+    };
     dispatch({
       type: GET_COURSE_DETAIL,
-      course_detail: all_courses[id],
+      course_detail: {
+        course: courseInfo,
+        teacher: all_courses[id].teacher,
+        lectures: lectureToObj,
+      },
     });
 
     setLoading(false);
@@ -198,7 +215,7 @@ export const editCourse = (
       {
         name: courseName,
         description: courseDescription,
-        "isActive": isActive,
+        isActive: isActive,
       },
       {
         headers: { Authorization: localStorage.token },
@@ -217,7 +234,6 @@ export const editCourse = (
       type: CLEAR_ERRORS,
     });
 
-
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -226,7 +242,6 @@ export const editCourse = (
       showConfirmButton: false,
       timer: 1500,
     });
-
   } catch (error) {
     logoutUser(dispatch, error);
     dispatch({

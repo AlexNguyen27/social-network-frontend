@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -10,7 +10,10 @@ import Typography from "@material-ui/core/Typography";
 // import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 // import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { Button, Grid } from "@material-ui/core";
+import { Row, Col } from "reactstrap";
+
 import FiveStars from "../custom/FiveStars";
+import AddLectureModal from "../pages/lectures/AddLectureModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +47,7 @@ const ControlCard = ({ course, auth: { user } }) => {
   const { course: courseDetail, teacher } = course;
 
   const { name, description, active } = courseDetail;
+  const [modal, setModal] = useState(false);
 
   const getToday = () => {
     var today = new Date();
@@ -59,7 +63,11 @@ const ControlCard = ({ course, auth: { user } }) => {
 
   return (
     <Card className={classes.root}>
-      <CardMedia className={classes.cover} image={courseDetail.image || ""} title={name} />
+      <CardMedia
+        className={classes.cover}
+        image={courseDetail.image || ""}
+        title={name}
+      />
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
@@ -69,7 +77,7 @@ const ControlCard = ({ course, auth: { user } }) => {
             <p>{description}</p>
           </Typography>
           <Typography component="h6" variant="body1">
-            Created by: {""} 
+            Created by: {""}
           </Typography>
           <Typography component="h6" variant="body1">
             Last Updated: {getToday()}
@@ -77,28 +85,35 @@ const ControlCard = ({ course, auth: { user } }) => {
         </CardContent>
 
         <div className={classes.controls}>
-        <Grid container spacing={2}>
-          <Grid item xs={4} style={{ textAlign: 'center'}}>
-            <Button variant="contained" color="secondary">
-              Statistics
-            </Button>
-          </Grid>
-          {isCurrentuser && (
-            <>
-              <Grid item xs={4} style={{ textAlign: 'center'}}>
-                <Button variant="contained" color="secondary">
-                  Add New Lecture
-                </Button>
-              </Grid>
-              <Grid item xs={4} style={{ textAlign: 'center'}}>
-                <Button variant="contained" color="primary">
-                  {active ? "Public" : "Private"}
-                </Button>
-              </Grid>
-            </>
-          )}
-        </Grid>
-        {/* <FiveStars /> */}
+          <Row>
+            {isCurrentuser && (
+              <>
+                <Col>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setModal(true)}
+                  >
+                    Add New Lecture
+                  </Button>
+                </Col>
+                <Col>
+                  <Button color="primary" variant="contained">
+                    {active ? "Public" : "Private"}
+                  </Button>
+                </Col>
+              </>
+            )}
+          </Row>
+          <Row className="mt-3">
+            <Col>
+              <Button variant="contained" color="default">
+                Statistics
+              </Button>
+            </Col>
+          </Row>
+
+          <AddLectureModal modal={modal} setModal={setModal} />
         </div>
       </div>
     </Card>
