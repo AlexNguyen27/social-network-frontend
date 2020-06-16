@@ -403,12 +403,12 @@ const DashBoard = ({
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={9} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+              <Badge badgeContent={10} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -420,7 +420,9 @@ const DashBoard = ({
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              {/* <AccountCircle /> */}
+              <p className="m-0 mr-2" style={{ fontSize: "19px" }}>
+                {user ? user.username : ""}
+              </p>
               <Avatar
                 alt="User Image"
                 src={

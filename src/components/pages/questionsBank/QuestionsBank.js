@@ -11,9 +11,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Paper from "@material-ui/core/Paper";
 import EditIcon from "@material-ui/icons/Edit";
 
-import { deleteQuestion, getQuestionById } from "../../../store/actions/question";
+import {
+  deleteQuestion,
+  getQuestionById,
+} from "../../../store/actions/question";
 import AddQuestionModal from "./AddQuestionModal";
 import EditQuestionModal from "./EditQuestionModal";
+import Colors from "../../../constants/Colors";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -29,7 +33,6 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
   const [loading, setLoading] = useState(false);
   const [modalAddQuestion, setModalAddQuestion] = useState(false);
   const [modalEditQuestion, setModalEditQuestion] = useState(false);
-  const [selectedId, setSelectedId] = useState();
 
   const questionsBankArray = Object.keys(questions_bank).map(
     (questionId) => questions_bank[questionId]
@@ -54,9 +57,7 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
 
   const onEditQuestion = (questionId) => {
     setModalEditQuestion(true);
-    // setSelectedId(questionId);
     getQuestionById(setLoading, questionId);
-    // setLectureData(lecture);
     console.log("lecutre----", questionId);
   };
 
@@ -78,7 +79,7 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
       <Grid item xs={12}>
         {questionsBankArray.length > 0 ? (
           <>
-            {questionsBankArray.map((question) => (
+            {questionsBankArray.map((question, index) => (
               <div className="mb-2">
                 <Paper className={classes.paper}>
                   <Row>
@@ -86,7 +87,9 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
                       xs="10"
                       style={{ display: "flex", alignItems: "center" }}
                     >
-                      <h6 style={{ margin: 0 }}>{question.question}</h6>
+                      <h5 style={{ color: Colors.accent }}>
+                        Question {index + 1}: {question.question}{" "}
+                      </h5>
                     </Col>
                     <Col xs="2">
                       <Row className="justify-content-center">
@@ -105,6 +108,23 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
                       </Row>
                     </Col>
                   </Row>
+                  <Col xs="12">
+                    <h6 style={{ color: Colors.black }}>
+                      A: {question.answerfirst}
+                    </h6>
+                    <h6 style={{ color: Colors.black }}>
+                      B: {question.answersecond}
+                    </h6>
+                    <h6 style={{ color: Colors.black }}>
+                      C: {question.answerthird}
+                    </h6>
+                    <h6 style={{ color: Colors.black }}>
+                      D: {question.answerfourth}
+                    </h6>
+                  </Col>
+                  <Col>
+                    <h6 style={{ color: "green"}}>Correct answer: {question.correctanswer}</h6>
+                  </Col>
                 </Paper>
               </div>
             ))}
@@ -129,4 +149,6 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
 const mapStateToProps = (state) => ({
   questions_bank: state.question.questions_bank,
 });
-export default connect(mapStateToProps, { deleteQuestion, getQuestionById })(QuestionsBank);
+export default connect(mapStateToProps, { deleteQuestion, getQuestionById })(
+  QuestionsBank
+);

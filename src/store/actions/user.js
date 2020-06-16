@@ -6,7 +6,7 @@ import {
 import { logoutUser } from "./auth";
 import Swal from "sweetalert2";
 
-export const updatePassword = (password, userId) => async (
+export const updatePassword = (password) => async (
   dispatch,
   getState
 ) => {
@@ -26,11 +26,6 @@ export const updatePassword = (password, userId) => async (
         headers: { Authorization: localStorage.token },
       }
     );
-
-    // dispatch({
-    //   type: EDIT_QUESTION,
-    //   newQuestion: res.data.data,
-    // });
 
     dispatch({
       type: CLEAR_ERRORS,
