@@ -1,5 +1,4 @@
 import axios from "../../utils/axios";
-import logoutDispatch from "../../utils/logoutDispatch";
 
 import {
   GET_ERRORS,
@@ -23,8 +22,6 @@ export const getCourses = (setLoading) => async (dispatch) => {
       headers: { Authorization: localStorage.token },
     });
 
-    console.log(allCoursesArray);
-
     const allCoursesToObject = arrayToObject(allCoursesArray.data.data);
 
     dispatch({
@@ -34,7 +31,6 @@ export const getCourses = (setLoading) => async (dispatch) => {
 
     setLoading(false);
   } catch (error) {
-    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -49,11 +45,8 @@ export const getUserCourses = (setLoading, userId) => async (dispatch) => {
       headers: { Authorization: localStorage.token },
     });
 
-    console.log(userCoursesArray);
-
     const userCoursesToObject = arrayToObject(userCoursesArray.data.data);
 
-    console.log(userCoursesArray);
     dispatch({
       type: GET_USER_COURSES,
       user_courses: userCoursesToObject,
@@ -61,7 +54,6 @@ export const getUserCourses = (setLoading, userId) => async (dispatch) => {
 
     setLoading(false);
   } catch (error) {
-    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -82,9 +74,7 @@ export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
     const lecturesArray = await axios.get(`/api/lectures/courses/${id}`, {
       headers: { Authorization: localStorage.token },
     });
-    // console.log(lecturesArray);
     const lecturesObject = arrayToObject(lecturesArray.data.data);
-    // console.log(lectureToObj);
     const {
       id: courseId,
       image,
@@ -110,11 +100,6 @@ export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
         lectures: lecturesObject,
       },
     });
-
-    // dispatch({
-    //   type: GET_LECTURES,
-    //   lectures: ,
-    // });
 
     setLoading(false);
   } catch (error) {

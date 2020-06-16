@@ -180,7 +180,7 @@ const AddLectureModal = ({
                 />
               </Col>
             </Row>
-            <Row className="py-1">
+            <Row className="py-1 mt-2">
               <Col xs="5">
                 <Button variant="contained" component="label">
                   Upload Image

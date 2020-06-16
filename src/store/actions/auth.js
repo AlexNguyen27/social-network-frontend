@@ -7,10 +7,8 @@ import jwt_decode from "jwt-decode";
 import Swal from "sweetalert2";
 //LOGIN User
 export const loginUser = (user) => async (dispatch) => {
-  // user includes username, password
   try {
     const res = await axios.post("/api/auth/signin", user);
-    // const { token } = res.data.data;
 
     const resData = res.data.data;
     const { token } = resData;
@@ -96,8 +94,6 @@ export const signupTeacher = (isAuthenticated, history, userData) => async (
       history.push("/login");
     }
 
-    // When admin create teacher
-    // history.push('/teacherList');
   } catch (error) {
     logoutUser(dispatch, error);
     dispatch({

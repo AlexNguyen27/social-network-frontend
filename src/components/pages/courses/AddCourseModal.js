@@ -86,6 +86,10 @@ const AddCourseModal = ({
       }
     });
 
+    if (description.trim().length > 255) {
+      error.description = "Description length must be less than 255 characters";
+    }
+
     if (image.name.trim() === "") {
       error.image = "Please select an image!";
     }
@@ -158,6 +162,9 @@ const AddCourseModal = ({
                   error={errors.description}
                   defaultValue="New course description"
                 />
+                {errors.description && (
+                  <p style={{ color: "red" }}>{errors.description}</p>
+                )}
               </Col>
             </Row>
             <Row className="py-2 px-3">

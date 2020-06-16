@@ -49,6 +49,7 @@ const EditCourseModal = ({
   setModal,
   courseData,
   editCourse,
+  course_detail
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -88,6 +89,9 @@ const EditCourseModal = ({
       }
     });
 
+    if (description.trim().length > 255) {
+      error.description = "Description length must be less than 255 characters";
+    }
     if (image.name.trim() === "") {
       error.image = "Please select an image!";
     }
@@ -95,8 +99,8 @@ const EditCourseModal = ({
       type: GET_ERRORS,
       errors: error,
     });
-    setLoading(true);
     if (JSON.stringify(error) === "{}") {
+      setLoading(true);
       editCourse(
         setLoading,
         courseData.id,
@@ -143,7 +147,7 @@ const EditCourseModal = ({
       name: courseData ? courseData.image : "",
       file: "same",
     });
-  }, [courseData]);
+  }, [course_detail]);
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
@@ -179,6 +183,9 @@ const EditCourseModal = ({
                   variant="outlined"
                   error={errors.description}
                 />
+                {errors.description && (
+                  <p style={{ color: "red" }}>{errors.description}</p>
+                )}
               </Col>
             </Row>
             <Row className="py-2 px-3">

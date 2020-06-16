@@ -76,20 +76,44 @@ const ControlCard = ({ course, auth: { user } }) => {
           <Typography variant="h6" color="textSecondary">
             <p>{description}</p>
           </Typography>
-          <hr/>
-          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
-            Created by: {teacher.fullname}
-          </Typography>
-          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
-            Last Updated: {getToday()}
-          </Typography>
-          <Typography component="h6" color="textSecondary" variant="body1" className="mt-2">
-            {totalStudentEnroll} Student enrolled 
-          </Typography>
+          <hr />
+          <Row>
+            <Col xs="9">
+              <Typography
+                component="h6"
+                color="textSecondary"
+                variant="body1"
+                className="mt-2"
+              >
+                Created by: {teacher.fullname}
+              </Typography>
+              <Typography
+                component="h6"
+                color="textSecondary"
+                variant="body1"
+                className="mt-2"
+              >
+                Last Updated: {getToday()}
+              </Typography>
+              <Typography
+                component="h6"
+                color="textSecondary"
+                variant="body1"
+                className="mt-2"
+              >
+                {totalStudentEnroll} Student enrolled
+              </Typography>
+            </Col>
+            <Col xs="3">
+              <Button color="default" variant="contained">
+                {active ? "Public" : "Private"}
+              </Button>
+            </Col>
+          </Row>
         </CardContent>
 
         <div className={classes.controls}>
-          <Row  className="p-3">
+          <Row className="pl-3">
             {isCurrentuser && (
               <>
                 <Col>
@@ -99,11 +123,6 @@ const ControlCard = ({ course, auth: { user } }) => {
                     onClick={() => setModal(true)}
                   >
                     Add New Lecture
-                  </Button>
-                </Col>
-                <Col>
-                  <Button color="default" variant="contained">
-                    {active ? "Public" : "Private"}
                   </Button>
                 </Col>
               </>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { TextField } from "@material-ui/core";
 import {
   Row,
   Col,
@@ -17,6 +16,7 @@ import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 import { GET_ERRORS } from "../../../store/actions/types";
 import { clearErrors } from "../../../store/actions/common";
 import { updatePassword } from "../../../store/actions/user";
+import PageLoader from "../../custom/PageLoader";
 
 const ChangePasswordModal = ({
   auth: { user },
@@ -27,6 +27,7 @@ const ChangePasswordModal = ({
   setModal,
 }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   // PASSWORD STATE
   const [password, setPassword] = useState({
     newPassword: "",
@@ -75,74 +76,76 @@ const ChangePasswordModal = ({
     });
 
     if (JSON.stringify(error) === "{}") {
-      console.log(password);
-      updatePassword(password);
+      setLoading(true);
+      updatePassword(setLoading, password);
     }
   };
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>
-        Change Your Password
-      </ModalHeader>
+      <PageLoader loading={loading} noPadding>
+        <ModalHeader toggle={() => closeModal()}>
+          Change my password
+        </ModalHeader>
 
-      {/** MODAL BODY */}
-      <Form onSubmit={(e) => onSubmit(e)}>
-        <ModalBody>
-          <Row>
-            <Col xs="12">
-              <TextFieldInputWithHeader
-                id="outlined-multiline-flexible"
-                name="currentPassword"
-                label="Current password"
-                fullWidth
-                type="password"
-                value={currentPassword}
-                onChange={onChange}
-                error={errors.currentPassword}
-              />
-            </Col>
-            <Col xs="12" className="mt-4">
-              <TextFieldInputWithHeader
-                id="outlined-multiline-static"
-                label="New Password"
-                name="newPassword"
-                type="password"
-                value={newPassword}
-                fullWidth
-                onChange={onChange}
-                error={errors.newPassword}
-              />
-            </Col>
-            <Col xs="12" className="mt-4">
-              <TextFieldInputWithHeader
-                id="outlined-multiline-static"
-                label="Confirm password"
-                type="password"
-                name="confirmPassword"
-                value={confirmPassword}
-                fullWidth
-                onChange={onChange}
-                error={errors.confirmPassword}
-              />
-            </Col>
-          </Row>
-        </ModalBody>
+        {/** MODAL BODY */}
+        <Form onSubmit={(e) => onSubmit(e)}>
+          <ModalBody>
+            <Row>
+              <Col xs="12">
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-flexible"
+                  name="currentPassword"
+                  label="Current password"
+                  fullWidth
+                  type="password"
+                  value={currentPassword}
+                  onChange={onChange}
+                  error={errors.currentPassword}
+                />
+              </Col>
+              <Col xs="12" className="mt-4">
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-static"
+                  label="New Password"
+                  name="newPassword"
+                  type="password"
+                  value={newPassword}
+                  fullWidth
+                  onChange={onChange}
+                  error={errors.newPassword}
+                />
+              </Col>
+              <Col xs="12" className="mt-4">
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-static"
+                  label="Confirm password"
+                  type="password"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  fullWidth
+                  onChange={onChange}
+                  error={errors.confirmPassword}
+                />
+              </Col>
+            </Row>
+          </ModalBody>
 
-        {/** MODAL FOOTER */}
-        <ModalFooter>
-          <Button variant="contained" color="primary" type="submit">
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            className="ml-2"
-            onClick={() => closeModal()}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Form>
+          {/** MODAL FOOTER */}
+          <ModalFooter>
+            <Button variant="contained" color="primary" type="submit">
+              Save
+            </Button>
+            <Button
+              variant="contained"
+              className="ml-2"
+              onClick={() => closeModal()}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </PageLoader>
     </Modal>
   );
 };

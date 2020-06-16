@@ -131,7 +131,6 @@ export const addNewLecture = (
       timer: 1500,
     });
   } catch (error) {
-    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
