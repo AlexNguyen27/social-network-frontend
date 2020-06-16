@@ -1,4 +1,4 @@
-export const BASE_URL = "http://9d6e67498cc4.ngrok.io/upload";
+export const BASE_URL = "http://57e63be3f1ad.ngrok.io/upload";
 
 export const AUTHENTICATE = "AUTHENTICATE";
 export const UNAUTHENTICATE = "UNAUTHENTICATE";
@@ -16,7 +16,14 @@ export const EDIT_COURSE = "EDIT_COURSE";
 
 export const REMOVE_COURSE_DETAIL = "REMOVE_COURSE_DETAIL";
 
-export const ADD_LECTURE = 'ADD_LECTURE';
-export const EDIT_LECTURE = 'EDIT_LECTURE';
-export const DELETE_LECTURE = 'DELETE_LECTURE';
-export const GET_LECTURES = 'GET_LECTURES'
+export const ADD_LECTURE = "ADD_LECTURE";
+export const EDIT_LECTURE = "EDIT_LECTURE";
+export const DELETE_LECTURE = "DELETE_LECTURE";
+export const GET_LECTURES = "GET_LECTURES";
+export const GET_LECTURE_DETAIL = "GET_LECTURE_DETAIL";
+
+export const GET_QUESTIONS = "GET_QUESTIONS";
+export const GET_QUESTION_DETAIL = "GET_QUESTION_DETAIL";
+export const EDIT_QUESTION = "EDIT_QUESTION";
+export const ADD_QUESTION = "ADD_QUESTION";
+export const DELETE_QUESTION = "DELETE_QUESTION";

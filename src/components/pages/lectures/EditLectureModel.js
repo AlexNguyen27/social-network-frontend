@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { green } from "@material-ui/core/colors";
 import { useDispatch } from "react-redux";
 
 import {
   TextField,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
 } from "@material-ui/core";
 
 import { getCourseById } from "../../../store/actions/course";

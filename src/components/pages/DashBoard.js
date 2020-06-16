@@ -230,7 +230,7 @@ const DashBoard = ({
   const renderContent = (drawerId) => {
     console.log("match----", match);
     if (match.params.lectureId) {
-      return <ViewLecture lectureId={match.params.lectureId} />;
+      return <ViewLecture courseId={match.params.courseId} lectureId={match.params.lectureId} />;
     }
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;

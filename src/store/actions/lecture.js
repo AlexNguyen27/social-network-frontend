@@ -7,36 +7,39 @@ import {
   CLEAR_ERRORS,
   GET_ERRORS,
   GET_LECTURES,
+  GET_LECTURE_DETAIL,
 } from "./types";
 import Swal from "sweetalert2";
 import { logoutUser } from "./auth";
 import { arrayToObject } from "../../utils/commonFunction";
 
-// export const getLecturesByCourseId = (setLoading, courseId) => async (dispatch) => {
-//   try {
-//     const lecturesArray = await axios.get(`/api/lectures/courses/${courseId}`, {
-//       headers: { Authorization: localStorage.token },
-//     });
+export const getLectureByLectureId = (setLoading, lectureId) => async (
+  dispatch
+) => {
+  try {
+    const lecture = await axios.get(`/api/lectures/${lectureId}`, {
+      headers: { Authorization: localStorage.token },
+    });
 
-//     console.log(lecturesArray);
+    // console.log(lecturesArray);
 
-//     const lecturesObject = arrayToObject(lecturesArray.data.data);
+    // const lecturesObject = arrayToObject(lecturesArray.data.data);
+    // const selectedLecture  = lecturesArray
+    dispatch({
+      type: GET_LECTURE_DETAIL,
+      lecture_detail: lecture.data.data,
+    });
 
-//     dispatch({
-//       type: GET_LECTURES,
-//       lectures: lecturesObject,
-//     });
-
-//     setLoading(false);
-//   } catch (error) {
-//     console.log(error);
-//     logoutUser(dispatch, error);
-//     dispatch({
-//       type: GET_ERRORS,
-//       errors: error.response.data,
-//     });
-//   }
-// };
+    setLoading(false);
+  } catch (error) {
+    console.log(error);
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
 
 // DELETE LECTURE
 export const deleteLecture = (lectureId) => async (dispatch) => {

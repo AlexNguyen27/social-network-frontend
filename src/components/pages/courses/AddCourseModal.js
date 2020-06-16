@@ -84,6 +84,9 @@ const AddCourseModal = ({
       }
     });
 
+    if (image.name.trim() === "") {
+      error.image = "Please select an image!";
+    }
     // console.log(error);
     dispatch({
       type: GET_ERRORS,
@@ -177,9 +180,9 @@ const AddCourseModal = ({
             </FormControl>
           </Row>
           <Row className="py-1">
-            <Col xs="4">
+            <Col xs="5">
               <Button variant="contained" component="label">
-                Upload File
+                Upload Image
                 <input
                   accept="image/*"
                   type="file"
@@ -188,11 +191,17 @@ const AddCourseModal = ({
                 />
               </Button>
             </Col>
-            <Col xs="8" className="text-break">
+            <Col xs="7" className="text-break">
               <h6>{image.name}</h6>
             </Col>
-            {/* <MediaCapture /> */}
           </Row>
+          {errors.image && (
+            <Row>
+              <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                {errors.image}
+              </p>
+            </Row>
+          )}
         </ModalBody>
 
         {/** MODAL FOOTER */}

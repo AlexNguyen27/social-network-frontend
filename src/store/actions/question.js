@@ -1,0 +1,187 @@
+import axios from "../../utils/axios";
+import {
+  GET_QUESTIONS,
+  GET_ERRORS,
+  GET_QUESTION_DETAIL,
+  DELETE_QUESTION,
+  ADD_QUESTION,
+  EDIT_QUESTION,
+  CLEAR_ERRORS,
+} from "./types";
+import { logoutUser } from "./auth";
+import { arrayToObject } from "../../utils/commonFunction";
+import Swal from "sweetalert2";
+import { questions_bank } from "../../mockup/questions_bank";
+
+// GET majors data
+export const getQuestionByLectureId = (setLoading, lectureId) => async (
+  dispatch
+) => {
+  try {
+    // TODO : GET QUESNTIONS BANK
+    // const questionsArray = await axios.get(
+    //   `/api/questions/lectures/${lectureId}`,
+    //   {
+    //     headers: { Authorization: localStorage.token },
+    //   }
+    // );
+
+    // console.log(questionsArray);
+
+    // const questionsObject = arrayToObject(questionsArray.data.data);
+
+    dispatch({
+      type: GET_QUESTIONS,
+      questions_bank: questions_bank,
+    });
+
+    setLoading(false);
+  } catch (error) {
+    console.log(error);
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
+
+export const getQuestionById = (setLoading, id) => async (
+  dispatch,
+  getState
+) => {
+  const { questions_bank } = getState().question;
+  try {
+    // const question = await axios.get(`/api/questions/${id}`, {
+    //   headers: { Authorization: localStorage.token },
+    // });
+    // const question = arrayToObject(question.data.data);
+
+    dispatch({
+      type: GET_QUESTION_DETAIL,
+      // question_detail: question.data.data,
+      question_detail: questions_bank[id],
+    });
+
+    setLoading(false);
+  } catch (error) {
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error,
+    });
+  }
+};
+
+// DELETE GROUP
+export const deleteQuestion = (questionId) => async (dispatch) => {
+  try {
+    await axios.delete(`api/questions/${questionId}`, {
+      headers: { Authorization: localStorage.token },
+    });
+
+    dispatch({
+      type: DELETE_QUESTION,
+      selectedId: questionId,
+    });
+
+    dispatch({
+      type: CLEAR_ERRORS,
+    });
+    // using sweetalert2
+    Swal.fire({
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } catch (error) {
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
+
+// ADD NEW Course
+export const addNewQuestion = (questionData) => async (dispatch) => {
+  try {
+    // Passing: groupName, categoryId
+    // const res = await axios.post(
+    //   "api/questions",
+    //   {
+    //     questionData,
+    //   },
+    //   {
+    //     headers: { Authorization: localStorage.token },
+    //   }
+    // );
+
+    // const newQuestion = res.data.data;
+    questionData.id = Math.random();
+    const newQuestion = questionData;
+    dispatch({
+      type: ADD_QUESTION,
+      newQuestion,
+    });
+
+    dispatch({
+      type: CLEAR_ERRORS,
+    });
+    // using sweetalert2
+    Swal.fire({
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } catch (error) {
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
+
+// EDIT Course NAME
+export const editQuestion = (questionId, questionData) => async (dispatch) => {
+  try {
+    const res = await axios.put(
+      `api/questions/${questionId}`,
+      {
+        questionData,
+      },
+      {
+        headers: { Authorization: localStorage.token },
+      }
+    );
+
+    dispatch({
+      type: EDIT_QUESTION,
+      newQuestion: res.data.data,
+    });
+
+    dispatch({
+      type: CLEAR_ERRORS,
+    });
+
+    Swal.fire({
+      // using sweetalert2
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } catch (error) {
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
