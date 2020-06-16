@@ -29,7 +29,6 @@ const StaffLogin = ({
   // Click button Login
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(formData);
 
     loginUser(formData);
   };

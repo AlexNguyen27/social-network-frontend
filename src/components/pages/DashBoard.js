@@ -48,13 +48,16 @@ import { logoutUser } from "../../store/actions/auth";
 import MultipleSummary from "./statistics/MultipleSummary";
 import Statistics from "./statistics/Statistics";
 import ViewLecture from "./lectures/ViewLecture";
+import { Avatar } from "@material-ui/core";
+import UserInfo from "./user/UserInfo";
+import ChangePasswordModal from "./user/ChangePasswordModal";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    margin: 0
+    margin: 0,
   },
   appBar: {
     background: Colors.purple,
@@ -135,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
 const DashBoard = ({
   history,
   logoutUser,
-  auth: { isAuthenticated },
+  auth: { isAuthenticated, user },
   match,
 }) => {
   const classes = useStyles();
@@ -153,6 +156,7 @@ const DashBoard = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [drawerId, setDrawerId] = useState("allCourses");
+  const [modalChangePassword, setModalChangePassword] = useState(false);
 
   const menuId = "primary-search-account-menu";
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -173,8 +177,13 @@ const DashBoard = ({
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+    history.push("/user-profile");
   };
 
+  const handeOnChangePassword = () => {
+    // handleMobileMenuClose();
+    setModalChangePassword(true);
+  };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -205,8 +214,8 @@ const DashBoard = ({
       open={isMenuOpen}
       onClose={() => setAnchorEl(null)}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handeOnChangePassword}>Change password</MenuItem>
     </Menu>
   );
 
@@ -230,12 +239,25 @@ const DashBoard = ({
   const renderContent = (drawerId) => {
     console.log("match----", match);
     if (match.params.lectureId) {
-      return <ViewLecture courseId={match.params.courseId} lectureId={match.params.lectureId} />;
+      return (
+        <ViewLecture
+          courseId={match.params.courseId}
+          lectureId={match.params.lectureId}
+        />
+      );
     }
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
+    if (match.path === "/user-profile") {
+      return (
+        <>
+          <div className={classes.header}>Dashboard / My Account</div>
+          <UserInfo />
+        </>
+      );
+    }
     if (match.path === "/all-courses") {
       return (
         <>
@@ -354,6 +376,10 @@ const DashBoard = ({
 
   return (
     <div className={classes.root}>
+      <ChangePasswordModal
+        modal={modalChangePassword}
+        setModal={setModalChangePassword}
+      />
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -394,7 +420,15 @@ const DashBoard = ({
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              {/* <AccountCircle /> */}
+              <Avatar
+                alt="User Image"
+                src={
+                  user && user.image
+                    ? user.image
+                    : "https://image.plo.vn/w653/Uploaded/2020/xpckxpiu/2020_05_31/lisa_goix.jpg"
+                }
+              />
             </IconButton>
           </div>
           <div className={classes.sectionDesktop}>

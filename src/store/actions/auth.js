@@ -1,29 +1,29 @@
-import axios from '../../utils/axios';
-import logoutDispatch from '../../utils/logoutDispatch';
-import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE } from './types';
+import axios from "../../utils/axios";
+import logoutDispatch from "../../utils/logoutDispatch";
+import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE } from "./types";
 
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 //LOGIN User
 export const loginUser = (user) => async (dispatch) => {
   // user includes username, password
   try {
-    const res = await axios.post('/api/auth/signin', user);
+    const res = await axios.post("/api/auth/signin", user);
     // const { token } = res.data.data;
 
     const resData = res.data.data;
     const { token } = resData;
 
     // Decode Token
-    const decoded = jwt_decode(token.replace('Bearer ', ''));
-    console.log('decoded -------', decoded);
+    const decoded = jwt_decode(token.replace("Bearer ", ""));
+    console.log("decoded -------", decoded);
 
     const userData = {};
-    if (resData.role.authority === 'ROLE_ADMIN') {
+    if (resData.role.authority === "ROLE_ADMIN") {
       userData.isAdmin = true;
     }
-    if (resData.role.authority === 'ROLE_TEACHER') {
+    if (resData.role.authority === "ROLE_TEACHER") {
       userData.isTeacher = true;
     }
 
@@ -48,9 +48,11 @@ export const loginUser = (user) => async (dispatch) => {
     });
   } catch (error) {
     // If login fails, set user info to null
-    console.log('err----------------', error);
+    console.log("err----------------", error);
     logoutDispatch(dispatch, error);
-
+    if (error.response.data.message === "Login fail") {
+      error.response.data.message = "Wrong username or password!";
+    }
     // Set errors
     dispatch({
       type: GET_ERRORS,
@@ -62,7 +64,7 @@ export const loginUser = (user) => async (dispatch) => {
 //Logout User
 export const logoutUser = () => (dispatch) => {
   // Set user info to null
-  console.log('here');
+  console.log("here");
 
   logoutDispatch(dispatch);
 };
@@ -72,9 +74,9 @@ export const signupTeacher = (isAuthenticated, history, userData) => async (
   dispatch
 ) => {
   try {
-    userData.role = ['TEACHER'];
+    userData.role = ["TEACHER"];
 
-    await axios.post('api/auth/signup', userData, {
+    await axios.post("api/auth/signup", userData, {
       headers: { Authorization: localStorage.token },
     });
 
@@ -83,15 +85,15 @@ export const signupTeacher = (isAuthenticated, history, userData) => async (
     });
     // using sweetalert2
     Swal.fire({
-      position: 'center',
-      type: 'success',
-      title: 'Login to continue',
+      position: "center",
+      type: "success",
+      title: "Login to continue",
       showConfirmButton: false,
       timer: 1500,
     });
 
     if (!isAuthenticated) {
-      history.push('/login');
+      history.push("/login");
     }
 
     // When admin create teacher

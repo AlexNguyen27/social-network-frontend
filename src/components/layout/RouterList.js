@@ -24,6 +24,7 @@ const RouterList = (props) => {
         <ProtectedRoute exact path="/your-courses/:courseId" component={DashBoard} />
         <ProtectedRoute exact path="/your-courses/:courseId/lectures/:lectureId" component={DashBoard} />
         <ProtectedRoute exact path="/all-courses/:courseId/lectures/:lectureId" component={DashBoard} />
+        <ProtectedRoute exact path="/user-profile" component={DashBoard} />
         <ProtectedRoute exact path="/statistics" component={DashBoard} />
         <ProtectedRoute exact path="/help" component={DashBoard} />
         <ProtectedRoute exact path="/notifications" component={DashBoard} />

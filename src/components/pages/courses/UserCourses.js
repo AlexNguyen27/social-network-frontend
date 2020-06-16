@@ -3,6 +3,10 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import { Grid, Button } from "@material-ui/core";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import CardItem from "../../layout/CardItem";
 import PageLoader from "../../custom/PageLoader";
@@ -75,7 +79,7 @@ const UserCourses = ({
             color="primary"
             onClick={() => setModalAdd(true)}
           >
-            Add new course
+            <AddCircleIcon className="mr-2" /> Add new course
           </Button>
         </Grid>
         {user_courses &&
@@ -95,6 +99,7 @@ const UserCourses = ({
                     history.push(`${window.location.pathname}/${key}`)
                   }
                 >
+                  {/* <VisibilityIcon className="mr-1" />  */}
                   Detail
                 </Button>
                 <Button
@@ -102,13 +107,15 @@ const UserCourses = ({
                   color="secondary"
                   onClick={() => onEditCourse(user_courses[key].course)}
                 >
-                  Edit
+                  {/* <EditIcon className="mr-1" /> */}
+                   Edit
                 </Button>
                 <Button
                   size="small"
                   color="default"
                   onClick={() => onDeleteCourse(key)}
                 >
+                  {/* <DeleteIcon className="mr-1" />  */}
                   Delete
                 </Button>
               </CardItem>

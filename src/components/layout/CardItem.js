@@ -49,7 +49,7 @@ const CardItem = ({ course, children }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>{children}</CardActions>
+      <CardActions style={{ justifyContent: 'space-evenly'}}>{children}</CardActions>
     </Card>
   );
 };
