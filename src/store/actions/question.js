@@ -153,7 +153,9 @@ export const addNewQuestion = (setLoading, questionData) => async (
 };
 
 // EDIT Course NAME
-export const editQuestion = (questionId, questionData) => async (dispatch) => {
+export const editQuestion = (setLoading, questionId, questionData) => async (
+  dispatch
+) => {
   try {
     const res = await axios.put(
       `api/questions/${questionId}`,
@@ -173,7 +175,7 @@ export const editQuestion = (questionId, questionData) => async (dispatch) => {
     dispatch({
       type: CLEAR_ERRORS,
     });
-
+    setLoading(false);
     Swal.fire({
       // using sweetalert2
       position: "center",
