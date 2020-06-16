@@ -58,7 +58,8 @@ const UserCourses = ({
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        deleteCourse(courseId);
+        setLoading(true);
+        deleteCourse(setLoading, courseId);
       }
     });
   };
@@ -108,7 +109,7 @@ const UserCourses = ({
                   onClick={() => onEditCourse(user_courses[key].course)}
                 >
                   {/* <EditIcon className="mr-1" /> */}
-                   Edit
+                  Edit
                 </Button>
                 <Button
                   size="small"

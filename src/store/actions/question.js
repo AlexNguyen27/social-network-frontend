@@ -74,7 +74,7 @@ export const getQuestionById = (setLoading, id) => async (
 };
 
 // DELETE GROUP
-export const deleteQuestion = (questionId) => async (dispatch) => {
+export const deleteQuestion = (setLoading, questionId) => async (dispatch) => {
   try {
     await axios.delete(`api/questions/${questionId}`, {
       headers: { Authorization: localStorage.token },
@@ -88,6 +88,7 @@ export const deleteQuestion = (questionId) => async (dispatch) => {
     dispatch({
       type: CLEAR_ERRORS,
     });
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -106,7 +107,9 @@ export const deleteQuestion = (questionId) => async (dispatch) => {
 };
 
 // ADD NEW Course
-export const addNewQuestion = (questionData) => async (dispatch) => {
+export const addNewQuestion = (setLoading, questionData) => async (
+  dispatch
+) => {
   try {
     // Passing: groupName, categoryId
     // const res = await axios.post(
@@ -130,6 +133,8 @@ export const addNewQuestion = (questionData) => async (dispatch) => {
     dispatch({
       type: CLEAR_ERRORS,
     });
+
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",

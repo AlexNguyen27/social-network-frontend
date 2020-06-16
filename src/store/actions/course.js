@@ -127,7 +127,7 @@ export const getCourseById = (setLoading, id) => async (dispatch, getState) => {
 };
 
 // DELETE GROUP
-export const deleteCourse = (courseId) => async (dispatch) => {
+export const deleteCourse = (setLoading, courseId) => async (dispatch) => {
   try {
     await axios.delete(`api/courses/${courseId}`, {
       headers: { Authorization: localStorage.token },
@@ -141,6 +141,8 @@ export const deleteCourse = (courseId) => async (dispatch) => {
     dispatch({
       type: CLEAR_ERRORS,
     });
+
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -160,6 +162,7 @@ export const deleteCourse = (courseId) => async (dispatch) => {
 
 // ADD NEW Course
 export const addNewCourse = (
+  setLoading,
   courseName,
   courseDescription,
   imageFile,
@@ -203,6 +206,7 @@ export const addNewCourse = (
     dispatch({
       type: CLEAR_ERRORS,
     });
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -222,6 +226,7 @@ export const addNewCourse = (
 
 // EDIT Course NAME
 export const editCourse = (
+  setLoading,
   courseId,
   courseName,
   courseDescription,
@@ -265,7 +270,7 @@ export const editCourse = (
     dispatch({
       type: CLEAR_ERRORS,
     });
-
+    setLoading(false);
     Swal.fire({
       // using sweetalert2
       position: "center",

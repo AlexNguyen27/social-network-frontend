@@ -50,7 +50,8 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        deleteQuestion(questionId);
+        setLoading(true);
+        deleteQuestion(setLoading, questionId);
       }
     });
   };
@@ -58,7 +59,6 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
   const onEditQuestion = (questionId) => {
     setModalEditQuestion(true);
     getQuestionById(setLoading, questionId);
-    console.log("lecutre----", questionId);
   };
 
   return (

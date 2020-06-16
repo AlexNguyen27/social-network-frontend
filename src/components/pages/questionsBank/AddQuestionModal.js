@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { green } from "@material-ui/core/colors";
 import { useDispatch } from "react-redux";
+import PageLoader from "../../custom/PageLoader";
 
 import {
   TextField,
@@ -39,6 +38,8 @@ const AddQuestionModal = ({
   addNewQuestion,
 }) => {
   const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
     question: "",
@@ -76,7 +77,6 @@ const AddQuestionModal = ({
 
     const error = {};
 
-    console.log(formData);
     Object.keys(formData).map((key) => {
       console.log(formData[key]);
       if (formData[key].trim() === "") {
@@ -85,18 +85,15 @@ const AddQuestionModal = ({
       }
     });
 
-    console.log(error);
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
 
     if (JSON.stringify(error) === "{}") {
-      console.log(formData);
-      console.log(correctanswer);
-      // addNewCourse(name, description, image.file, isActive);
       formData.correctanswer = correctanswer;
-      addNewQuestion(formData);
+      setLoading(true);
+      addNewQuestion(setLoading, formData);
     }
   };
 
@@ -114,113 +111,131 @@ const AddQuestionModal = ({
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>Add New Question</ModalHeader>
+      <PageLoader loading={loading} noPadding>
+        <ModalHeader toggle={() => closeModal()}>Add New Question</ModalHeader>
 
-      {/** MODAL BODY */}
-      <Form onSubmit={(e) => onSubmit(e)}>
-        <ModalBody>
-          <Row>
-            <Col xs="8">
-              <Col xs="12">
-                <TextFieldInputWithHeader
-                  id="outlined-multiline-flexible"
-                  name="question"
-                  label="New question name"
-                  fullWidth
-                  value={question}
-                  onChange={onChange}
-                  error={errors.question}
-                />
+        {/** MODAL BODY */}
+        <Form onSubmit={(e) => onSubmit(e)}>
+          <ModalBody>
+            <Row>
+              <Col xs="8">
+                <Col xs="12">
+                  <TextFieldInputWithHeader
+                    id="outlined-multiline-flexible"
+                    name="question"
+                    label="New question name"
+                    fullWidth
+                    value={question}
+                    onChange={onChange}
+                    error={errors.question}
+                  />
+                </Col>
+                <Col xs="12" className="mt-4">
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="A. First Answer"
+                    name="answerfirst"
+                    fullWidth
+                    value={answerfirst}
+                    rows={2}
+                    onChange={onChange}
+                    variant="outlined"
+                    error={errors.answerfirst}
+                  />
+                </Col>
+                <Col xs="12" className="mt-4">
+                  <TextField
+                    id="outlined-static"
+                    label="B. Second Answer"
+                    name="answersecond"
+                    fullWidth
+                    value={answersecond}
+                    rows={2}
+                    onChange={onChange}
+                    variant="outlined"
+                    error={errors.answersecond}
+                  />
+                </Col>
+                <Col xs="12" className="mt-4">
+                  <TextField
+                    id="outlined-static"
+                    label="C. Third Answer"
+                    name="answerthird"
+                    fullWidth
+                    value={answerthird}
+                    rows={2}
+                    onChange={onChange}
+                    variant="outlined"
+                    error={errors.answerthird}
+                  />
+                </Col>
+                <Col xs="12" className="mt-4">
+                  <TextField
+                    id="outlined-multiline-static"
+                    label="D. Fourth Answer"
+                    name="answerfourth"
+                    fullWidth
+                    value={answerfourth}
+                    multiline
+                    rows={1}
+                    onChange={onChange}
+                    variant="outlined"
+                    error={errors.answerfourth}
+                  />
+                </Col>
               </Col>
-              <Col xs="12" className="mt-4">
-                <TextField
-                  id="outlined-multiline-static"
-                  label="A. First Answer"
-                  name="answerfirst"
-                  fullWidth
-                  value={answerfirst}
-                  rows={2}
-                  onChange={onChange}
-                  variant="outlined"
-                  error={errors.answerfirst}
-                />
+              <Col xs="4">
+                <Row>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Correct answer</FormLabel>
+                    <RadioGroup
+                      aria-label="gender"
+                      name="correctanswer"
+                      value={correctanswer}
+                      onChange={handleChange}
+                    >
+                      <FormControlLabel
+                        value="A"
+                        control={<Radio />}
+                        label="A"
+                      />
+                      <FormControlLabel
+                        value="B"
+                        control={<Radio />}
+                        label="B"
+                      />
+                      <FormControlLabel
+                        value="C"
+                        control={<Radio />}
+                        label="C"
+                      />
+                      <FormControlLabel
+                        value="D"
+                        control={<Radio />}
+                        label="D"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Row>
               </Col>
-              <Col xs="12" className="mt-4">
-                <TextField
-                  id="outlined-static"
-                  label="B. Second Answer"
-                  name="answersecond"
-                  fullWidth
-                  value={answersecond}
-                  rows={2}
-                  onChange={onChange}
-                  variant="outlined"
-                  error={errors.answersecond}
-                />
-              </Col>
-              <Col xs="12" className="mt-4">
-                <TextField
-                  id="outlined-static"
-                  label="C. Third Answer"
-                  name="answerthird"
-                  fullWidth
-                  value={answerthird}
-                  rows={2}
-                  onChange={onChange}
-                  variant="outlined"
-                  error={errors.answerthird}
-                />
-              </Col>
-              <Col xs="12" className="mt-4">
-                <TextField
-                  id="outlined-multiline-static"
-                  label="D. Fourth Answer"
-                  name="answerfourth"
-                  fullWidth
-                  value={answerfourth}
-                  multiline
-                  rows={1}
-                  onChange={onChange}
-                  variant="outlined"
-                  error={errors.answerfourth}
-                />
-              </Col>
-            </Col>
-            <Col xs="4">
-              <Row>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Correct answer</FormLabel>
-                  <RadioGroup
-                    aria-label="gender"
-                    name="correctanswer"
-                    value={correctanswer}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel value="A" control={<Radio />} label="A" />
-                    <FormControlLabel value="B" control={<Radio />} label="B" />
-                    <FormControlLabel value="C" control={<Radio />} label="C" />
-                    <FormControlLabel value="D" control={<Radio />} label="D" />
-                  </RadioGroup>
-                </FormControl>
-              </Row>
-            </Col>
-          </Row>
-        </ModalBody>
+            </Row>
+          </ModalBody>
 
-        {/** MODAL FOOTER */}
-        <ModalFooter>
-          <Button variant="contained" color="primary" type="submit">
-            Add
-          </Button>
-          <Button
-            variant="contained"
-            className="ml-2"
-            onClick={() => closeModal()}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Form>
+          {/** MODAL FOOTER */}
+          <ModalFooter>
+            <Button variant="contained" color="primary" type="submit">
+              Add
+            </Button>
+            <Button
+              variant="contained"
+              className="ml-2"
+              onClick={() => closeModal()}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </PageLoader>
     </Modal>
   );
 };

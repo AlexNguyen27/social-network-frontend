@@ -109,14 +109,6 @@ const ControlCard = ({ course, auth: { user } }) => {
               </>
             )}
           </Row>
-          {/* <Row className="mt-3">
-            <Col>
-              <Button variant="contained" color="default">
-                Statistics
-              </Button>
-            </Col>
-          </Row> */}
-
           <AddLectureModal modal={modal} setModal={setModal} />
         </div>
       </div>

@@ -29,6 +29,7 @@ import {
   Form,
 } from "reactstrap";
 import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
+import PageLoader from "../../custom/PageLoader";
 
 const GreenRadio = withStyles({
   root: {
@@ -48,6 +49,7 @@ const AddCourseModal = ({
   addNewCourse,
 }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
     name: "",
@@ -94,7 +96,8 @@ const AddCourseModal = ({
     });
 
     if (JSON.stringify(error) === "{}") {
-      addNewCourse(name, description, image.file, isActive);
+      setLoading(true);
+      addNewCourse(setLoading, name, description, image.file, isActive);
     }
   };
 
@@ -124,100 +127,103 @@ const AddCourseModal = ({
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>Add New Course</ModalHeader>
-
-      {/** MODAL BODY */}
-      <Form onSubmit={(e) => onSubmit(e)}>
-        <ModalBody>
-          <Row>
-            <Col xs="12">
-              <TextFieldInputWithHeader
-                id="outlined-multiline-flexible"
-                name="name"
-                label="New course name"
-                fullWidth
-                value={name}
-                onChange={onChange}
-                error={errors.name}
-              />
-            </Col>
-            <Col xs="12" className="mt-4">
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                name="description"
-                fullWidth
-                value={description}
-                multiline
-                rows={4}
-                onChange={onChange}
-                variant="outlined"
-                error={errors.description}
-                defaultValue="New course description"
-              />
-            </Col>
-          </Row>
-          <Row className="py-2 px-3">
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Puclic your new course? </FormLabel>
-              <RadioGroup
-                aria-label="Public"
-                name="isActive"
-                value={isActive}
-                onChange={(e) => handleChangeActive(e)}
-              >
-                <FormControlLabel
-                  value={false}
-                  control={<Radio />}
-                  label="Private"
-                />
-                <FormControlLabel
-                  value={true}
-                  control={<Radio />}
-                  label="Public"
-                />
-              </RadioGroup>
-            </FormControl>
-          </Row>
-          <Row className="py-1">
-            <Col xs="5">
-              <Button variant="contained" component="label">
-                Upload Image
-                <input
-                  accept="image/*"
-                  type="file"
-                  onChange={handleCapture}
-                  style={{ display: "none" }}
-                />
-              </Button>
-            </Col>
-            <Col xs="7" className="text-break">
-              <h6>{image.name}</h6>
-            </Col>
-          </Row>
-          {errors.image && (
+      <PageLoader loading={loading} noPadding>
+        <ModalHeader toggle={() => closeModal()}>Add New Course</ModalHeader>
+        {/** MODAL BODY */}
+        <Form onSubmit={(e) => onSubmit(e)}>
+          <ModalBody>
             <Row>
-              <p style={{ color: "red" }} className="px-3 py-2 m-0">
-                {errors.image}
-              </p>
+              <Col xs="12">
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-flexible"
+                  name="name"
+                  label="New course name"
+                  fullWidth
+                  value={name}
+                  onChange={onChange}
+                  error={errors.name}
+                />
+              </Col>
+              <Col xs="12" className="mt-4">
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  name="description"
+                  fullWidth
+                  value={description}
+                  multiline
+                  rows={4}
+                  onChange={onChange}
+                  variant="outlined"
+                  error={errors.description}
+                  defaultValue="New course description"
+                />
+              </Col>
             </Row>
-          )}
-        </ModalBody>
+            <Row className="py-2 px-3">
+              <FormControl component="fieldset">
+                <FormLabel component="legend">
+                  Puclic your new course?{" "}
+                </FormLabel>
+                <RadioGroup
+                  aria-label="Public"
+                  name="isActive"
+                  value={isActive}
+                  onChange={(e) => handleChangeActive(e)}
+                >
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="Private"
+                  />
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="Public"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Row>
+            <Row className="py-1">
+              <Col xs="5">
+                <Button variant="contained" component="label">
+                  Upload Image
+                  <input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleCapture}
+                    style={{ display: "none" }}
+                  />
+                </Button>
+              </Col>
+              <Col xs="7" className="text-break">
+                <h6>{image.name}</h6>
+              </Col>
+            </Row>
+            {errors.image && (
+              <Row>
+                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                  {errors.image}
+                </p>
+              </Row>
+            )}
+          </ModalBody>
 
-        {/** MODAL FOOTER */}
-        <ModalFooter>
-          <Button variant="contained" color="primary" type="submit">
-            Add
-          </Button>
-          <Button
-            variant="contained"
-            className="ml-2"
-            onClick={() => closeModal()}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Form>
+          {/** MODAL FOOTER */}
+          <ModalFooter>
+            <Button variant="contained" color="primary" type="submit">
+              Add
+            </Button>
+            <Button
+              variant="contained"
+              className="ml-2"
+              onClick={() => closeModal()}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </PageLoader>
     </Modal>
   );
 };

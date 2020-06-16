@@ -42,7 +42,7 @@ export const getLectureByLectureId = (setLoading, lectureId) => async (
 };
 
 // DELETE LECTURE
-export const deleteLecture = (lectureId) => async (dispatch) => {
+export const deleteLecture = (setLoading, lectureId) => async (dispatch) => {
   try {
     await axios.delete(`api/lectures/${lectureId}`, {
       headers: { Authorization: localStorage.token },
@@ -56,6 +56,7 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
     dispatch({
       type: CLEAR_ERRORS,
     });
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -76,6 +77,7 @@ export const deleteLecture = (lectureId) => async (dispatch) => {
 
 // ADD NEW Course
 export const addNewLecture = (
+  setLoading,
   courseId,
   name,
   description,
@@ -119,6 +121,7 @@ export const addNewLecture = (
     dispatch({
       type: CLEAR_ERRORS,
     });
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",
@@ -139,6 +142,7 @@ export const addNewLecture = (
 
 // EDIT Course NAME
 export const editLecture = (
+  setLoading,
   lectureId,
   name,
   description,
@@ -198,7 +202,7 @@ export const editLecture = (
     dispatch({
       type: CLEAR_ERRORS,
     });
-
+    setLoading(false)
     // using sweetalert2
     Swal.fire({
       position: "center",

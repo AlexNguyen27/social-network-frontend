@@ -88,18 +88,17 @@ const EditCourseModal = ({
       }
     });
 
-
     if (image.name.trim() === "") {
       error.image = "Please select an image!";
     }
-    // console.log(error);
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
-
+    setLoading(true);
     if (JSON.stringify(error) === "{}") {
       editCourse(
+        setLoading,
         courseData.id,
         name,
         description,
@@ -131,15 +130,6 @@ const EditCourseModal = ({
       name: fileName,
       file: target.files[0],
     });
-    // ONLY UPLOAD TYPE image/*
-    // fileReader.readAsDataURL(target.files[0]);
-    // fileReader.onload = (e) => {
-    //   console.log(e.target);
-    //   setImage({
-    //     name: fileName,
-    //     file: target.files[0],
-    //   });
-    // };
   };
 
   useEffect(() => {
@@ -157,8 +147,10 @@ const EditCourseModal = ({
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>Edit Course {name}</ModalHeader>
-      <PageLoader loading={loading}>
+      <PageLoader loading={loading} noPadding>
+        <ModalHeader toggle={() => closeModal()}>
+          Edit Course {name}
+        </ModalHeader>
         {/** MODAL BODY */}
         <Form onSubmit={(e) => onSubmit(e)}>
           <ModalBody>

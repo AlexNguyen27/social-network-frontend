@@ -29,6 +29,7 @@ import {
   Form,
 } from "reactstrap";
 import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
+import PageLoader from "../../custom/PageLoader";
 
 const GreenRadio = withStyles({
   root: {
@@ -49,13 +50,14 @@ const AddLectureModal = ({
   addNewLecture,
 }) => {
   const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
     name: "",
     description: "",
   });
 
-  const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
     name: "",
     file: "",
@@ -108,8 +110,15 @@ const AddLectureModal = ({
 
     if (JSON.stringify(error) === "{}") {
       console.log(formData);
-      // addNewCourse(name, description, image.file, isActive);
-      addNewLecture(courseId, name, description, image.file, video.file);
+      setLoading(true);
+      addNewLecture(
+        setLoading,
+        courseId,
+        name,
+        description,
+        image.file,
+        video.file
+      );
     }
   };
 
@@ -138,100 +147,101 @@ const AddLectureModal = ({
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
-      <ModalHeader toggle={() => closeModal()}>Add New Lecture</ModalHeader>
+      <PageLoader loading={loading} noPadding>
+        <ModalHeader toggle={() => closeModal()}>Add New Lecture</ModalHeader>
 
-      {/** MODAL BODY */}
-      <Form onSubmit={(e) => onSubmit(e)}>
-        <ModalBody>
-          <Row>
-            <Col xs="12">
-              <TextFieldInputWithHeader
-                id="outlined-multiline-flexible"
-                name="name"
-                label="New lecture name"
-                fullWidth
-                value={name}
-                onChange={onChange}
-                error={errors.name}
-              />
-            </Col>
-            <Col xs="12" className="mt-4">
-              <TextField
-                id="outlined-multiline-static"
-                label="Description"
-                name="description"
-                fullWidth
-                value={description}
-                multiline
-                rows={4}
-                onChange={onChange}
-                variant="outlined"
-                error={errors.description}
-              />
-            </Col>
-          </Row>
-          <Row className="py-1">
-            <Col xs="5">
-              <Button variant="contained" component="label">
-                Upload Image
-                <input
-                  accept="image/*"
-                  type="file"
-                  onChange={handleCapture}
-                  style={{ display: "none" }}
-                />
-              </Button>
-            </Col>
-            <Col xs="7" className="text-break">
-              <h6>{image.name}</h6>
-            </Col>
-          </Row>
-          {errors.image && (
+        {/** MODAL BODY */}
+        <Form onSubmit={(e) => onSubmit(e)}>
+          <ModalBody>
             <Row>
-              <p style={{ color: "red" }} className="px-3 py-2 m-0">
-                {errors.image}
-              </p>
-            </Row>
-          )}
-          <Row className="py-1 mt-2">
-            <Col xs="5">
-              <Button variant="contained" component="label">
-                Upload Video
-                <input
-                  accept="video/*"
-                  type="file"
-                  onChange={handleCapture}
-                  style={{ display: "none" }}
+              <Col xs="12">
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-flexible"
+                  name="name"
+                  label="New lecture name"
+                  fullWidth
+                  value={name}
+                  onChange={onChange}
+                  error={errors.name}
                 />
-              </Button>
-            </Col>
-            <Col xs="7" className="text-break">
-              <h6>{video.name}</h6>
-            </Col>
-          </Row>
-          {errors.image && (
-            <Row>
-              <p style={{ color: "red" }} className="px-3 py-2 m-0">
-                {errors.image}
-              </p>
+              </Col>
+              <Col xs="12" className="mt-4">
+                <TextField
+                  id="outlined-multiline-static"
+                  label="Description"
+                  name="description"
+                  fullWidth
+                  value={description}
+                  multiline
+                  rows={4}
+                  onChange={onChange}
+                  variant="outlined"
+                  error={errors.description}
+                />
+              </Col>
             </Row>
-          )}
-        </ModalBody>
-
-        {/** MODAL FOOTER */}
-        <ModalFooter>
-          <Button variant="contained" color="primary" type="submit">
-            Add
-          </Button>
-          <Button
-            variant="contained"
-            className="ml-2"
-            onClick={() => closeModal()}
-          >
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Form>
+            <Row className="py-1">
+              <Col xs="5">
+                <Button variant="contained" component="label">
+                  Upload Image
+                  <input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleCapture}
+                    style={{ display: "none" }}
+                  />
+                </Button>
+              </Col>
+              <Col xs="7" className="text-break">
+                <h6>{image.name}</h6>
+              </Col>
+            </Row>
+            {errors.image && (
+              <Row>
+                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                  {errors.image}
+                </p>
+              </Row>
+            )}
+            <Row className="py-1 mt-2">
+              <Col xs="5">
+                <Button variant="contained" component="label">
+                  Upload Video
+                  <input
+                    accept="video/*"
+                    type="file"
+                    onChange={handleCapture}
+                    style={{ display: "none" }}
+                  />
+                </Button>
+              </Col>
+              <Col xs="7" className="text-break">
+                <h6>{video.name}</h6>
+              </Col>
+            </Row>
+            {errors.image && (
+              <Row>
+                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                  {errors.image}
+                </p>
+              </Row>
+            )}
+          </ModalBody>
+          {/** MODAL FOOTER */}
+          <ModalFooter>
+            <Button variant="contained" color="primary" type="submit">
+              Add
+            </Button>
+            <Button
+              variant="contained"
+              className="ml-2"
+              onClick={() => closeModal()}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Form>
+      </PageLoader>
     </Modal>
   );
 };

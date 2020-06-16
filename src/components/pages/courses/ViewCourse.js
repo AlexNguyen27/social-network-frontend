@@ -14,9 +14,7 @@ import { Row, Col } from "reactstrap";
 import { getCourseById } from "../../../store/actions/course";
 import PageLoader from "../../custom/PageLoader";
 import { IconButton } from "@material-ui/core";
-import {
-  deleteLecture,
-} from "../../../store/actions/lecture";
+import { deleteLecture } from "../../../store/actions/lecture";
 import EditLectureModel from "../lectures/EditLectureModel";
 import Swal from "sweetalert2";
 
@@ -47,7 +45,6 @@ const ViewCourse = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("------------herer");
     getCourseById(setLoading, courseId);
     // getLecturesByCourseId(setLoading, courseId);
   }, [courseId]);
@@ -68,7 +65,8 @@ const ViewCourse = ({
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        deleteLecture(lectureId);
+        setLoading(true);
+        deleteLecture(setLoading, lectureId);
       }
     });
   };
@@ -76,7 +74,6 @@ const ViewCourse = ({
   const onEditLecture = (lecture) => {
     setModalEdit(true);
     setLectureData(lecture);
-    console.log("lecutre----", lecture);
   };
 
   return (
@@ -117,59 +114,57 @@ const ViewCourse = ({
           <Grid item xs={6} style={{ display: "flex", alignItems: "center" }}>
             <h6>{lectures && Object.keys(lectures).length} Lectures</h6>
           </Grid>
-          <PageLoader loading={loading}>
-            {lectures &&
-              Object.keys(lectures).map((key) => (
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <Row>
-                      <Col
-                        xs="1"
-                        style={{ display: "flex", alignItems: "center" }}
+          {lectures &&
+            Object.keys(lectures).map((key) => (
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Row>
+                    <Col
+                      xs="1"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <IconButton
+                        onClick={() =>
+                          history.push(
+                            `${window.location.pathname}/lectures/${key}`
+                          )
+                        }
                       >
-                        <IconButton
-                          onClick={() =>
-                            history.push(
-                              `${window.location.pathname}/lectures/${key}`
-                            )
-                          }
-                        >
-                          <PlayCircleFilledIcon
-                            color="primary"
-                            fontSize="large"
-                          />
-                        </IconButton>
+                        <PlayCircleFilledIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Col>
+                    <Col
+                      xs="8"
+                      lg="9"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
+                    </Col>
+                    {user.id === course_detail.teacher.id && (
+                      <Col xs="3" lg="2">
+                        <Row>
+                          <IconButton
+                            color="default"
+                            onClick={() => onEditLecture(lectures[key])}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => onDeleteLecture(key)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Row>
                       </Col>
-                      <Col
-                        xs="8"
-                        lg="9"
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
-                      </Col>
-                      {user.id === course_detail.teacher.id && (
-                        <Col xs="3" lg="2">
-                          <Row>
-                            <IconButton
-                              color="default"
-                              onClick={() => onEditLecture(lectures[key])}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              color="secondary"
-                              onClick={() => onDeleteLecture(key)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Row>
-                        </Col>
-                      )}
-                    </Row>
-                  </Paper>
-                </Grid>
-              ))}
-          </PageLoader>
+                    )}
+                  </Row>
+                </Paper>
+              </Grid>
+            ))}
         </Grid>
         <EditLectureModel
           setModal={setModalEdit}

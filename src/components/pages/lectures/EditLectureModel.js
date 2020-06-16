@@ -108,7 +108,8 @@ const EditLectureModal = ({
     });
 
     if (JSON.stringify(error) === "{}") {
-      editLecture(lectureData.id, name, description, image.file, video.file);
+      setLoading(true);
+      editLecture(setLoading, lectureData.id, name, description, image.file, video.file);
     }
   };
 
@@ -137,8 +138,8 @@ const EditLectureModal = ({
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
+      <PageLoader loading={loading} noPadding>
       <ModalHeader toggle={() => closeModal()}>Edit Lecture {name}</ModalHeader>
-      <PageLoader loading={loading}>
         {/** MODAL BODY */}
         <Form onSubmit={(e) => onSubmit(e)}>
           <ModalBody>
