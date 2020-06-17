@@ -1,23 +1,24 @@
-import React from 'react';
-import MaterialTable from 'material-table';
+import React, { useEffect } from "react";
+import MaterialTable from "material-table";
 
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
+import moment from "moment";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -46,74 +47,66 @@ const tableIcons = {
 const UsersList = () => {
   const [state, setState] = React.useState({
     columns: [
-      { title: 'Name', field: 'name' },
-      { title: 'Surname', field: 'surname' },
-      { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+      { title: "Username", field: "username" },
+      { title: "Fullname", field: "fullname" },
+      { title: "Email", field: "email", type: "email" },
       {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
+        title: "Role",
+        field: "role",
+      },
+      {
+        title: "Created Date",
+        field: "createddate",
+      },
+      {
+        title: "Modified Date",
+        field: "modifieddate",
       },
     ],
     data: [
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
       {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
-      },
-      {
-        name: 'Zerya Betül',
-        surname: 'Baran',
-        birthYear: 2017,
-        birthCity: 34,
+        username: "thanh_teacher",
+        fullname: "Nguyen le Ngocj thanh ",
+        email: "thanh@gmail.com",
+        role: "Teacher",
+        createdDate: moment("2020-05-29T14:49:05.661Z").format("MMM DD h:mm A"),
       },
     ],
   });
 
+  useEffect(() => {
+    const mockup = {
+      username: "thanh_teacher",
+      fullname: "Nguyen le Ngocj thanh ",
+      email: "thanh@gmail.com",
+      role: "Teacher",
+      createdDate: moment("2020-05-29T14:49:05.661Z").format("MMM DD h:mm A"),
+    };
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        ...mockup,
+        id: i,
+      });
+    }
+
+    setState({
+      ...state,
+      data,
+    });
+  }, []);
+
   return (
-    <div style={{ maxHeight: `500px`, maxWidth: `100%`, overflowY: 'auto' }}>
+    <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
       <MaterialTable
         icons={tableIcons}
-        title="Users List"
+        title="List Of Users"
         columns={state.columns}
         data={state.data}
         options={{
           pageSize: 10,
           headerStyle: {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
         }}
         editable={{
