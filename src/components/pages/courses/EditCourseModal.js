@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { green } from "@material-ui/core/colors";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { green } from '@material-ui/core/colors';
+import { useDispatch } from 'react-redux';
 
 import {
   TextField,
@@ -11,14 +11,14 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { getCourseById, editCourse } from "../../../store/actions/course";
-import { clearErrors } from "../../../store/actions/common";
+import { getCourseById, editCourse } from '../../../store/actions/course';
+import { clearErrors } from '../../../store/actions/common';
 
 // COMPONENTS
-import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Button from '@material-ui/core/Button';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
 
 import {
   Row,
@@ -28,19 +28,9 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
-import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
-import PageLoader from "../../custom/PageLoader";
-
-const GreenRadio = withStyles({
-  root: {
-    color: green[400],
-    "&$checked": {
-      color: green[600],
-    },
-  },
-  checked: {},
-})((props) => <Radio color="default" {...props} />);
+} from 'reactstrap';
+import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
+import PageLoader from '../../custom/PageLoader';
 
 const EditCourseModal = ({
   errors,
@@ -49,20 +39,20 @@ const EditCourseModal = ({
   setModal,
   courseData,
   editCourse,
-  course_detail
+  course_detail,
 }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    name: courseData ? courseData.name : "",
-    description: courseData ? courseData.description : "",
+    name: '',
+    description: '',
   });
 
   const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
-    name: "",
-    file: "same",
+    name: '',
+    file: 'same',
   });
 
   const { name, description } = formData;
@@ -72,8 +62,8 @@ const EditCourseModal = ({
     setModal(false);
     clearErrors();
     setFormData({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     });
   };
 
@@ -84,22 +74,22 @@ const EditCourseModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      if (formData[key].trim() === "") {
-        error[key] = "This field is required";
+      if (formData[key].trim() === '') {
+        error[key] = 'This field is required';
       }
     });
 
     if (description.trim().length > 255) {
-      error.description = "Description length must be less than 255 characters";
+      error.description = 'Description length must be less than 255 characters';
     }
-    if (image.name.trim() === "") {
-      error.image = "Please select an image!";
+    if (image.name.trim() === '') {
+      error.image = 'Please select an image!';
     }
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
-    if (JSON.stringify(error) === "{}") {
+    if (JSON.stringify(error) === '{}') {
       setLoading(true);
       editCourse(
         setLoading,
@@ -121,7 +111,7 @@ const EditCourseModal = ({
   };
 
   const handleChangeActive = (event) => {
-    if (event.target.value === "true") {
+    if (event.target.value === 'true') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -138,14 +128,14 @@ const EditCourseModal = ({
 
   useEffect(() => {
     setFormData({
-      name: courseData ? courseData.name : "",
-      description: courseData ? courseData.description : "",
+      name: courseData ? courseData.name : '',
+      description: courseData ? courseData.description : '',
     });
 
     setIsActive(courseData ? courseData.active : false);
     setImage({
-      name: courseData ? courseData.image : "",
-      file: "same",
+      name: courseData ? courseData.image : '',
+      file: 'same',
     });
   }, [course_detail]);
 
@@ -184,14 +174,14 @@ const EditCourseModal = ({
                   error={errors.description}
                 />
                 {errors.description && (
-                  <p style={{ color: "red" }}>{errors.description}</p>
+                  <p style={{ color: 'red' }}>{errors.description}</p>
                 )}
               </Col>
             </Row>
             <Row className="py-2 px-3">
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  Puclic your new course?{" "}
+                  Puclic your new course?{' '}
                 </FormLabel>
                 <RadioGroup
                   aria-label="Public"
@@ -220,7 +210,7 @@ const EditCourseModal = ({
                     accept="image/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </Button>
               </Col>
@@ -230,7 +220,7 @@ const EditCourseModal = ({
             </Row>
             {errors.image && (
               <Row>
-                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                <p style={{ color: 'red' }} className="px-3 py-2 m-0">
                   {errors.image}
                 </p>
               </Row>
