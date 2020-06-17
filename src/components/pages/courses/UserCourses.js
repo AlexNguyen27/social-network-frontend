@@ -126,7 +126,7 @@ const UserCourses = ({
                 <Button
                   size="small"
                   color="secondary"
-                  onClick={() => onEditCourse(course.course.id)}
+                  onClick={() => onEditCourse(course.course)}
                 >
                   {/* <EditIcon className="mr-1" /> */}
                   Edit

@@ -55,6 +55,19 @@ const RouterList = (props) => {
           path="/all-courses/:courseId"
           component={DashBoard}
         />
+        <ProtectedRoute exact path="/users-list" component={DashBoard} />
+        <ProtectedRoute
+          exact
+          path="/users-list/:userId"
+          component={DashBoard}
+        />
+
+        <ProtectedRoute exact path="/user-courses" component={DashBoard} />
+        <ProtectedRoute
+          exact
+          path="/user-courses/:courseId"
+          component={DashBoard}
+        />
 
         <ProtectedRoute component={() => <NotFound center />} />
       </Switch>

@@ -44,6 +44,8 @@ import { Link, NavLink } from 'react-router-dom';
 import Courses from './courses/Courses';
 import UserCourses from './courses/UserCourses';
 import ViewCourse from './courses/ViewCourse';
+import UsersList from './admin/UsersList';
+import CoursesList from './admin/CoursesList';
 
 // ACTION
 import { logoutUser } from '../../store/actions/auth';
@@ -178,7 +180,7 @@ const DashBoard = ({
   history,
   location,
   logoutUser,
-  auth: { isAuthenticated, user },
+  auth: { isAuthenticated, user, isAdmin },
   match,
 }) => {
   const classes = useStyles();
@@ -278,6 +280,7 @@ const DashBoard = ({
 
   const renderContent = (drawerId) => {
     console.log('match----', match);
+
     if (match.params.lectureId) {
       return (
         <ViewLecture
@@ -290,73 +293,85 @@ const DashBoard = ({
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (match.path === '/user-profile') {
-      return (
-        <>
-          <div className={classes.header}>Dashboard / My Account</div>
-          <UserInfo />
-        </>
-      );
+    switch (match.path) {
+      case '/users-list':
+        return (
+          <>
+            {/* <div className={classes.header}>Dashboard / List of Users</div> */}
+            <UsersList />
+          </>
+        );
+      case '/user-courses':
+        return (
+          <>
+            {/* <div className={classes.header}>Dashboard / List of Courses</div> */}
+            <CoursesList />
+          </>
+        );
+      case '/user-profile':
+        return (
+          <>
+            <div className={classes.header}>Dashboard / My Account</div>
+            <UserInfo />
+          </>
+        );
+      case '/all-courses':
+        return (
+          <>
+            <div className={classes.header}>Dashboard / All Courses</div>
+            <Courses match={match} location={location} />
+          </>
+        );
+      case '/your-courses':
+        return (
+          <>
+            <div className={classes.header}>Dashboard / Your Courses</div>
+            <UserCourses location={location} />
+          </>
+        );
+      case '/statistics':
+        return (
+          <>
+            <div className={classes.header}>Dashboard / Statistics</div>
+            <Statistics />
+          </>
+        );
+      default:
+        return (
+          <Fragment>
+            <Typography paragraph>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Rhoncus dolor purus non enim praesent elementum facilisis leo vel.
+              Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
+              gravida rutrum quisque non tellus. Convallis convallis tellus id
+              interdum velit laoreet id donec ultrices. Odio morbi quis commodo
+              odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum
+              est ultricies integer quis. Cursus euismod quis viverra nibh cras.
+              Metus vulputate eu scelerisque felis imperdiet proin fermentum
+              leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
+              lobortis feugiat vivamus at augue. At augue eget arcu dictum
+              varius duis at consectetur lorem. Velit sed ullamcorper morbi
+              tincidunt. Lorem donec massa sapien faucibus et molestie ac.
+            </Typography>
+            <Typography paragraph>
+              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
+              ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
+              elementum integer enim neque volutpat ac tincidunt. Ornare
+              suspendisse sed nisi lacus sed viverra tellus. Purus sit amet
+              volutpat consequat mauris. Elementum eu facilisis sed odio morbi.
+              Euismod lacinia at quis risus sed vulputate odio. Morbi tincidunt
+              ornare massa eget egestas purus viverra accumsan in. In hendrerit
+              gravida rutrum quisque non tellus orci ac. Pellentesque nec nam
+              aliquam sem et tortor. Habitant morbi tristique senectus et.
+              Adipiscing elit duis tristique sollicitudin nibh sit. Ornare
+              aenean euismod elementum nisi quis eleifend. Commodo viverra
+              maecenas accumsan lacus vel facilisis. Nulla posuere sollicitudin
+              aliquam ultrices sagittis orci a.
+            </Typography>
+          </Fragment>
+        );
     }
-    if (match.path === '/all-courses') {
-      return (
-        <>
-          <div className={classes.header}>Dashboard / All Courses</div>
-          <Courses match={match} location={location} />
-        </>
-      );
-    }
-
-    if (match.path === '/your-courses') {
-      return (
-        <>
-          <div className={classes.header}>Dashboard / Your Courses</div>
-          <UserCourses location={location} />
-        </>
-      );
-    }
-
-    if (match.path === '/statistics') {
-      return (
-        <>
-          <div className={classes.header}>Dashboard / Statistics</div>
-          <Statistics />
-        </>
-      );
-    }
-    return (
-      <Fragment>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </Fragment>
-    );
   };
 
   if (!isAuthenticated) {
@@ -381,6 +396,21 @@ const DashBoard = ({
       icon: <BarChartIcon />,
       to: '/statistics',
       title: 'Statistics',
+    },
+  ];
+
+  const navList3 = [
+    {
+      key: 'usersList',
+      icon: <ArtTrackIcon />,
+      to: '/users-list',
+      title: 'Users List',
+    },
+    {
+      key: 'users-courses',
+      icon: <AccountBalanceIcon />,
+      to: '/user-courses',
+      title: 'User Courses',
     },
   ];
 
@@ -541,7 +571,7 @@ const DashBoard = ({
         </div>
         <Divider />
         <List>
-          {navList1.map((item) => (
+          {(isAdmin ? navList3 : navList1).map((item) => (
             <ListItem
               button
               key={item.key}

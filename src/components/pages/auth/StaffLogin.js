@@ -1,27 +1,27 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { Redirect, withRouter, matchPath } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import { Button, Container } from "@material-ui/core";
+import React, { Fragment, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, withRouter, matchPath } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { Button, Container } from '@material-ui/core';
 
 // COMPONENT
-import PageTitle from "../../custom/PageTitle";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
-import Landing from "../../layout/Landing";
+import PageTitle from '../../custom/PageTitle';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
+import Landing from '../../layout/Landing';
 
 // ACTION
-import { loginUser } from "../../../store/actions/auth";
+import { loginUser } from '../../../store/actions/auth';
 const StaffLogin = ({
   errors,
   history,
   loginUser,
-  auth: { isAuthenticated },
+  auth: { isAuthenticated, isAdmin },
   match,
 }) => {
   // FORM DATA STATE
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
 
   const { username, password } = formData;
@@ -42,7 +42,10 @@ const StaffLogin = ({
   };
 
   if (isAuthenticated) {
-    if (match.path === "/your-courses") {
+    if (isAdmin) {
+      return <Redirect to="/users-list" />;
+    }
+    if (match.path === '/your-courses') {
       return <Redirect to="/your-courses" />;
     }
     return <Redirect to="/all-courses" />;

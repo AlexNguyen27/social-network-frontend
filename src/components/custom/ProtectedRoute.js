@@ -7,20 +7,26 @@ const ProtectedRoute = ({
   component: Component,
   authorized,
   auth: { isAuthenticated, isTeacher, isAdmin },
-  student,
   dispatch,
+  path,
   ...rest
 }) => {
+  const adminUnauthorized = ['/your-courses', '/your-courses:/courseId'];
+  const teacherUnauthorized = [
+    '/users-list',
+    '/users-list/:userId',
+    '/user-courses',
+    '/user-courses/:courseId',
+  ];
   const page = (props) => {
     if (isAuthenticated) {
       if (
-        isAdmin || isTeacher ||
-        (authorized && !isTeacher) ||
-        (student && isTeacher) ||
-        (authorized === undefined && !isTeacher)
+        (isAdmin && !adminUnauthorized.includes(path)) ||
+        (isTeacher && !teacherUnauthorized.includes(path))
       ) {
         return <Component {...props} dispatch={dispatch} />;
       }
+
       return (
         <NotFound
           alertText="Unauthorized"
