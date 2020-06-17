@@ -99,7 +99,10 @@ const UserCourses = ({
           </Button>
         </Grid>
         {user_courses &&
-          (coursesData || coursesArray).map((course) => (
+          (coursesData && coursesData.length > 0
+            ? coursesData
+            : coursesArray
+          ).map((course) => (
             <Grid
               style={{ display: 'inline-grid' }}
               item

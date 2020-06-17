@@ -35,7 +35,7 @@ const Courses = ({
   );
 
   useEffect(() => {
-    console.log(location);
+    // console.log(location);
     const searchText = location.searchText;
     const mockup = (coursesArray || []).filter((item) => {
       return (
@@ -50,7 +50,10 @@ const Courses = ({
     <PageLoader loading={loading}>
       <Grid container spacing={3}>
         {coursesArray &&
-          (coursesData || coursesArray).map((course) => (
+          (coursesData && coursesData.length > 0
+            ? coursesData
+            : coursesArray
+          ).map((course) => (
             <Grid
               item
               style={{ display: 'inline-grid' }}
