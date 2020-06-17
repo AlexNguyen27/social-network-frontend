@@ -51,9 +51,6 @@ const EditQuestionModal = ({
   const [correctanswer, setCorrectanswer] = useState("A");
 
   useEffect(() => {
-    //   console.log(questionId)
-    // const selectedQuestion = questions_bank[questionId];
-    // console.log(selectedQuestion);
     setFormData({
       question: question_detail ? question_detail.question : "",
       answerfirst: question_detail ? question_detail.answerfirst : "",
@@ -63,7 +60,7 @@ const EditQuestionModal = ({
     });
 
     setCorrectanswer(question_detail ? question_detail.correctanswer : "A");
-  }, [question_detail]);
+  }, [modal]);
 
   const {
     question,
@@ -106,7 +103,7 @@ const EditQuestionModal = ({
     if (JSON.stringify(error) === "{}") {
       formData.correctanswer = correctanswer;
       setLoading(true);
-      editQuestion(setLoading, formData);
+      editQuestion(setLoading, question_detail.id, formData);
     }
   };
 

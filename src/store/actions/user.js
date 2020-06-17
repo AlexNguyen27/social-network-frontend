@@ -11,7 +11,7 @@ export const updatePassword = (setLoading, password) => async (
   const { user, isTeacher } = getState().auth;
   try {
     const res = await axios.put(
-      `api/users/${user.id}`,
+      `api/users/change_password/${user.id}`,
       {
         username: user.username,
         email: user.image,
@@ -45,27 +45,37 @@ export const updatePassword = (setLoading, password) => async (
   }
 };
 
-
 // ADD NEW Course
-export const updateUserAvatar = (
-  setLoading,
-  image
-) => async (dispatch, getState) => {
+export const editUserInfo = (setLoading, userData, image) => async (
+  dispatch,
+  getState
+) => {
   try {
-    const { user } = getState().auth;
-    const imageData = new FormData();
-    imageData.append("file", image);
-    
-    const res = await axios.post(
-      `api/users/upload/${user.id}`,
-      imageData,
-      {
+    const { user, isTeacher } = getState().auth;
+
+    if (image !== "same") {
+      const imageData = new FormData();
+      imageData.append("file", image);
+
+      const res = await axios.post(`api/users/upload/${user.id}`, imageData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.token,
         },
-      }
-    );
+      });
+    } else {
+      userData.role = isTeacher ? "TEACHER" : "ADMIN";
+      const res = await axios.post(
+        `api/users/update_profile/${user.id}`,
+        userData,
+        {
+          headers: {
+            Authorization: localStorage.token,
+          },
+        }
+      );
+    }
+
     dispatch({
       type: CLEAR_ERRORS,
     });

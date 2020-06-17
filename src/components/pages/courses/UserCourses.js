@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { Grid, Button } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Grid, Button, Paper } from "@material-ui/core";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-import CardItem from '../../layout/CardItem';
-import PageLoader from '../../custom/PageLoader';
+import CardItem from "../../layout/CardItem";
+import PageLoader from "../../custom/PageLoader";
 import {
   getUserCourses,
   deleteCourse,
   getCourseById,
-} from '../../../store/actions/course';
-import { clearErrors } from '../../../store/actions/common';
-import Swal from 'sweetalert2';
-import AddCourseModal from './AddCourseModal';
-import EditCourseModal from './EditCourseModal';
+} from "../../../store/actions/course";
+import { clearErrors } from "../../../store/actions/common";
+import Swal from "sweetalert2";
+import AddCourseModal from "./AddCourseModal";
+import EditCourseModal from "./EditCourseModal";
 
 const UserCourses = ({
   match,
@@ -51,7 +51,6 @@ const UserCourses = ({
   }, []);
 
   useEffect(() => {
-    console.log(location);
     const searchText = location.searchText;
     const mockup = (coursesArray || []).filter((item) => {
       return (
@@ -67,11 +66,11 @@ const UserCourses = ({
     Swal.fire({
       title: `Are you sure to delete ?`,
       text: "You won't be able to revert this!",
-      type: 'warning',
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
         setLoading(true);
@@ -98,13 +97,13 @@ const UserCourses = ({
             <AddCircleIcon className="mr-2" /> Add new course
           </Button>
         </Grid>
-        {user_courses &&
+        {coursesArray.length > 0  ? (
           (coursesData && coursesData.length > 0
             ? coursesData
             : coursesArray
           ).map((course) => (
             <Grid
-              style={{ display: 'inline-grid' }}
+              style={{ display: "inline-grid" }}
               item
               xs={4}
               md={3}
@@ -141,8 +140,14 @@ const UserCourses = ({
                 </Button>
               </CardItem>
             </Grid>
-          ))}
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <h4 className="text-center">No courses, maybe adding some course for yourself!</h4>
+          </Grid>
+        )}
       </Grid>
+
       <AddCourseModal modal={modalAdd} setModal={setModalAdd} />
       <EditCourseModal
         modal={modalEdit}

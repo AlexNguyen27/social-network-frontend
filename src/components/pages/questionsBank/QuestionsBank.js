@@ -18,26 +18,38 @@ import {
 import AddQuestionModal from "./AddQuestionModal";
 import EditQuestionModal from "./EditQuestionModal";
 import Colors from "../../../constants/Colors";
+import PageLoader from "../../custom/PageLoader";
+import { getQuestionByLectureId } from "../../../store/actions/question";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   paper: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
     color: theme.palette.text.secondary,
   },
 }));
-const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
+const QuestionsBank = ({
+  getQuestionByLectureId,
+  lecture_detail: { id: lectureId },
+  questions_bank,
+  deleteQuestion,
+  getQuestionById,
+}) => {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [modalAddQuestion, setModalAddQuestion] = useState(false);
   const [modalEditQuestion, setModalEditQuestion] = useState(false);
 
+  // useEffect(() => {
+  //   getQuestionByLectureId(setLoading, lectureId);
+  // }, [lectureId]);
+
   const questionsBankArray = Object.keys(questions_bank).map(
     (questionId) => questions_bank[questionId]
   );
-
   // HANDLE ON DELETE Course
   const onDeleteQuestion = (questionId) => {
     Swal.fire({
@@ -76,63 +88,69 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
       <Grid item xs={6}>
         <h4>Quizes and Answers</h4>
       </Grid>
-      <Grid item xs={12}>
-        {questionsBankArray.length > 0 ? (
-          <>
-            {questionsBankArray.map((question, index) => (
-              <div className="mb-2">
-                <Paper className={classes.paper}>
-                  <Row>
-                    <Col
-                      xs="10"
-                      style={{ display: "flex", alignItems: "center" }}
-                    >
-                      <h5 style={{ color: Colors.accent }}>
-                        Question {index + 1}: {question.question}{" "}
-                      </h5>
+      <PageLoader loading={loading}>
+        <Grid item xs={12}>
+          {questionsBankArray.length > 0 ? (
+            <>
+              {questionsBankArray.map((question, index) => (
+                <div className="mb-2">
+                  <Paper className={classes.paper}>
+                    <Row>
+                      <Col
+                        xs="10"
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <h5 style={{ color: Colors.accent }}>
+                          Question {index + 1}: {question.question}{" "}
+                        </h5>
+                      </Col>
+                      <Col xs="2">
+                        <Row className="justify-content-center">
+                          <IconButton
+                            color="default"
+                            onClick={() => onEditQuestion(question.id)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="secondary"
+                            onClick={() => onDeleteQuestion(question.id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Row>
+                      </Col>
+                    </Row>
+                    <Col xs="12">
+                      <h6 style={{ color: Colors.black }}>
+                        A: {question.answerfirst}
+                      </h6>
+                      <h6 style={{ color: Colors.black }}>
+                        B: {question.answersecond}
+                      </h6>
+                      <h6 style={{ color: Colors.black }}>
+                        C: {question.answerthird}
+                      </h6>
+                      <h6 style={{ color: Colors.black }}>
+                        D: {question.answerfourth}
+                      </h6>
                     </Col>
-                    <Col xs="2">
-                      <Row className="justify-content-center">
-                        <IconButton
-                          color="default"
-                          onClick={() => onEditQuestion(question.id)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          color="secondary"
-                          onClick={() => onDeleteQuestion(question.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Row>
+                    <Col>
+                      <h6 style={{ color: "green" }}>
+                        Correct answer: {question.correctanswer}
+                      </h6>
                     </Col>
-                  </Row>
-                  <Col xs="12">
-                    <h6 style={{ color: Colors.black }}>
-                      A: {question.answerfirst}
-                    </h6>
-                    <h6 style={{ color: Colors.black }}>
-                      B: {question.answersecond}
-                    </h6>
-                    <h6 style={{ color: Colors.black }}>
-                      C: {question.answerthird}
-                    </h6>
-                    <h6 style={{ color: Colors.black }}>
-                      D: {question.answerfourth}
-                    </h6>
-                  </Col>
-                  <Col>
-                    <h6 style={{ color: "green"}}>Correct answer: {question.correctanswer}</h6>
-                  </Col>
-                </Paper>
-              </div>
-            ))}
-          </>
-        ) : (
-          <Paper className={classes.paper}>No testing</Paper>
-        )}
-      </Grid>
+                  </Paper>
+                </div>
+              ))}
+            </>
+          ) : (
+            <Paper className={classes.paper}>
+              No Questions, Add some more ?
+            </Paper>
+          )}
+        </Grid>
+      </PageLoader>
       <AddQuestionModal
         modal={modalAddQuestion}
         setModal={setModalAddQuestion}
@@ -148,7 +166,10 @@ const QuestionsBank = ({ questions_bank, deleteQuestion, getQuestionById }) => {
 };
 const mapStateToProps = (state) => ({
   questions_bank: state.question.questions_bank,
+  lecture_detail: state.lecture.lecture_detail,
 });
-export default connect(mapStateToProps, { deleteQuestion, getQuestionById })(
-  QuestionsBank
-);
+export default connect(mapStateToProps, {
+  getQuestionByLectureId,
+  deleteQuestion,
+  getQuestionById,
+})(QuestionsBank);

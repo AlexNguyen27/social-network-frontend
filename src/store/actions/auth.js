@@ -30,6 +30,7 @@ export const loginUser = (user) => async (dispatch) => {
       email: resData.email,
       fullname: resData.fullname,
       username: resData.username,
+      image: resData.image
     };
 
     console.log(resData);
@@ -46,11 +47,15 @@ export const loginUser = (user) => async (dispatch) => {
     });
   } catch (error) {
     // If login fails, set user info to null
-    console.log("err----------------", error);
     logoutDispatch(dispatch, error);
     if (error.response.data.message === "Login fail") {
       error.response.data.message = "Wrong username or password!";
+    } else if (
+      error.response.data.messageKey === "msg.pleaseEnterAllRequiredFields"
+    ) {
+      error.response.data.message = "This field is required!";
     }
+
     // Set errors
     dispatch({
       type: GET_ERRORS,
@@ -62,7 +67,7 @@ export const loginUser = (user) => async (dispatch) => {
 //Logout User
 export const logoutUser = () => (dispatch) => {
   // Set user info to null
-  console.log("here");
+  console.log("logout user");
 
   logoutDispatch(dispatch);
 };
@@ -93,7 +98,6 @@ export const signupTeacher = (isAuthenticated, history, userData) => async (
     if (!isAuthenticated) {
       history.push("/login");
     }
-
   } catch (error) {
     logoutUser(dispatch, error);
     dispatch({

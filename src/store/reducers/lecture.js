@@ -1,4 +1,4 @@
-import { GET_LECTURE_DETAIL } from "../actions/types";
+import { GET_LECTURE_DETAIL, UNAUTHENTICATE } from "../actions/types";
 
 const initialState = {
   lecture: {
@@ -11,11 +11,10 @@ export default function (state = initialState, action) {
   switch (type) {
     case GET_LECTURE_DETAIL:
       return {
-        lecture: {
-          ...state,
-          lecture_detail,
-        },
+        lecture_detail,
       };
+    case UNAUTHENTICATE:
+      return initialState;
     default:
       return state;
   }

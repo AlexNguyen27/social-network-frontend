@@ -143,7 +143,7 @@ const ViewCourse = ({
                       lg="9"
                       style={{ display: 'flex', alignItems: 'center' }}
                     >
-                      <h6 style={{ margin: 0 }}>{lectures[key].name}</h6>
+                      <h6 style={{ margin: 0 }}>{lectures[key].name} : {lectures[key].description}</h6>
                     </Col>
                     {user.id === course_detail.teacher.id && (
                       <Col xs="3" lg="2">

@@ -18,7 +18,7 @@ export default function (state = initialState, action) {
     questions_bank,
     question_detail,
     newQuestion,
-    seletecId,
+    selectedId,
   } = action;
   switch (type) {
     case GET_QUESTIONS:
@@ -34,14 +34,15 @@ export default function (state = initialState, action) {
     case EDIT_QUESTION:
     case ADD_QUESTION:
       return {
+        ...state,
         questions_bank: {
           ...state.questions_bank,
           [newQuestion.id]: newQuestion,
         },
       };
     case DELETE_QUESTION:
-      const newQuestionBank = questions_bank;
-      delete newQuestionBank[seletecId];
+      const newQuestionBank = state.questions_bank;
+      delete newQuestionBank[selectedId];
       return {
         ...state,
         questions_bank: newQuestionBank,

@@ -191,6 +191,7 @@ export const addNewCourse = (
       }
     );
 
+    newCourse.image = courseWithImage.data.data.image;
     dispatch({
       type: ADD_COURSE,
       newCourse: newCourse,
@@ -239,6 +240,7 @@ export const editCourse = (
       }
     );
 
+    const newCourse = res.data.data;
     // TODO : FIX RETURN VALUE KHI UPLOAD IMAGE
     if (imageFile !== 'same') {
       const fileData = new FormData();
@@ -253,11 +255,12 @@ export const editCourse = (
           },
         }
       );
+      newCourse.image = courseWithImage.data.data.image;
     }
 
     dispatch({
       type: EDIT_COURSE,
-      newCourse: res.data.data,
+      newCourse,
     });
 
     dispatch({

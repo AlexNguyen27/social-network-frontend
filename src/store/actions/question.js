@@ -1,4 +1,4 @@
-import axios from '../../utils/axios';
+import axios from "../../utils/axios";
 import {
   GET_QUESTIONS,
   GET_ERRORS,
@@ -7,11 +7,11 @@ import {
   ADD_QUESTION,
   EDIT_QUESTION,
   CLEAR_ERRORS,
-} from './types';
-import { logoutUser } from './auth';
-import { arrayToObject } from '../../utils/commonFunction';
-import Swal from 'sweetalert2';
-import { questions_bank } from '../../mockup/questions_bank';
+} from "./types";
+import { logoutUser } from "./auth";
+import { arrayToObject } from "../../utils/commonFunction";
+import Swal from "sweetalert2";
+// import { questions_bank } from '../../mockup/questions_bank';
 
 // GET majors data
 export const getQuestionByLectureId = (setLoading, lectureId) => async (
@@ -19,20 +19,20 @@ export const getQuestionByLectureId = (setLoading, lectureId) => async (
 ) => {
   try {
     // TODO : GET QUESNTIONS BANK
-    // const questionsArray = await axios.get(
-    //   `/api/questions/lectures/${lectureId}`,
-    //   {
-    //     headers: { Authorization: localStorage.token },
-    //   }
-    // );
+    const questionsArray = await axios.get(
+      `/api/questions/lectures/${lectureId}`,
+      {
+        headers: { Authorization: localStorage.token },
+      }
+    );
 
-    // console.log(questionsArray);
+    console.log(questionsArray);
 
-    // const questionsObject = arrayToObject(questionsArray.data.data);
+    const questionsObject = arrayToObject(questionsArray.data.data);
 
     dispatch({
       type: GET_QUESTIONS,
-      questions_bank: questions_bank,
+      questions_bank: questionsObject,
     });
 
     setLoading(false);
@@ -91,13 +91,14 @@ export const deleteQuestion = (setLoading, questionId) => async (dispatch) => {
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: 'center',
-      type: 'success',
-      title: 'Your work has been saved',
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
       showConfirmButton: false,
       timer: 1500,
     });
   } catch (error) {
+    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -107,25 +108,19 @@ export const deleteQuestion = (setLoading, questionId) => async (dispatch) => {
 };
 
 // ADD NEW Course
-export const addNewQuestion = (setLoading, questionData) => async (
+export const addNewQuestion = (setLoading, lectureId, questionData) => async (
   dispatch
 ) => {
   try {
-    // TODO: add lecture id
-    // Passing: groupName, categoryId
-    // const res = await axios.post(
-    //   "api/questions",
-    //   {
-    //     questionData,
-    //   },
-    //   {
-    //     headers: { Authorization: localStorage.token },
-    //   }
-    // );
+    const res = await axios.post(
+      `api/questions/lectures/${lectureId}`,
+      questionData,
+      {
+        headers: { Authorization: localStorage.token },
+      }
+    );
 
-    // const newQuestion = res.data.data;
-    questionData.id = Math.random();
-    const newQuestion = questionData;
+    const newQuestion = res.data.data;
     dispatch({
       type: ADD_QUESTION,
       newQuestion,
@@ -138,9 +133,9 @@ export const addNewQuestion = (setLoading, questionData) => async (
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: 'center',
-      type: 'success',
-      title: 'Your work has been saved',
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
       showConfirmButton: false,
       timer: 1500,
     });
@@ -160,9 +155,7 @@ export const editQuestion = (setLoading, questionId, questionData) => async (
   try {
     const res = await axios.put(
       `api/questions/${questionId}`,
-      {
-        questionData,
-      },
+      questionData,
       {
         headers: { Authorization: localStorage.token },
       }
@@ -179,9 +172,9 @@ export const editQuestion = (setLoading, questionId, questionData) => async (
     setLoading(false);
     Swal.fire({
       // using sweetalert2
-      position: 'center',
-      type: 'success',
-      title: 'Your work has been saved',
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
       showConfirmButton: false,
       timer: 1500,
     });

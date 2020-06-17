@@ -35,6 +35,7 @@ const AddQuestionModal = ({
   clearErrors,
   modal,
   setModal,
+  lecture_detail,
   addNewQuestion,
 }) => {
   const dispatch = useDispatch();
@@ -93,7 +94,7 @@ const AddQuestionModal = ({
     if (JSON.stringify(error) === "{}") {
       formData.correctanswer = correctanswer;
       setLoading(true);
-      addNewQuestion(setLoading, formData);
+      addNewQuestion(setLoading, lecture_detail.id, formData);
     }
   };
 
@@ -242,6 +243,7 @@ const AddQuestionModal = ({
 const mapStateToProps = (state) => ({
   errors: state.errors,
   course: state.course.course_detail.course,
+  lecture_detail: state.lecture.lecture_detail
 });
 export default connect(mapStateToProps, {
   clearErrors,

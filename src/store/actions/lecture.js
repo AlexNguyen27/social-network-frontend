@@ -8,6 +8,7 @@ import {
   GET_ERRORS,
   GET_LECTURES,
   GET_LECTURE_DETAIL,
+  GET_QUESTIONS,
 } from "./types";
 import Swal from "sweetalert2";
 import { logoutUser } from "./auth";
@@ -21,13 +22,23 @@ export const getLectureByLectureId = (setLoading, lectureId) => async (
       headers: { Authorization: localStorage.token },
     });
 
-    // console.log(lecturesArray);
-
-    // const lecturesObject = arrayToObject(lecturesArray.data.data);
-    // const selectedLecture  = lecturesArray
     dispatch({
       type: GET_LECTURE_DETAIL,
       lecture_detail: lecture.data.data,
+    });
+
+    const questionsArray = await axios.get(
+      `/api/questions/lectures/${lectureId}`,
+      {
+        headers: { Authorization: localStorage.token },
+      }
+    );
+
+    const questionsObject = arrayToObject(questionsArray.data.data);
+
+    dispatch({
+      type: GET_QUESTIONS,
+      questions_bank: questionsObject,
     });
 
     setLoading(false);
@@ -91,6 +102,7 @@ export const addNewLecture = (
       `api/lectures/courses/${courseId}`,
       {
         name,
+        description,
       },
       {
         headers: { Authorization: localStorage.token },
@@ -99,10 +111,12 @@ export const addNewLecture = (
 
     const newLecture = res.data.data;
 
+    const lectureId = newLecture.id;
+
     const imageData = new FormData();
     imageData.append("file", image);
     const lectureWithImage = await axios.post(
-      `api/lectures/upload/${newLecture.id}`,
+      `api/lectures/upload/${lectureId}`,
       imageData,
       {
         headers: {
@@ -112,7 +126,21 @@ export const addNewLecture = (
       }
     );
 
-    console.log("iamge res----------", lectureWithImage);
+    const videoData = new FormData();
+    videoData.append("file", video);
+    const lectureWithVideo = await axios.post(
+      `api/lectures/upload/${lectureId}`,
+      videoData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.token,
+        },
+      }
+    );
+
+    newLecture.image = lectureWithVideo.data.data.image;
+    newLecture.video = lectureWithVideo.data.data.video;
     dispatch({
       type: ADD_LECTURE,
       newLecture,
@@ -122,7 +150,6 @@ export const addNewLecture = (
       type: CLEAR_ERRORS,
     });
     setLoading(false);
-    // using sweetalert2
     Swal.fire({
       position: "center",
       type: "success",
@@ -155,6 +182,7 @@ export const editLecture = (
       `api/lectures/${lectureId}`,
       {
         name,
+        description
       },
       {
         headers: {
@@ -163,6 +191,7 @@ export const editLecture = (
       }
     );
 
+    const newLecture = res.data.data;
     if (image !== "same") {
       const imageData = new FormData();
       imageData.append("file", image);
@@ -176,6 +205,7 @@ export const editLecture = (
           },
         }
       );
+      newLecture.image = lectureWithImage.data.data.image;
     }
 
     if (video !== "same") {
@@ -191,17 +221,18 @@ export const editLecture = (
           },
         }
       );
+      newLecture.video = lectureWithVideo.data.data.video
     }
 
     dispatch({
       type: EDIT_LECTURE,
-      newLecture: res.data.data,
+      newLecture,
     });
 
     dispatch({
       type: CLEAR_ERRORS,
     });
-    setLoading(false)
+    setLoading(false);
     // using sweetalert2
     Swal.fire({
       position: "center",

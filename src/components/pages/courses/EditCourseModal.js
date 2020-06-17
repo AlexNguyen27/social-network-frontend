@@ -137,7 +137,7 @@ const EditCourseModal = ({
       name: courseData ? courseData.image : '',
       file: 'same',
     });
-  }, [course_detail]);
+  }, [modal]);
 
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>

@@ -1,18 +1,18 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { connect } from 'react-redux';
-import { Redirect, withRouter, matchPath } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-import { Button, Container } from '@material-ui/core';
+import React, { Fragment, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import { Redirect, withRouter, matchPath } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import { Button, Container } from "@material-ui/core";
 
 // COMPONENT
-import PageTitle from '../../custom/PageTitle';
-import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
-import Landing from '../../layout/Landing';
+import PageTitle from "../../custom/PageTitle";
+import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Landing from "../../layout/Landing";
 
 // ACTION
-import { signupTeacher } from '../../../store/actions/auth';
-import { GET_ERRORS } from '../../../store/actions/types';
+import { signupTeacher } from "../../../store/actions/auth";
+import { GET_ERRORS } from "../../../store/actions/types";
 const Signup = ({
   errors,
   auth: { isAuthenticated },
@@ -22,10 +22,10 @@ const Signup = ({
   const dispatch = useDispatch();
   // FORM DATA STATE
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    fullname: '',
-    email: '',
+    username: "",
+    password: "",
+    fullname: "",
+    email: "",
   });
 
   const { username, password, email, fullname } = formData;
@@ -40,22 +40,32 @@ const Signup = ({
 
     const error = {};
 
+    console.log(formData);
+    if (formData.role) {
+      delete formData.role;
+    }
     Object.keys(formData).map((key) => {
-      if (formData[key].trim() === '') {
-        error[key] = 'This field is required';
+      console.log(formData[key]);
+      if (formData[key] && formData[key].trim() === "") {
+        error[key] = "This field is required";
       }
 
-      if (!error[key] && key === 'email' && !validateEmail(formData[key])) {
-        error[key] = 'Email is invalid';
+      if (!error[key] && key === "email" && !validateEmail(formData[key])) {
+        error[key] = "Email is invalid";
       }
     });
-
+    if (errors.message === "Username is existing") {
+      error.username = "Username already exists!";
+    }
+    if (errors.message === "Email is existing") {
+      error.email = "Email already exists!";
+    }
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
 
-    if (JSON.stringify(error) === '{}') {
+    if (JSON.stringify(error) === "{}") {
       signupTeacher(isAuthenticated, history, formData);
     }
   };

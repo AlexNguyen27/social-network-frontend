@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import { Grid, Button } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { Row, Col } from "reactstrap";
-import { BASE_URL } from "../../../store/actions/types";
+import { BASE_URL, GET_ERRORS } from "../../../store/actions/types";
 import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 import ImageIcon from "@material-ui/icons/Image";
-import { updateUserAvatar } from "../../../store/actions/user";
+import { editUserInfo } from "../../../store/actions/user";
 import PageLoader from "../../custom/PageLoader";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,14 +27,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-const UserInfo = ({ user, errors, updateUserAvatar }) => {
+const UserInfo = ({ user, errors, editUserInfo }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [formData, setformData] = useState({
     fullname: "",
     email: "",
-    username: "",
   });
 
   const [image, setImage] = useState({
@@ -43,7 +43,7 @@ const UserInfo = ({ user, errors, updateUserAvatar }) => {
   });
 
   const [isEdit, setIsEdit] = useState(false);
-  const { fullname, email, username } = formData;
+  const { fullname, email } = formData;
   // Save on change input value
   const onChange = (e) => {
     setformData({
@@ -56,18 +56,34 @@ const UserInfo = ({ user, errors, updateUserAvatar }) => {
     setformData({
       fullname: user.fullname,
       email: user.email || "",
-      username: user.username || "",
     });
   }, []);
 
   const onSubmit = () => {
     console.log(formData);
+    const error = {};
+
+    Object.keys(formData).map((key) => {
+      if (formData[key].trim() === "") {
+        error[key] = "This field is required";
+      }
+    });
+
+    dispatch({
+      type: GET_ERRORS,
+      errors: error,
+    });
+
+    if (JSON.stringify(error) === "{}") {
+      setLoading(true);
+      editUserInfo(setLoading, formData, "same");
+    }
   };
 
   const handleCapture = ({ target }) => {
     const fileName = target.files[0].name;
     setLoading(true);
-    updateUserAvatar(setLoading, target.files[0]);
+    editUserInfo(setLoading, {}, target.files[0]);
     if (target.accept.includes("image")) {
       setImage({
         name: fileName,
@@ -180,4 +196,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   errors: state.errors,
 });
-export default connect(mapStateToProps, { updateUserAvatar })(UserInfo);
+export default connect(mapStateToProps, { editUserInfo })(UserInfo);

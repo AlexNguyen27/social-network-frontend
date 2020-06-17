@@ -36,17 +36,17 @@ const ViewLecture = ({
   questions_bank,
 }) => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [lectureData, setLectureData] = useState();
 
   useEffect(() => {
     setLectureData(lectures[lectureId]);
-    getQuestionByLectureId(setLoading, lectureId);
-    // getLectureByLectureId(setLoading, lectureId);
+    // getQuestionByLectureId(setLoading, lectureId);
+    getLectureByLectureId(setLoading, lectureId);
   }, [lectureId]);
 
-  const [modalAddQuestion, setModalAddQuestion] = useState(false);
-  const [modalEditQuestion, setModalEditQuestion] = useState(false);
+  // const [modalAddQuestion, setModalAddQuestion] = useState(false);
+  // const [modalEditQuestion, setModalEditQuestion] = useState(false);
 
   // const questionsBankArray = Object.keys(questions_bank).map(
   //   (questionId) => questions_bank[questionId]
