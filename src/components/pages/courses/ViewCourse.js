@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import ControlCard from '../../layout/ControlCard';
-import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import ControlCard from "../../layout/ControlCard";
+import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import { Row, Col } from 'reactstrap';
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import { Row, Col } from "reactstrap";
 
-import { getCourseById } from '../../../store/actions/course';
-import PageLoader from '../../custom/PageLoader';
-import { IconButton } from '@material-ui/core';
-import { deleteLecture } from '../../../store/actions/lecture';
-import EditLectureModel from '../lectures/EditLectureModel';
-import Swal from 'sweetalert2';
+import { getCourseById } from "../../../store/actions/course";
+import PageLoader from "../../custom/PageLoader";
+import { IconButton } from "@material-ui/core";
+import { deleteLecture } from "../../../store/actions/lecture";
+import EditLectureModel from "../lectures/EditLectureModel";
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1, 3),
     color: theme.palette.text.secondary,
-    fontSize: '16px',
+    fontSize: "16px",
   },
   centered: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
   },
 }));
 
@@ -38,7 +38,7 @@ const ViewCourse = ({
   courseId,
   course_detail,
   deleteLecture,
-  auth: { user },
+  auth: { user, isAdmin },
 }) => {
   const history = useHistory();
   const classes = useStyles();
@@ -60,11 +60,11 @@ const ViewCourse = ({
     Swal.fire({
       title: `Are you sure to delete ?`,
       text: "You won't be able to revert this!",
-      type: 'warning',
+      type: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
         setLoading(true);
@@ -86,7 +86,7 @@ const ViewCourse = ({
             <ControlCard course={course_detail} />
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.paper} style={{ fontSize: '20px' }}>
+            <Paper className={classes.paper} style={{ fontSize: "20px" }}>
               What you will learn
             </Paper>
             <Paper className={classes.paper}>
@@ -113,7 +113,7 @@ const ViewCourse = ({
           <Grid item xs={6}>
             <h4>Course Content</h4>
           </Grid>
-          <Grid item xs={6} style={{ display: 'flex', alignItems: 'center' }}>
+          <Grid item xs={6} style={{ display: "flex", alignItems: "center" }}>
             <h6>{lectures && Object.keys(lectures).length} Lectures</h6>
           </Grid>
           {lectures &&
@@ -123,14 +123,16 @@ const ViewCourse = ({
                   <Row>
                     <Col
                       xs="1"
-                      style={{ display: 'flex', alignItems: 'center' }}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
                       <IconButton
-                        onClick={() =>
-                          history.push(
-                            `${window.location.pathname}/lectures/${key}`
-                          )
-                        }
+                        onClick={() => {
+                          if (user.id === course_detail.teacher.id || isAdmin) {
+                            history.push(
+                              `${window.location.pathname}/lectures/${key}`
+                            );
+                          }
+                        }}
                       >
                         <PlayCircleFilledIcon
                           color="primary"
@@ -141,11 +143,13 @@ const ViewCourse = ({
                     <Col
                       xs="8"
                       lg="9"
-                      style={{ display: 'flex', alignItems: 'center' }}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
-                      <h6 style={{ margin: 0 }}>{lectures[key].name} : {lectures[key].description}</h6>
+                      <h6 style={{ margin: 0 }}>
+                        {lectures[key].name} : {lectures[key].description}
+                      </h6>
                     </Col>
-                    {user.id === course_detail.teacher.id && (
+                    {(user.id === course_detail.teacher.id || isAdmin) && (
                       <Col xs="3" lg="2">
                         <Row>
                           <IconButton

@@ -48,17 +48,19 @@ const UserCourses = ({
     return () => {
       clearErrors();
     };
-  }, []);
+  }, [course_detail]);
 
   useEffect(() => {
     const searchText = location.searchText;
-    const mockup = (coursesArray || []).filter((item) => {
-      return (
-        item.course.name.toLowerCase().match(searchText) ||
-        item.course.description.toLowerCase().match(searchText)
-      );
-    });
-    setCoursesData(mockup);
+    if (searchText && searchText.trim() !== "") {
+      const mockup = (coursesArray || []).filter((item) => {
+        return (
+          item.course.name.toLowerCase().match(searchText) ||
+          item.course.description.toLowerCase().match(searchText)
+        );
+      });
+      setCoursesData(mockup);
+    }
   }, [location]);
 
   // HANDLE ON DELETE Course
@@ -97,7 +99,7 @@ const UserCourses = ({
             <AddCircleIcon className="mr-2" /> Add new course
           </Button>
         </Grid>
-        {coursesArray.length > 0  ? (
+        {coursesArray.length > 0 ? (
           (coursesData && coursesData.length > 0
             ? coursesData
             : coursesArray
@@ -130,20 +132,23 @@ const UserCourses = ({
                   {/* <EditIcon className="mr-1" /> */}
                   Edit
                 </Button>
-                <Button
-                  size="small"
-                  color="default"
-                  onClick={() => onDeleteCourse(course.course.id)}
-                >
-                  {/* <DeleteIcon className="mr-1" />  */}
-                  Delete
-                </Button>
+                {course.course.totalStudentEnroll === 0 && (
+                  <Button
+                    size="small"
+                    color="default"
+                    onClick={() => onDeleteCourse(course.course.id)}
+                  >
+                    Delete
+                  </Button>
+                )}
               </CardItem>
             </Grid>
           ))
         ) : (
           <Grid item xs={12}>
-            <h4 className="text-center">No courses, maybe adding some course for yourself!</h4>
+            <h4 className="text-center">
+              No courses, maybe adding some course for yourself!
+            </h4>
           </Grid>
         )}
       </Grid>

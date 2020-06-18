@@ -5,6 +5,7 @@ import {
   ADD_COURSE,
   ADD_QUESTION,
   DELETE_QUESTION,
+  UNAUTHENTICATE,
 } from "../actions/types";
 
 const initialState = {
@@ -47,6 +48,8 @@ export default function (state = initialState, action) {
         ...state,
         questions_bank: newQuestionBank,
       };
+      case UNAUTHENTICATE:
+        return initialState;
     default: {
       return state;
     }

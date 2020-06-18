@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
+import { useHistory } from 'react-router-dom';
 import { forwardRef } from "react";
 
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -18,8 +20,12 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import moment from "moment";
-import { getCourses, editCourse, deleteCourse } from "../../../store/actions/course";
+import PageLoader from "../../custom/PageLoader";
+import {
+  getCourses,
+  editCourse,
+  deleteCourse,
+} from "../../../store/actions/course";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,19 +57,22 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
     columns: [
       { title: "Name", field: "name" },
       { title: "Public", field: "active" },
+      { title: "Instructor", field: "fullname", editable: "never" },
+      { title: "Username", field: "username", editable: "never" },
+      { title: "Lectures", field: "lectures", editable: "never" },
       {
         title: "Total Students Enrolled",
         field: "totalStudentEnroll",
         editable: "never",
       },
-      { title: "Instructor", field: "fullname", editable: "never" },
-      { title: "Lectures", field: "lectures", editable: "never" },
     ],
     data: [],
   });
   const coursesArray = Object.keys(all_courses).map(
     (courseId) => all_courses[courseId]
   );
+
+  const history = useHistory();
   useEffect(() => {
     getCourses(setLoading);
 
@@ -79,6 +88,7 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
           totalStudentEnroll: item.course.totalStudentEnroll,
           lectures: item.course.letures.length,
           fullname: item.teacher.fullname,
+          username: item.teacher.username,
         });
       }
     });
@@ -87,73 +97,88 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
       ...state,
       data: formatData,
     });
-  }, []);
+  }, [loading]);
   return (
-    <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
-      <MaterialTable
-        icons={tableIcons}
-        title="List Of Courses"
-        columns={state.columns}
-        data={state.data}
-        options={{
-          pageSize: 10,
-          headerStyle: {
-            fontWeight: "bold",
-          },
-        }}
-        editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                editCourse(
-                  setLoading,
-                  newData.id,
-                  newData.name,
-                  newData.description,
-                  "same",
-                  newData.active
-                );
+    <PageLoader loading={loading}>
+      <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
+        <MaterialTable
+          icons={tableIcons}
+          title="List Of Courses"
+          columns={state.columns}
+          data={state.data}
+          options={{
+            pageSize: 10,
+            headerStyle: {
+              fontWeight: "bold",
+            },
+          }}
+          detailPanel={[
+            {
+              icon: '',
+              tooltip: "View course",
+              render: (rowData) => {
+                history.push({
+                  pathname: `/your-courses/${rowData.id}`
+                })
+              },
+            },
+          ]}
+          editable={{
+            onRowAdd: (newData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    data.push(newData);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  editCourse(
+                    setLoading,
+                    newData.id,
+                    newData.name,
+                    newData.description,
+                    "same",
+                    newData.active
+                  );
 
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                deleteCourse(setLoading, oldData.id);
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-        }}
-      />
-    </div>
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    data.push(newData);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+            onRowDelete: (oldData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  deleteCourse(setLoading, oldData.id);
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    data.splice(data.indexOf(oldData), 1);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+          }}
+        />
+      </div>
+    </PageLoader>
   );
 };
 
 const mapStateToProps = (state) => ({
   all_courses: state.course.all_courses,
 });
-export default connect(mapStateToProps, { getCourses, editCourse, deleteCourse })(
-  CoursesList
-);
+export default connect(mapStateToProps, {
+  getCourses,
+  editCourse,
+  deleteCourse,
+})(CoursesList);

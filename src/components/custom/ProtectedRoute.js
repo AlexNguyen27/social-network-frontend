@@ -1,7 +1,7 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import NotFound from '../layout/NotFound';
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import NotFound from "../layout/NotFound";
 
 const ProtectedRoute = ({
   component: Component,
@@ -11,17 +11,11 @@ const ProtectedRoute = ({
   path,
   ...rest
 }) => {
-  const adminUnauthorized = ['/your-courses', '/your-courses:/courseId'];
-  const teacherUnauthorized = [
-    '/users-list',
-    '/users-list/:userId',
-    '/user-courses',
-    '/user-courses/:courseId',
-  ];
+  const teacherUnauthorized = ["/users-list", "user-courses"];
   const page = (props) => {
     if (isAuthenticated) {
       if (
-        (isAdmin && !adminUnauthorized.includes(path)) ||
+        (isAdmin) ||
         (isTeacher && !teacherUnauthorized.includes(path))
       ) {
         return <Component {...props} dispatch={dispatch} />;

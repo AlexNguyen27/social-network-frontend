@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import VideoCard from '../../custom/VideoCard';
-import { BASE_URL } from '../../../store/actions/types';
-import { Button } from '@material-ui/core';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import PageLoader from '../../custom/PageLoader';
-import { getLectureByLectureId } from '../../../store/actions/lecture';
-import { getQuestionByLectureId } from '../../../store/actions/question';
-import AddQuestionModal from '../questionsBank/AddQuestionModal';
-import QuestionsBank from '../questionsBank/QuestionsBank';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import VideoCard from "../../custom/VideoCard";
+import { BASE_URL } from "../../../store/actions/types";
+import { Button } from "@material-ui/core";
+import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
+import PageLoader from "../../custom/PageLoader";
+import { getLectureByLectureId } from "../../../store/actions/lecture";
+import { getQuestionByLectureId } from "../../../store/actions/question";
+import AddQuestionModal from "../questionsBank/AddQuestionModal";
+import QuestionsBank from "../questionsBank/QuestionsBank";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: 'center',
+    textAlign: "center",
     color: theme.palette.text.secondary,
   },
 }));
@@ -28,12 +28,9 @@ const ViewLecture = ({
   lectureId,
   courseId,
   lectures,
-  auth: { user },
-  lecture_detail,
+  auth: { user, isAdmin },
   user_courses,
   getLectureByLectureId,
-  getQuestionByLectureId,
-  questions_bank,
 }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
@@ -41,16 +38,8 @@ const ViewLecture = ({
 
   useEffect(() => {
     setLectureData(lectures[lectureId]);
-    // getQuestionByLectureId(setLoading, lectureId);
     getLectureByLectureId(setLoading, lectureId);
   }, [lectureId]);
-
-  // const [modalAddQuestion, setModalAddQuestion] = useState(false);
-  // const [modalEditQuestion, setModalEditQuestion] = useState(false);
-
-  // const questionsBankArray = Object.keys(questions_bank).map(
-  //   (questionId) => questions_bank[questionId]
-  // );
 
   const isCurrentUser = !!user_courses[courseId];
 
@@ -62,12 +51,12 @@ const ViewLecture = ({
           <Grid item xs={12}>
             <VideoCard
               poster={
-                lectureData ? `${BASE_URL}/images/${lectureData.image}` : ''
+                lectureData ? `${BASE_URL}/images/${lectureData.image}` : ""
               }
-              src={lectureData ? `${BASE_URL}/video/${lectureData.video}` : ''}
+              src={lectureData ? `${BASE_URL}/video/${lectureData.video}` : ""}
             />
           </Grid>
-          {isCurrentUser && <QuestionsBank />}
+          {(isCurrentUser || isAdmin) && <QuestionsBank />}
         </Grid>
       </div>
     </PageLoader>

@@ -113,7 +113,7 @@ const ChangePasswordModal = ({
                   value={newPassword}
                   fullWidth
                   onChange={onChange}
-                  error={errors.newPassword}
+                  error={errors.message || errors.newPassword}
                 />
               </Col>
               <Col xs="12" className="mt-4">

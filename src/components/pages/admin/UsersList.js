@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
-
+import { connect } from "react-redux";
+import { getUsers, editUserInfo, deleteUser } from "../../../store/actions/user";
 import { forwardRef } from "react";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -19,6 +20,9 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import moment from "moment";
+
+import PageLoader from "../../custom/PageLoader";
+import { editCourse, deleteCourse } from "../../../store/actions/course";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -44,23 +48,15 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const UsersList = () => {
-  const [state, setState] = React.useState({
+const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
+  const [state, setState] = useState({
     columns: [
-      { title: "Username", field: "username" },
+      { title: "Username", field: "username", editable: "never" },
       { title: "Fullname", field: "fullname" },
       { title: "Email", field: "email", type: "email" },
       {
         title: "Role",
         field: "role",
-      },
-      {
-        title: "Created Date",
-        field: "createddate",
-      },
-      {
-        title: "Modified Date",
-        field: "modifieddate",
       },
     ],
     data: [
@@ -74,81 +70,78 @@ const UsersList = () => {
     ],
   });
 
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const mockup = {
-      username: "thanh_teacher",
-      fullname: "Nguyen le Ngocj thanh ",
-      email: "thanh@gmail.com",
-      role: "Teacher",
-      createdDate: moment("2020-05-29T14:49:05.661Z").format("MMM DD h:mm A"),
-    };
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        ...mockup,
-        id: i,
-      });
-    }
-
-    setState({
-      ...state,
-      data,
-    });
+    console.log("here---------------");
+    getUsers(setLoading);
   }, []);
 
+  const usersArray = Object.keys(users).map((userId) => users[userId]);
+
   return (
-    <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
-      <MaterialTable
-        icons={tableIcons}
-        title="List Of Users"
-        columns={state.columns}
-        data={state.data}
-        options={{
-          pageSize: 10,
-          headerStyle: {
-            fontWeight: "bold",
-          },
-        }}
-        editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                if (oldData) {
+    <PageLoader loading={loading}>
+      <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
+        <MaterialTable
+          icons={tableIcons}
+          title="List Of Users"
+          columns={state.columns}
+          data={usersArray || []}
+          options={{
+            pageSize: 10,
+            headerStyle: {
+              fontWeight: "bold",
+            },
+          }}
+          editable={{
+            onRowAdd: (newData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
                   setState((prevState) => {
                     const data = [...prevState.data];
-                    data[data.indexOf(oldData)] = newData;
+                    data.push(newData);
                     return { ...prevState, data };
                   });
-                }
-              }, 600);
-            }),
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                resolve();
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
-              }, 600);
-            }),
-        }}
-      />
-    </div>
+                }, 600);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  console.log(newData);
+                  editUserInfo(setLoading, {
+                    email: newData.email,
+                    fullname: newData.fullname,
+                    role: newData.role,
+                  });
+                  if (oldData) {
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = newData;
+                      return { ...prevState, data };
+                    });
+                  }
+                }, 600);
+              }),
+            onRowDelete: (oldData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve();
+                  deleteUser(setLoading, oldData.id);
+                  setState((prevState) => {
+                    const data = [...prevState.data];
+                    data.splice(data.indexOf(oldData), 1);
+                    return { ...prevState, data };
+                  });
+                }, 600);
+              }),
+          }}
+        />
+      </div>
+    </PageLoader>
   );
 };
-
-export default UsersList;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+export default connect(mapStateToProps, { getUsers, editUserInfo, deleteUser })(UsersList);

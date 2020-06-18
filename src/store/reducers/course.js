@@ -72,6 +72,10 @@ export default function (state = initialState, action) {
           ...state.user_courses,
           [newCourse.course.id]: newCourse,
         },
+        course_detail: {
+          ...state.course_detail,
+          ...newCourse
+        }
       };
 
     case REMOVE_COURSE_DETAIL:

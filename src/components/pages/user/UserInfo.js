@@ -76,7 +76,7 @@ const UserInfo = ({ user, errors, editUserInfo }) => {
 
     if (JSON.stringify(error) === "{}") {
       setLoading(true);
-      editUserInfo(setLoading, formData, "same");
+      editUserInfo(setLoading, formData);
     }
   };
 

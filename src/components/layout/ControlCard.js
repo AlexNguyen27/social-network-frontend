@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ControlCard = ({ course, auth: { user } }) => {
+const ControlCard = ({ course, auth: { user, isAdmin } }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -114,7 +114,7 @@ const ControlCard = ({ course, auth: { user } }) => {
 
         <div className={classes.controls}>
           <Row className="pl-3">
-            {isCurrentuser && (
+            {(isCurrentuser || isAdmin) && (
               <>
                 <Col>
                   <Button
