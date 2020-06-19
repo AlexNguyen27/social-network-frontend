@@ -87,7 +87,7 @@ export const editUserInfo = (setLoading, userData, image) => async (
       const imageData = new FormData();
       imageData.append("file", image);
 
-      const res = await axios.post(`api/users/uploads/${user.id}`, imageData, {
+      const res = await axios.put(`api/users/uploads/${user.id}`, imageData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.token,
@@ -101,7 +101,7 @@ export const editUserInfo = (setLoading, userData, image) => async (
         },
       });
     } else {
-      userData.role = isTeacher ? "ROLE_TEACHER" : "ROLE_ADMIN";
+      // userData.role="ROLE_ADMIN"
       const res = await axios.put(
         `api/users/update_profile/${user.id}`,
         userData,

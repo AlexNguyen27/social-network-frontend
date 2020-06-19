@@ -76,6 +76,7 @@ const UserInfo = ({ user, errors, editUserInfo }) => {
 
     if (JSON.stringify(error) === "{}") {
       setLoading(true);
+      formData.role="ROLE_TEACHER";
       editUserInfo(setLoading, formData);
     }
   };

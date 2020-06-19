@@ -64,10 +64,10 @@ export default function (state = initialState, action) {
     case EDIT_COURSE:
       return {
         ...state,
-        all_courses: {
-          ...state.all_courses,
-          [newCourse.course.id]: newCourse,
-        },
+        // all_courses: {
+        //   ...state.all_courses,
+        //   [newCourse.course.id]: newCourse,
+        // },
         user_courses: {
           ...state.user_courses,
           [newCourse.course.id]: newCourse,
@@ -83,14 +83,6 @@ export default function (state = initialState, action) {
         ...state,
         course_detail: {},
       };
-    // case GET_LECTURES: 
-    //   return {
-    //     ...state,
-    //     course_detail: {
-    //       ...state.course_detail,
-    //       lectures
-    //     }
-    //   }
     case ADD_LECTURE:
     case EDIT_LECTURE:
       const newLecture = action.newLecture;

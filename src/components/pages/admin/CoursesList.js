@@ -26,6 +26,7 @@ import {
   editCourse,
   deleteCourse,
 } from "../../../store/actions/course";
+import Swal from "sweetalert2";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -128,12 +129,19 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
-                  setState((prevState) => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
+                  Swal.fire({
+                    position: "center",
+                    type: "error",
+                    title: "Admin can not add new course",
+                    showConfirmButton: false,
+                    timer: 1500,
                   });
-                }, 600);
+                  // setState((prevState) => {
+                  //   const data = [...prevState.data];
+                  //   data.push(newData);
+                  //   return { ...prevState, data };
+                  // });
+                }, 100);
               }),
             onRowUpdate: (newData, oldData) =>
               new Promise((resolve) => {
@@ -148,17 +156,28 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
                     newData.active
                   );
 
-                  setState((prevState) => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
-                  });
+                  if (oldData) {
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = newData;
+                      return { ...prevState, data };
+                    });
+                  }
                 }, 600);
               }),
             onRowDelete: (oldData) =>
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
+                  if(oldData.totalStudentEnroll > 0) {
+                    return  Swal.fire({
+                      position: "center",
+                      type: "error",
+                      title: "Can't delete course have student enrolled",
+                      showConfirmButton: false,
+                      timer: 1500,
+                    });
+                  }
                   deleteCourse(setLoading, oldData.id);
                   setState((prevState) => {
                     const data = [...prevState.data];

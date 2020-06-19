@@ -22,7 +22,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import moment from "moment";
 
 import PageLoader from "../../custom/PageLoader";
-import { editCourse, deleteCourse } from "../../../store/actions/course";
+import Swal from "sweetalert2";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -97,11 +97,18 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
-                  setState((prevState) => {
-                    const data = [...prevState.data];
-                    data.push(newData);
-                    return { ...prevState, data };
+                  Swal.fire({
+                    position: "center",
+                    type: "error",
+                    title: "Admin can not add new user",
+                    showConfirmButton: false,
+                    timer: 1500,
                   });
+                  // setState((prevState) => {
+                  //   const data = [...prevState.data];
+                  //   data.push(newData);
+                  //   return { ...prevState, data };
+                  // });
                 }, 600);
               }),
             onRowUpdate: (newData, oldData) =>

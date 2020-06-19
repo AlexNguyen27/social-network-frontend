@@ -1,4 +1,4 @@
-export const BASE_URL = "http://e7f82cff02a0.ngrok.io/upload";
+export const BASE_URL = "http://8542db8af1a5.ngrok.io/upload";
 // export const BASE_URL = 'http://localhost:8080/upload';
 
 export const AUTHENTICATE = "AUTHENTICATE";
