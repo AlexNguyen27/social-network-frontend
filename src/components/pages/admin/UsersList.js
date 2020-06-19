@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
-import { getUsers, editUserInfo, deleteUser } from "../../../store/actions/user";
+import {
+  getUsers,
+  editUserInfo,
+  deleteUser,
+} from "../../../store/actions/user";
 import { forwardRef } from "react";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -74,7 +78,7 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
   useEffect(() => {
     console.log("here---------------");
     getUsers(setLoading);
-  }, []);
+  }, [loading]);
 
   const usersArray = Object.keys(users).map((userId) => users[userId]);
 
@@ -117,6 +121,7 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
                   resolve();
                   console.log(newData);
                   editUserInfo(setLoading, {
+                    id: oldData.id,
                     email: newData.email,
                     fullname: newData.fullname,
                     role: newData.role,
@@ -151,4 +156,6 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
 const mapStateToProps = (state) => ({
   user: state.user,
 });
-export default connect(mapStateToProps, { getUsers, editUserInfo, deleteUser })(UsersList);
+export default connect(mapStateToProps, { getUsers, editUserInfo, deleteUser })(
+  UsersList
+);
