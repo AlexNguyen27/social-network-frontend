@@ -15,7 +15,8 @@ import {
 import { logoutUser } from './auth';
 import { arrayToObject } from '../../utils/commonFunction';
 import Swal from 'sweetalert2';
-// GET majors data
+
+// GET ALL COURSE
 export const getCourses = (setLoading) => async (dispatch) => {
   try {
     const allCoursesArray = await axios.get('/api/all-courses', {
@@ -39,6 +40,8 @@ export const getCourses = (setLoading) => async (dispatch) => {
   }
 };
 
+
+// GET USER COURSE
 export const getUserCourses = (setLoading, userId) => async (dispatch) => {
   try {
     const userCoursesArray = await axios.get(`/api/users/${userId}/courses`, {
