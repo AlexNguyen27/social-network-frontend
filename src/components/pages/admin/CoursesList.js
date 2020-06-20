@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import { connect } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { forwardRef } from "react";
 
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -87,7 +87,7 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
           name: item.course.name,
           active: item.course.active,
           totalStudentEnroll: item.course.totalStudentEnroll,
-          lectures: item.course.letures.length,
+          lectures: item.course.letures ? item.course.letures.length : 0,
           fullname: item.teacher.fullname,
           username: item.teacher.username,
         });
@@ -115,12 +115,12 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
           }}
           detailPanel={[
             {
-              icon: '',
+              icon: "",
               tooltip: "View course",
               render: (rowData) => {
                 history.push({
-                  pathname: `/your-courses/${rowData.id}`
-                })
+                  pathname: `/your-courses/${rowData.id}`,
+                });
               },
             },
           ]}
@@ -169,8 +169,8 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
-                  if(oldData.totalStudentEnroll > 0) {
-                    return  Swal.fire({
+                  if (oldData.totalStudentEnroll > 0) {
+                    return Swal.fire({
                       position: "center",
                       type: "error",
                       title: "Can't delete course have student enrolled",

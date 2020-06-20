@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Grid, Button } from '@material-ui/core';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Grid, Button } from "@material-ui/core";
 
-import CardItem from '../../layout/CardItem';
-import PageLoader from '../../custom/PageLoader';
-import { getCourses } from '../../../store/actions/course';
-import { clearErrors } from '../../../store/actions/common';
+import CardItem from "../../layout/CardItem";
+import PageLoader from "../../custom/PageLoader";
+import { getCourses } from "../../../store/actions/course";
+import { clearErrors } from "../../../store/actions/common";
 
 const Courses = ({
   match,
@@ -25,7 +25,6 @@ const Courses = ({
     // console.log(location);
     getCourses(setLoading);
     return () => {
-      console.log(all_courses);
       clearErrors();
     };
   }, []);
@@ -37,13 +36,15 @@ const Courses = ({
   useEffect(() => {
     // console.log(location);
     const searchText = location.searchText;
-    const mockup = (coursesArray || []).filter((item) => {
-      return (
-        item.course.name.toLowerCase().match(searchText) ||
-        item.course.description.toLowerCase().match(searchText)
-      );
-    });
-    setCoursesData(mockup);
+    if (searchText && searchText.trim() !== "") {
+      const mockup = (coursesArray || []).filter((item) => {
+        return (
+          item.course.name.toLowerCase().match(searchText) ||
+          item.course.description.toLowerCase().match(searchText)
+        );
+      });
+      setCoursesData(mockup);
+    }
   }, [location]);
 
   return (
@@ -56,7 +57,7 @@ const Courses = ({
           ).map((course) => (
             <Grid
               item
-              style={{ display: 'inline-grid' }}
+              style={{ display: "inline-grid" }}
               xs={4}
               md={3}
               spacing={3}

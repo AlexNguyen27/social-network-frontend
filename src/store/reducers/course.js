@@ -62,6 +62,24 @@ export default function (state = initialState, action) {
       };
     case ADD_COURSE:
     case EDIT_COURSE:
+      if(state.all_courses[newCourse.course.id]) {
+        return {
+          ...state,
+          all_courses: {
+            ...state.all_courses,
+            [newCourse.course.id]: newCourse,
+          },
+          user_courses: {
+            ...state.user_courses,
+            [newCourse.course.id]: newCourse,
+          },
+          course_detail: {
+            ...state.course_detail,
+            ...newCourse
+          }
+        };
+      }
+
       return {
         ...state,
         // all_courses: {
