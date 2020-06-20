@@ -98,7 +98,7 @@ const EditCourseModal = ({
         description,
         image.file,
         isActive
-      ).then((t) => console.log(t));
+      );
     }
   };
 

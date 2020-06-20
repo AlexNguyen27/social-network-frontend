@@ -1,5 +1,5 @@
-import axios from "../../utils/axios";
-import logoutDispatch from "../../utils/logoutDispatch";
+import axios from '../../utils/axios';
+import logoutDispatch from '../../utils/logoutDispatch';
 import {
   DELETE_LECTURE,
   ADD_LECTURE,
@@ -9,10 +9,10 @@ import {
   GET_LECTURES,
   GET_LECTURE_DETAIL,
   GET_QUESTIONS,
-} from "./types";
-import Swal from "sweetalert2";
-import { logoutUser } from "./auth";
-import { arrayToObject } from "../../utils/commonFunction";
+} from './types';
+import Swal from 'sweetalert2';
+import { logoutUser } from './auth';
+import { arrayToObject } from '../../utils/commonFunction';
 
 export const getLectureByLectureId = (setLoading, lectureId) => async (
   dispatch
@@ -43,7 +43,6 @@ export const getLectureByLectureId = (setLoading, lectureId) => async (
 
     setLoading(false);
   } catch (error) {
-    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -70,9 +69,9 @@ export const deleteLecture = (setLoading, lectureId) => async (dispatch) => {
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -114,26 +113,26 @@ export const addNewLecture = (
     const lectureId = newLecture.id;
 
     const imageData = new FormData();
-    imageData.append("file", image);
+    imageData.append('file', image);
     const lectureWithImage = await axios.post(
       `api/lectures/upload/${lectureId}`,
       imageData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
           Authorization: localStorage.token,
         },
       }
     );
 
     const videoData = new FormData();
-    videoData.append("file", video);
+    videoData.append('file', video);
     const lectureWithVideo = await axios.post(
       `api/lectures/upload/${lectureId}`,
       videoData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
           Authorization: localStorage.token,
         },
       }
@@ -151,9 +150,9 @@ export const addNewLecture = (
     });
     setLoading(false);
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -182,7 +181,7 @@ export const editLecture = (
       `api/lectures/${lectureId}`,
       {
         name,
-        description
+        description,
       },
       {
         headers: {
@@ -192,15 +191,15 @@ export const editLecture = (
     );
 
     const newLecture = res.data.data;
-    if (image !== "same") {
+    if (image !== 'same') {
       const imageData = new FormData();
-      imageData.append("file", image);
+      imageData.append('file', image);
       const lectureWithImage = await axios.post(
         `api/lectures/upload/${lectureId}`,
         imageData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
             Authorization: localStorage.token,
           },
         }
@@ -208,20 +207,20 @@ export const editLecture = (
       newLecture.image = lectureWithImage.data.data.image;
     }
 
-    if (video !== "same") {
+    if (video !== 'same') {
       const videoData = new FormData();
-      videoData.append("file", video);
+      videoData.append('file', video);
       const lectureWithVideo = await axios.post(
         `api/lectures/upload/${lectureId}`,
         videoData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
             Authorization: localStorage.token,
           },
         }
       );
-      newLecture.video = lectureWithVideo.data.data.video
+      newLecture.video = lectureWithVideo.data.data.video;
     }
 
     dispatch({
@@ -235,9 +234,9 @@ export const editLecture = (
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { useDispatch } from "react-redux";
-import PageLoader from "../../custom/PageLoader";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import PageLoader from '../../custom/PageLoader';
 
 import {
   TextField,
@@ -10,7 +10,7 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 import {
   Row,
@@ -20,15 +20,15 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
+} from 'reactstrap';
 
-import { addNewQuestion } from "../../../store/actions/question";
-import { clearErrors } from "../../../store/actions/common";
+import { addNewQuestion } from '../../../store/actions/question';
+import { clearErrors } from '../../../store/actions/common';
 // COMPONENTS
-import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Button from '@material-ui/core/Button';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
 
-import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
+import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
 
 const AddQuestionModal = ({
   errors,
@@ -43,14 +43,14 @@ const AddQuestionModal = ({
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    question: "",
-    answerfirst: "",
-    answersecond: "",
-    answerthird: "",
-    answerfourth: "",
+    question: '',
+    answerfirst: '',
+    answersecond: '',
+    answerthird: '',
+    answerfourth: '',
   });
 
-  const [correctanswer, setCorrectanswer] = useState("A");
+  const [correctanswer, setCorrectanswer] = useState('A');
   const {
     question,
     answerfirst,
@@ -64,11 +64,11 @@ const AddQuestionModal = ({
     setModal(false);
     clearErrors();
     setFormData({
-      question: "",
-      answerfirst: "",
-      answersecond: "",
-      answerthird: "",
-      answerfourth: "",
+      question: '',
+      answerfirst: '',
+      answersecond: '',
+      answerthird: '',
+      answerfourth: '',
     });
   };
 
@@ -79,10 +79,8 @@ const AddQuestionModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      console.log(formData[key]);
-      if (formData[key].trim() === "") {
-        error[key] = "This field is required";
-        console.log("ror", error);
+      if (formData[key].trim() === '') {
+        error[key] = 'This field is required';
       }
     });
 
@@ -91,7 +89,7 @@ const AddQuestionModal = ({
       errors: error,
     });
 
-    if (JSON.stringify(error) === "{}") {
+    if (JSON.stringify(error) === '{}') {
       formData.correctanswer = correctanswer;
       setLoading(true);
       addNewQuestion(setLoading, lecture_detail.id, formData);
@@ -243,7 +241,7 @@ const AddQuestionModal = ({
 const mapStateToProps = (state) => ({
   errors: state.errors,
   course: state.course.course_detail.course,
-  lecture_detail: state.lecture.lecture_detail
+  lecture_detail: state.lecture.lecture_detail,
 });
 export default connect(mapStateToProps, {
   clearErrors,

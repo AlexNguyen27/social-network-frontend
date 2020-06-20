@@ -1,4 +1,4 @@
-import axios from "../../utils/axios";
+import axios from '../../utils/axios';
 import {
   GET_ERRORS,
   CLEAR_ERRORS,
@@ -6,16 +6,15 @@ import {
   GET_USERS,
   DELETE_USER,
   EDIT_USER,
-} from "./types";
-import { logoutUser } from "./auth";
-import { arrayToObject } from "../../utils/commonFunction";
-import Swal from "sweetalert2";
+} from './types';
+import { logoutUser } from './auth';
+import { arrayToObject } from '../../utils/commonFunction';
+import Swal from 'sweetalert2';
 
 // GET majors data
 export const getUsers = (setLoading) => async (dispatch) => {
   try {
-    console.log("serkkkkkkkkkkkkkkkkkkkkkkkkk");
-    const usersList = await axios.get("/api/users", {
+    const usersList = await axios.get('/api/users', {
       headers: { Authorization: localStorage.token },
     });
 
@@ -60,9 +59,9 @@ export const updatePassword = (setLoading, password) => async (
     setLoading(false);
     Swal.fire({
       // using sweetalert2
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -76,28 +75,23 @@ export const updatePassword = (setLoading, password) => async (
   }
 };
 
-// ADD NEW Course
 export const editUserInfo = (setLoading, userData, image) => async (
   dispatch,
   getState
 ) => {
   try {
-    const { user, isTeacher, isAdmin } = getState().auth;
+    const { user, isTeacher } = getState().auth;
 
     if (image) {
       const imageData = new FormData();
-      imageData.append("file", image);
+      imageData.append('file', image);
 
-      const res = await axios.put(
-        `api/users/uploads/${userData.id || user.id}`,
-        imageData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: localStorage.token,
-          },
-        }
-      );
+      const res = await axios.post(`api/users/upload/${user.id}`, imageData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: localStorage.token,
+        },
+      });
 
       dispatch({
         type: EDIT_USER_INFO,
@@ -106,10 +100,9 @@ export const editUserInfo = (setLoading, userData, image) => async (
         },
       });
     } else {
-      // userData.role="ROLE_ADMIN"
-      const userId = isAdmin ? userData.id : user.id;
+      userData.role = isTeacher ? 'ROLE_TEACHER' : 'ROLE_ADMIN';
       const res = await axios.put(
-        `api/users/update_profile/${userId}`,
+        `api/users/update_profile/${user.id}`,
         userData,
         {
           headers: {
@@ -118,23 +111,13 @@ export const editUserInfo = (setLoading, userData, image) => async (
         }
       );
 
-      if (!userData.id) {
-        dispatch({
-          type: EDIT_USER_INFO,
-          userInfo: {
-            email: res.data.data.email,
-            fullname: res.data.data.fullname,
-          },
-        });
-      }
-
-      if (isAdmin) {
-        dispatch({
-          type: EDIT_USER,
-          selectedId: res.data.data.id,
-          newUser: res.data.data,
-        });
-      }
+      dispatch({
+        type: EDIT_USER_INFO,
+        userInfo: {
+          email: res.data.data.email,
+          fullname: res.data.data.fullname,
+        },
+      });
     }
 
     dispatch({
@@ -144,9 +127,54 @@ export const editUserInfo = (setLoading, userData, image) => async (
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } catch (error) {
+    console.log(error);
+    logoutUser(dispatch, error);
+    dispatch({
+      type: GET_ERRORS,
+      errors: error.response.data,
+    });
+  }
+};
+
+export const editUserInfoByAdmin = (setLoading, userData) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    // userData.role="ROLE_ADMIN"
+    const res = await axios.put(
+      `api/users/update_profile/${userData.id}`,
+      userData,
+      {
+        headers: {
+          Authorization: localStorage.token,
+        },
+      }
+    );
+
+    dispatch({
+      type: EDIT_USER,
+      selectedId: res.data.data.id,
+      newUser: res.data.data,
+    });
+
+    dispatch({
+      type: CLEAR_ERRORS,
+    });
+
+    setLoading(false);
+    // using sweetalert2
+    Swal.fire({
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -179,9 +207,9 @@ export const deleteUser = (setLoading, userId) => async (dispatch) => {
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });

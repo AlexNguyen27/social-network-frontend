@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import {
-  TextField,
-} from "@material-ui/core";
+import { TextField } from '@material-ui/core';
 
-import { getCourseById } from "../../../store/actions/course";
-import { editLecture } from "../../../store/actions/lecture";
-import { clearErrors } from "../../../store/actions/common";
+import { getCourseById } from '../../../store/actions/course';
+import { editLecture } from '../../../store/actions/lecture';
+import { clearErrors } from '../../../store/actions/common';
 
 // COMPONENTS
-import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Button from '@material-ui/core/Button';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
 
 import {
   Row,
@@ -22,9 +20,9 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
-import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
-import PageLoader from "../../custom/PageLoader";
+} from 'reactstrap';
+import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
+import PageLoader from '../../custom/PageLoader';
 
 const EditLectureModal = ({
   errors,
@@ -38,34 +36,34 @@ const EditLectureModal = ({
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
   });
 
   const [image, setImage] = useState({
-    name: "",
-    file: "",
+    name: '',
+    file: '',
   });
 
   const [video, setVideo] = useState({
-    name: "",
-    file: "",
+    name: '',
+    file: '',
   });
 
   useEffect(() => {
     setFormData({
-      name: lectureData ? lectureData.name : "",
-      description: lectureData ? lectureData.description : "",
+      name: lectureData ? lectureData.name : '',
+      description: lectureData ? lectureData.description : '',
     });
     setImage({
       name: lectureData ? lectureData.image : '',
-      file: 'same'
-    })
+      file: 'same',
+    });
 
     setVideo({
       name: lectureData ? lectureData.video : '',
-      file: 'same'
-    })
+      file: 'same',
+    });
   }, [lectureData]);
 
   const { name, description } = formData;
@@ -75,8 +73,8 @@ const EditLectureModal = ({
     setModal(false);
     clearErrors();
     setFormData({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     });
   };
 
@@ -87,29 +85,34 @@ const EditLectureModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      console.log(formData[key]);
-      if (!formData[key] || formData[key].trim() === "") {
-        error[key] = "This field is required";
+      if (!formData[key] || formData[key].trim() === '') {
+        error[key] = 'This field is required';
       }
     });
 
-    if (image.name.trim() === "") {
-      error.image = "Please select an image!";
+    if (image.name.trim() === '') {
+      error.image = 'Please select an image!';
     }
 
-    if (video.name.trim() === "") {
-      error.video = "Please select an video!";
+    if (video.name.trim() === '') {
+      error.video = 'Please select an video!';
     }
 
-    // console.log(error);
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
 
-    if (JSON.stringify(error) === "{}") {
+    if (JSON.stringify(error) === '{}') {
       setLoading(true);
-      editLecture(setLoading, lectureData.id, name, description, image.file, video.file);
+      editLecture(
+        setLoading,
+        lectureData.id,
+        name,
+        description,
+        image.file,
+        video.file
+      );
     }
   };
 
@@ -123,7 +126,7 @@ const EditLectureModal = ({
 
   const handleCapture = ({ target }) => {
     const fileName = target.files[0].name;
-    if (target.accept.includes("image")) {
+    if (target.accept.includes('image')) {
       setImage({
         name: fileName,
         file: target.files[0],
@@ -139,7 +142,9 @@ const EditLectureModal = ({
   return (
     <Modal isOpen={modal} toggle={() => closeModal()} centered={true}>
       <PageLoader loading={loading} noPadding>
-      <ModalHeader toggle={() => closeModal()}>Edit Lecture {name}</ModalHeader>
+        <ModalHeader toggle={() => closeModal()}>
+          Edit Lecture {name}
+        </ModalHeader>
         {/** MODAL BODY */}
         <Form onSubmit={(e) => onSubmit(e)}>
           <ModalBody>
@@ -178,7 +183,7 @@ const EditLectureModal = ({
                     accept="image/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </Button>
               </Col>
@@ -188,7 +193,7 @@ const EditLectureModal = ({
             </Row>
             {errors.image && (
               <Row>
-                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                <p style={{ color: 'red' }} className="px-3 py-2 m-0">
                   {errors.image}
                 </p>
               </Row>
@@ -201,7 +206,7 @@ const EditLectureModal = ({
                     accept="video/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </Button>
               </Col>
@@ -211,7 +216,7 @@ const EditLectureModal = ({
             </Row>
             {errors.video && (
               <Row>
-                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                <p style={{ color: 'red' }} className="px-3 py-2 m-0">
                   {errors.video}
                 </p>
               </Row>

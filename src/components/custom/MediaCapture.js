@@ -1,35 +1,31 @@
-import React, { useState, Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { useState, Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import Videocam from "@material-ui/icons/Videocam";
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import Videocam from '@material-ui/icons/Videocam';
 
 const styles = (theme) => ({
   input: {
-    display: "none",
+    display: 'none',
   },
 });
 
 const MediaCapture = () => {
   const [image, setImage] = useState({
-    name: "",
-    data: "",
+    name: '',
+    data: '',
   });
   const [video, setVideo] = useState([]);
 
   const handleCapture = ({ target }) => {
     const fileReader = new FileReader();
-    const name = target.accept.includes("image") ? "images" : "videos";
+    const name = target.accept.includes('image') ? 'images' : 'videos';
 
     fileReader.readAsDataURL(target.files[0]);
     fileReader.onload = (e) => {
-    
-      console.log(e.target);
-      //   this.setState((prevState) => ({
-      //     [name]: [...prevState[name], e.target.result],
-      //   }));
+      // HANDLE WHEN SHOW IMAGE
     };
   };
 

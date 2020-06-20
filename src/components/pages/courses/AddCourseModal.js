@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import { green } from "@material-ui/core/colors";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import { green } from '@material-ui/core/colors';
+import { useDispatch } from 'react-redux';
 
 import {
   TextField,
@@ -11,13 +11,13 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { addNewCourse } from "../../../store/actions/course";
-import { clearErrors } from "../../../store/actions/common";
+import { addNewCourse } from '../../../store/actions/course';
+import { clearErrors } from '../../../store/actions/common';
 // COMPONENTS
-import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
+import Button from '@material-ui/core/Button';
+import TextFieldInputWithHeader from '../../custom/TextFieldInputWithheader';
 
 import {
   Row,
@@ -27,14 +27,14 @@ import {
   ModalBody,
   ModalFooter,
   Form,
-} from "reactstrap";
-import { GET_ERRORS, BASE_URL } from "../../../store/actions/types";
-import PageLoader from "../../custom/PageLoader";
+} from 'reactstrap';
+import { GET_ERRORS, BASE_URL } from '../../../store/actions/types';
+import PageLoader from '../../custom/PageLoader';
 
 const GreenRadio = withStyles({
   root: {
     color: green[400],
-    "&$checked": {
+    '&$checked': {
       color: green[600],
     },
   },
@@ -52,14 +52,14 @@ const AddCourseModal = ({
   const [loading, setLoading] = useState(false);
   // NEW ROLE NAME STATE
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
   });
 
   const [isActive, setIsActive] = useState(false);
   const [image, setImage] = useState({
-    name: "",
-    file: "",
+    name: '',
+    file: '',
   });
 
   const { name, description } = formData;
@@ -69,8 +69,12 @@ const AddCourseModal = ({
     setModal(false);
     clearErrors();
     setFormData({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
+    });
+    setImage({
+      name: '',
+      file: '',
     });
   };
 
@@ -81,17 +85,17 @@ const AddCourseModal = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      if (formData[key].trim() === "") {
-        error[key] = "This field is required";
+      if (formData[key].trim() === '') {
+        error[key] = 'This field is required';
       }
     });
 
     if (description.trim().length > 255) {
-      error.description = "Description length must be less than 255 characters";
+      error.description = 'Description length must be less than 255 characters';
     }
 
-    if (image.name.trim() === "") {
-      error.image = "Please select an image!";
+    if (image.name.trim() === '') {
+      error.image = 'Please select an image!';
     }
     // console.log(error);
     dispatch({
@@ -99,7 +103,7 @@ const AddCourseModal = ({
       errors: error,
     });
 
-    if (JSON.stringify(error) === "{}") {
+    if (JSON.stringify(error) === '{}') {
       setLoading(true);
       addNewCourse(setLoading, name, description, image.file, isActive);
     }
@@ -114,7 +118,7 @@ const AddCourseModal = ({
   };
 
   const handleChangeActive = (event) => {
-    if (event.target.value === "true") {
+    if (event.target.value === 'true') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -163,14 +167,14 @@ const AddCourseModal = ({
                   defaultValue="New course description"
                 />
                 {errors.description && (
-                  <p style={{ color: "red" }}>{errors.description}</p>
+                  <p style={{ color: 'red' }}>{errors.description}</p>
                 )}
               </Col>
             </Row>
             <Row className="py-2 px-3">
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  Puclic your new course?{" "}
+                  Puclic your new course?{' '}
                 </FormLabel>
                 <RadioGroup
                   aria-label="Public"
@@ -199,7 +203,7 @@ const AddCourseModal = ({
                     accept="image/*"
                     type="file"
                     onChange={handleCapture}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </Button>
               </Col>
@@ -209,7 +213,7 @@ const AddCourseModal = ({
             </Row>
             {errors.image && (
               <Row>
-                <p style={{ color: "red" }} className="px-3 py-2 m-0">
+                <p style={{ color: 'red' }} className="px-3 py-2 m-0">
                   {errors.image}
                 </p>
               </Row>

@@ -1,4 +1,4 @@
-import axios from "../../utils/axios";
+import axios from '../../utils/axios';
 import {
   GET_QUESTIONS,
   GET_ERRORS,
@@ -7,11 +7,10 @@ import {
   ADD_QUESTION,
   EDIT_QUESTION,
   CLEAR_ERRORS,
-} from "./types";
-import { logoutUser } from "./auth";
-import { arrayToObject } from "../../utils/commonFunction";
-import Swal from "sweetalert2";
-// import { questions_bank } from '../../mockup/questions_bank';
+} from './types';
+import { logoutUser } from './auth';
+import { arrayToObject } from '../../utils/commonFunction';
+import Swal from 'sweetalert2';
 
 // GET majors data
 export const getQuestionByLectureId = (setLoading, lectureId) => async (
@@ -26,8 +25,6 @@ export const getQuestionByLectureId = (setLoading, lectureId) => async (
       }
     );
 
-    console.log(questionsArray);
-
     const questionsObject = arrayToObject(questionsArray.data.data);
 
     dispatch({
@@ -37,7 +34,6 @@ export const getQuestionByLectureId = (setLoading, lectureId) => async (
 
     setLoading(false);
   } catch (error) {
-    console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,
@@ -52,14 +48,8 @@ export const getQuestionById = (setLoading, id) => async (
 ) => {
   const { questions_bank } = getState().question;
   try {
-    // const question = await axios.get(`/api/questions/${id}`, {
-    //   headers: { Authorization: localStorage.token },
-    // });
-    // const question = arrayToObject(question.data.data);
-
     dispatch({
       type: GET_QUESTION_DETAIL,
-      // question_detail: question.data.data,
       question_detail: questions_bank[id],
     });
 
@@ -91,9 +81,9 @@ export const deleteQuestion = (setLoading, questionId) => async (dispatch) => {
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -133,9 +123,9 @@ export const addNewQuestion = (setLoading, lectureId, questionData) => async (
     setLoading(false);
     // using sweetalert2
     Swal.fire({
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -153,13 +143,9 @@ export const editQuestion = (setLoading, questionId, questionData) => async (
   dispatch
 ) => {
   try {
-    const res = await axios.put(
-      `api/questions/${questionId}`,
-      questionData,
-      {
-        headers: { Authorization: localStorage.token },
-      }
-    );
+    const res = await axios.put(`api/questions/${questionId}`, questionData, {
+      headers: { Authorization: localStorage.token },
+    });
 
     dispatch({
       type: EDIT_QUESTION,
@@ -172,9 +158,9 @@ export const editQuestion = (setLoading, questionId, questionData) => async (
     setLoading(false);
     Swal.fire({
       // using sweetalert2
-      position: "center",
-      type: "success",
-      title: "Your work has been saved",
+      position: 'center',
+      type: 'success',
+      title: 'Your work has been saved',
       showConfirmButton: false,
       timer: 1500,
     });

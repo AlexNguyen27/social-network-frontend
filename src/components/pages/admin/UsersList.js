@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import MaterialTable from "material-table";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import MaterialTable from 'material-table';
+import { connect } from 'react-redux';
 import {
   getUsers,
-  editUserInfo,
+  editUserInfoByAdmin,
   deleteUser,
-} from "../../../store/actions/user";
-import { forwardRef } from "react";
+} from '../../../store/actions/user';
+import { forwardRef } from 'react';
 
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
-import moment from "moment";
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import moment from 'moment';
 
-import PageLoader from "../../custom/PageLoader";
-import Swal from "sweetalert2";
+import PageLoader from '../../custom/PageLoader';
+import Swal from 'sweetalert2';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -52,31 +52,35 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
+const UsersList = ({
+  getUsers,
+  editUserInfoByAdmin,
+  user: { users },
+  deleteUser,
+}) => {
   const [state, setState] = useState({
     columns: [
-      { title: "Username", field: "username", editable: "never" },
-      { title: "Fullname", field: "fullname" },
-      { title: "Email", field: "email", type: "email" },
+      { title: 'Username', field: 'username', editable: 'never' },
+      { title: 'Fullname', field: 'fullname' },
+      { title: 'Email', field: 'email', type: 'email' },
       {
-        title: "Role",
-        field: "role",
+        title: 'Role',
+        field: 'role',
       },
     ],
     data: [
       {
-        username: "thanh_teacher",
-        fullname: "Nguyen le Ngocj thanh ",
-        email: "thanh@gmail.com",
-        role: "Teacher",
-        createdDate: moment("2020-05-29T14:49:05.661Z").format("MMM DD h:mm A"),
+        username: 'thanh_teacher',
+        fullname: 'Nguyen le Ngocj thanh ',
+        email: 'thanh@gmail.com',
+        role: 'Teacher',
+        createdDate: moment('2020-05-29T14:49:05.661Z').format('MMM DD h:mm A'),
       },
     ],
   });
 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    console.log("here---------------");
     getUsers(setLoading);
   }, [loading]);
 
@@ -84,7 +88,7 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
 
   return (
     <PageLoader loading={loading}>
-      <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
+      <div style={{ maxWidth: `100%`, overflowY: 'auto' }}>
         <MaterialTable
           icons={tableIcons}
           title="List Of Users"
@@ -93,7 +97,7 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
           options={{
             pageSize: 10,
             headerStyle: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
             },
           }}
           editable={{
@@ -102,9 +106,9 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
                 setTimeout(() => {
                   resolve();
                   Swal.fire({
-                    position: "center",
-                    type: "error",
-                    title: "Admin can not add new user",
+                    position: 'center',
+                    type: 'error',
+                    title: 'Admin can not add new user',
                     showConfirmButton: false,
                     timer: 1500,
                   });
@@ -119,8 +123,7 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
               new Promise((resolve) => {
                 setTimeout(() => {
                   resolve();
-                  console.log(newData);
-                  editUserInfo(setLoading, {
+                  editUserInfoByAdmin(setLoading, {
                     id: oldData.id,
                     email: newData.email,
                     fullname: newData.fullname,
@@ -156,6 +159,8 @@ const UsersList = ({ getUsers, editUserInfo, user: { users }, deleteUser }) => {
 const mapStateToProps = (state) => ({
   user: state.user,
 });
-export default connect(mapStateToProps, { getUsers, editUserInfo, deleteUser })(
-  UsersList
-);
+export default connect(mapStateToProps, {
+  getUsers,
+  editUserInfoByAdmin,
+  deleteUser,
+})(UsersList);
