@@ -108,7 +108,7 @@ const CoursesList = ({ getCourses, all_courses, editCourse, deleteCourse }) => {
           columns={state.columns}
           data={state.data}
           options={{
-            pageSize: 10,
+            pageSize: 5,
             headerStyle: {
               fontWeight: "bold",
             },

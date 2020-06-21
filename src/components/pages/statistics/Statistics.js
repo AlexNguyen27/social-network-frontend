@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import MultipleSummary from "./MultipleSummary";
+import React from 'react';
+import { connect } from 'react-redux';
+import MultipleSummary from './MultipleSummary';
 
 // TODO: thống kê số sinh viên đã theo học trong từng khóa học theo từng tháng
 // get all course
@@ -16,9 +16,11 @@ const Statistics = ({ user_courses }) => {
     course.course.totalStudentEnroll ? course.course.totalStudentEnroll : 0
   );
 
+  // const totalStudentEnrollArr = [345, 4545, 1343, 2345];
+
   return (
     <>
-      {console.log("totalStudentEnrollArr", totalStudentEnrollArr)}
+      {console.log('totalStudentEnrollArr', totalStudentEnrollArr)}
       <h4>Statistics of students who have studied your course</h4>
       <MultipleSummary
         courseName={courseNameArr}

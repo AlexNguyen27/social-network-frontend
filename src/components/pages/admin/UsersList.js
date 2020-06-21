@@ -95,7 +95,7 @@ const UsersList = ({
           columns={state.columns}
           data={usersArray || []}
           options={{
-            pageSize: 10,
+            pageSize: 5,
             headerStyle: {
               fontWeight: 'bold',
             },
