@@ -1,5 +1,5 @@
 import { hera } from "hera-js";
-const baseURL = "http://localhost:9000/graphql";
+const baseURL = process.env.REACT_APP_API_HOST || "http://localhost:9000/graphql";
 
 export const graphqlRequest = (
   url = baseURL,

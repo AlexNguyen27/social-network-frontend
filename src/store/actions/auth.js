@@ -11,7 +11,7 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
   // const res = await axios.post('', data: {});
   const { data, errors } = await hera({
     option: {
-      url: "http://localhost:9000/graphql",
+      url: process.env.REACT_APP_API_HOST || "http://localhost:9000/graphql",
     },
     query: `
         query {
