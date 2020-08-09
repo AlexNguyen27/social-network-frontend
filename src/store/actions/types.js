@@ -1,5 +1,5 @@
 // export const BASE_URL = 'http://6bfe10facf33.ngrok.io/upload';
-export const BASE_URL = 'http://localhost:9000/graphql';
+export const BASE_URL = process.env.REACT_APP_API_HOST || 'http://localhost:9000/graphql';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const UNAUTHENTICATE = 'UNAUTHENTICATE';
