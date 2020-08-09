@@ -11,62 +11,66 @@ import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 import Landing from "../../layout/Landing";
 
 // ACTION
-import { signupTeacher } from "../../../store/actions/auth";
+import { signUpUser } from "../../../store/actions/auth";
 import { GET_ERRORS } from "../../../store/actions/types";
-const Signup = ({
-  errors,
-  auth: { isAuthenticated },
-  history,
-  signupTeacher,
-}) => {
+const Signup = ({ errors, auth: { isAuthenticated }, history, signUpUser }) => {
   const dispatch = useDispatch();
   // FORM DATA STATE
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    fullname: "",
-    email: "",
+    confirmPassword: "",
   });
 
-  const { username, password, email, fullname } = formData;
+  const { username, password, confirmPassword } = formData;
 
-  const validateEmail = (email) => {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  };
+  // const validateEmail = (email) => {
+  //   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //   return re.test(String(email).toLowerCase());
+  // };
   // Click button Login
   const onSubmit = (e) => {
     e.preventDefault();
 
     const error = {};
 
-    console.log(formData);
-    if (formData.role) {
-      delete formData.role;
-    }
+    console.log("forma data---------------------", formData);
+    // if (formData.role) {
+    //   delete formData.role;
+    // }
     Object.keys(formData).map((key) => {
-      console.log(formData[key]);
-      if (formData[key] && formData[key].trim() === "") {
+      console.log("-------------------", formData);
+      console.log(key);
+      if (!formData[key] || (formData[key] && formData[key].trim() === "")) {
         error[key] = "This field is required";
       }
 
-      if (!error[key] && key === "email" && !validateEmail(formData[key])) {
-        error[key] = "Email is invalid";
-      }
+      // if (!error[key] && key === "email" && !validateEmail(formData[key])) {
+      //   error[key] = "Email is invalid";
+      // }
     });
-    if (errors.message === "Username is existing") {
-      error.username = "Username already exists!";
+
+    if (formData.password !== formData.confirmPassword) {
+      error.confirmPassword = "Confirm password is wrong";
+    } else {
+      if (error.confirmPassword) delete error.confirmPassword;
     }
-    if (errors.message === "Email is existing") {
-      error.email = "Email already exists!";
-    }
+    // if (errors.message === "Username is existing") {
+    //   error.username = "Username already exists!";
+    // }
+    // if (errors.message === "Email is existing") {
+    //   error.email = "Email already exists!";
+    // }
     dispatch({
       type: GET_ERRORS,
       errors: error,
     });
 
     if (JSON.stringify(error) === "{}") {
-      signupTeacher(isAuthenticated, history, formData);
+      console.log(formData);
+      const data = { ...formData };
+      delete data.confirmPassword;
+      signUpUser(isAuthenticated, history, data);
     }
   };
 
@@ -95,7 +99,7 @@ const Signup = ({
               error={errors.username}
               placeholder="Enter Username"
             />
-            <TextFieldInputWithHeader
+            {/* <TextFieldInputWithHeader
               header="Email"
               name="email"
               className="mt-0"
@@ -104,18 +108,8 @@ const Signup = ({
               onChange={onChange}
               error={errors.email}
               placeholder="Enter Email"
-            />
+            /> */}
 
-            <TextFieldInputWithHeader
-              header="Fullname"
-              name="fullname"
-              className="mt-0"
-              fullWidth
-              value={fullname}
-              onChange={onChange}
-              error={errors.fullname}
-              placeholder="Enter Fullname"
-            />
             <TextFieldInputWithHeader
               header="Password"
               name="password"
@@ -123,6 +117,18 @@ const Signup = ({
               type="password"
               value={password}
               error={errors.password}
+              className="mt-0"
+              fullWidth
+              onChange={onChange}
+            />
+
+            <TextFieldInputWithHeader
+              header="Confirm password"
+              name="confirmPassword"
+              placeholder="Enter Confirm password"
+              type="password"
+              value={confirmPassword}
+              error={errors.confirmPassword}
               className="mt-0"
               fullWidth
               onChange={onChange}
@@ -148,4 +154,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
   auth: state.auth,
 });
-export default connect(mapStateToProps, { signupTeacher })(withRouter(Signup));
+export default connect(mapStateToProps, { signUpUser })(withRouter(Signup));

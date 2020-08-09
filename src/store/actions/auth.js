@@ -1,65 +1,100 @@
-import axios from '../../utils/axios';
-import logoutDispatch from '../../utils/logoutDispatch';
-import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE } from './types';
+import axios from "axios";
+import logoutDispatch from "../../utils/logoutDispatch";
+import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE } from "./types";
+import { hera } from "hera-js";
+import jwt_decode from "jwt-decode";
 
-import jwt_decode from 'jwt-decode';
-
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 //LOGIN User
-export const loginUser = (user) => async (dispatch) => {
-  try {
-    const res = await axios.post('/api/auth/signin', user);
+export const loginUser = ({ username, password }) => async (dispatch) => {
+  // try {
+  // const res = await axios.post('', data: {});
+  const { data, errors } = await hera({
+    option: {
+      url: "http://localhost:9000/graphql",
+    },
+    query: `
+        query {
+          login(username: $username, password: $password) {
+            id,
+            token,
+            username,
+            firstName,
+            lastName,
+            email,
+            phone,
+            address,
+            password,
+            imageUrl,
+            githubUsername,
+            role,
+            createdAt,
+            updatedAt
+          }
+        }
+      `,
+    variables: {
+      username,
+      password,
+    },
+  });
 
-    const resData = res.data.data;
-    const { token } = resData;
+  console.log(data);
+  console.log("erer----------------", errors);
 
-    // Decode Token
-    const decoded = jwt_decode(token.replace('Bearer ', ''));
-
-    const userData = {};
-    if (resData.role.authority === 'ROLE_ADMIN') {
-      userData.isAdmin = true;
-    }
-    if (resData.role.authority === 'ROLE_TEACHER') {
-      userData.isTeacher = true;
-    }
-
-    userData.userInfo = {
-      id: resData.id,
-      email: resData.email,
-      fullname: resData.fullname,
-      username: resData.username,
-      image: resData.image,
-    };
-
-    //Retrieve User info from decoded token
-    dispatch({
-      type: AUTHENTICATE,
-      user: userData,
-      token,
-    });
-
-    //Clear errors
-    dispatch({
-      type: CLEAR_ERRORS,
-    });
-  } catch (error) {
+  if (errors) {
+    console.log("eror------------------", errors);
     // If login fails, set user info to null
-    logoutDispatch(dispatch, error);
-    if (error.response.data.message === 'Login fail') {
-      error.response.data.message = 'Wrong username or password!';
-    } else if (
-      error.response.data.messageKey === 'msg.pleaseEnterAllRequiredFields'
-    ) {
-      error.response.data.message = 'This field is required!';
-    }
+    logoutDispatch(dispatch, errors);
+    // if (errors.message === "Login fail") {
+    //   errors.message = "Wrong username or password!";
+    // } else if (
+    //   errors.messageKey === "msg.pleaseEnterAllRequiredFields"
+    // ) {
+    //   errors.message = "This field is required!";
+    // }
+
+    const formatedErr = {};
 
     // Set errors
     dispatch({
       type: GET_ERRORS,
-      errors: error.response.data,
+      errors: { message: errors[0].message },
+    });
+  } else {
+    const resData = data.login;
+    const { token } = resData;
+
+    // const decoded = jwt_decode(token);
+
+    const userData = { ...resData };
+    delete userData.token;
+
+    if (resData.role === "user") {
+      userData.isUser = true;
+    }
+    if (resData.role === "admin") {
+      userData.isAdmin = true;
+    }
+
+    dispatch({
+      type: AUTHENTICATE,
+      user: {
+        userInfo: userData,
+        isUser: userData.isUser || false,
+        isAdmin: userData.isAdmin || false,
+      },
+      token,
     });
   }
+
+  //Clear errors
+  //   dispatch({
+  //     type: CLEAR_ERRORS,
+  //   });
+  // } catch (error) {
+
+  // }
 };
 
 //Logout User
@@ -69,36 +104,74 @@ export const logoutUser = () => (dispatch) => {
 };
 
 // Sign up User
-export const signupTeacher = (isAuthenticated, history, userData) => async (
+export const signUpUser = (isAuthenticated, history, userData) => async (
   dispatch
 ) => {
-  try {
-    userData.role = ['TEACHER'];
+  // await axios.post("api/auth/signup", userData, {
+  //   headers: { Authorization: localStorage.token },
+  // });
 
-    await axios.post('api/auth/signup', userData, {
-      headers: { Authorization: localStorage.token },
+  const { username, password } = userData;
+  const { data, errors } = await hera({
+    option: {
+      url: "http://localhost:9000/graphql",
+    },
+    query: `
+        mutation {
+          register(username: $username, password: $password, role: $role ) {
+            id,
+            username,
+            password,
+            phone,
+            password,
+            imageUrl,
+            githubUsername,
+            role,
+            createdAt,
+            updatedAt
+          }
+        }
+      `,
+    variables: {
+      username,
+      password,
+      role: "user",
+    },
+  });
+
+  console.log(data);
+  if (errors) {
+    console.log('error---------', errors);
+    logoutUser(dispatch, errors);
+
+    const formatedError = {};
+    const error = errors[0].message;
+    if (error.includes('Password')) {
+      formatedError.password = error;
+    }
+    if (error.includes('Username')) {
+      formatedError.username = error;
+    }
+    
+    dispatch({
+      type: GET_ERRORS,
+      errors: {...formatedError},
     });
-
+  } else {
     dispatch({
       type: CLEAR_ERRORS,
     });
     // using sweetalert2
     Swal.fire({
-      position: 'center',
-      type: 'success',
-      title: 'Login to continue',
+      position: "center",
+      type: "success",
+      title: "Login to continue",
       showConfirmButton: false,
       timer: 1500,
     });
 
     if (!isAuthenticated) {
-      history.push('/login');
+      history.push("/login");
     }
-  } catch (error) {
-    logoutUser(dispatch, error);
-    dispatch({
-      type: GET_ERRORS,
-      errors: error.response.data,
-    });
   }
 };

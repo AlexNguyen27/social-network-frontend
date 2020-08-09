@@ -6,17 +6,17 @@ import NotFound from "../layout/NotFound";
 const ProtectedRoute = ({
   component: Component,
   authorized,
-  auth: { isAuthenticated, isTeacher, isAdmin },
+  auth: { isAuthenticated, isUser, isAdmin },
   dispatch,
   path,
   ...rest
 }) => {
-  const teacherUnauthorized = ["/users-list", "user-courses"];
+  const teacherUnauthorized = ["/users-list", "/edit-user"];
   const page = (props) => {
     if (isAuthenticated) {
       if (
         (isAdmin) ||
-        (isTeacher && !teacherUnauthorized.includes(path))
+        (isUser && !teacherUnauthorized.includes(path))
       ) {
         return <Component {...props} dispatch={dispatch} />;
       }

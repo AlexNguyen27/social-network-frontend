@@ -20,12 +20,12 @@ import { logoutUser } from './store/actions/auth';
 
 // Check if token is expired
 if (localStorage.token) {
-  const decoded = jwt_decode(localStorage.token.replace('Bearer ', ''));
-  const currentTime = Date.now() / 1000;
-  if (decoded.exp <= currentTime) {
-    store.dispatch(logoutUser());
-    localStorage.clear();
-  }
+  // const decoded = jwt_decode(localStorage.token.replace('Bearer ', ''));
+  // const currentTime = Date.now() / 1000;
+  // if (decoded.exp <= currentTime) {
+  //   store.dispatch(logoutUser());
+  //   localStorage.clear();
+  // }
 }
 
 function App() {

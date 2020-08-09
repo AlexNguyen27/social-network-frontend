@@ -1,5 +1,5 @@
 // export const BASE_URL = 'http://6bfe10facf33.ngrok.io/upload';
-export const BASE_URL = 'http://localhost:8080/upload';
+export const BASE_URL = 'http://localhost:9000/graphql';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const UNAUTHENTICATE = 'UNAUTHENTICATE';
@@ -33,3 +33,4 @@ export const EDIT_USER_INFO = 'EDIT_USER_INFO';
 export const GET_USERS = 'GET_USERS';
 export const DELETE_USER = 'DELETE_USER';
 export const EDIT_USER = 'EDIT_USER';
+export const SAVE_CURRENT_USER = 'SAVE_CURRENT_USER';

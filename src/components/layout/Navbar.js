@@ -1,12 +1,14 @@
-import React, { Fragment } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Colors from '../../constants/Colors';
+import React, { Fragment } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import Colors from "../../constants/Colors";
+import { logoutUser } from "../../store/actions/auth";
 
-import Landing from './Landing';
+import Landing from "./Landing";
 
-const Navbar = () => {
+const Navbar = ({ logoutUser }) => {
   const isAuthenticated = true;
+  // eslint-disable-next-line no-unused-vars
   const logoutButton = (
     <ul className="navbar-nav">
       <li className="nav-item">
@@ -14,10 +16,10 @@ const Navbar = () => {
           className="nav-link"
           to=""
           onClick={() => {
-            // logoutUser();
+            logoutUser();
           }}
         >
-          Logout
+          Log out
         </Link>
       </li>
     </ul>
@@ -47,10 +49,10 @@ const Navbar = () => {
     <>
       <nav
         className="navbar navbar-expand-md navbar-dark"
-        style={{ background: Colors.purple, minHeight: '64px' }}
+        style={{ background: Colors.purple }}
       >
         <Link className="navbar-brand" to="/login">
-          Elearning English
+          Dev connector
         </Link>
 
         <button
@@ -68,7 +70,7 @@ const Navbar = () => {
             <Fragment>
               <li className="nav-item">
                 <NavLink className="nav-link" to="/login">
-                  Staff
+                  Login
                 </NavLink>
               </li>
               {/* <li className="nav-item">
@@ -85,6 +87,7 @@ const Navbar = () => {
           </ul>
           {/* {loginButton} */}
           {signUpButton}
+          {logoutButton}
         </div>
       </nav>
       {!isAuthenticated && <Landing />}
@@ -95,4 +98,4 @@ const Navbar = () => {
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, {})(Navbar);
+export default connect(mapStateToProps, { logoutUser })(Navbar);

@@ -23,7 +23,7 @@ footer {
 .MuiContainer-root .MuiContainer-maxWidthLg {
   @media (min-width: 1280px) {
     .MuiContainer-maxWidthLg {
-      max-width: 1500px;
+      max-width: 1500px !important;
     }
   }
 }

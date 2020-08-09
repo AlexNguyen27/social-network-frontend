@@ -5,7 +5,7 @@ export default (state = initialState, action) => {
   const { errors, type } = action;
   switch (type) {
     case GET_ERRORS:
-      return { ...errors };
+      return {...errors};
     case UNAUTHENTICATE:
     case CLEAR_ERRORS:
       return {};
