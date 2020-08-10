@@ -39,7 +39,11 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
               githubUsername,
               role,
               createdAt,
-              updatedAt
+              updatedAt,
+              posts{
+                id
+                title
+              }
             }
           }
         `,
@@ -179,7 +183,9 @@ export const editUserInfo = (setLoading, userData) => async (
 ) => {
   console.log('userdata-------------', userData);
   const state = getState();
-  const { auth: { token }, user: { current_user: { id }}} = state;
+  const { auth: { token, user: { id: userId} } } = state;
+  const { user } = state;
+
   const { data, errors } = await hera({
     option: {
       url: "http://localhost:9000/graphql",
@@ -201,13 +207,14 @@ export const editUserInfo = (setLoading, userData) => async (
             imageUrl,
             githubUsername,
             createdAt,
-            updatedAt
+            updatedAt,
+
           }
         }
       `,
     variables: {
       info: {
-        id,
+        id: user.current_user ? user.current_user.id : userId,
         ...userData
       },
     },

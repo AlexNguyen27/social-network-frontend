@@ -24,7 +24,6 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
             email,
             phone,
             address,
-            password,
             imageUrl,
             githubUsername,
             role,

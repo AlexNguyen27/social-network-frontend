@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-const UserInfo = ({ current_user, errors, editUserInfo }) => {
+const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -69,16 +69,30 @@ const UserInfo = ({ current_user, errors, editUserInfo }) => {
   };
 
   const setInit = () => {
-    setformData({
-      username: current_user.username || "",
-      firstName: current_user.firstName || "",
-      lastName: current_user.lastName || "",
-      email: current_user.email || "",
-      phone: current_user.phone || "",
-      address: current_user.address || "",
-      githubUsername: current_user.githubUsername || "",
-    });
+    if (JSON.stringify(current_user) !== "{}") {
+      setformData({
+        username: current_user.username || "",
+        firstName: current_user.firstName || "",
+        lastName: current_user.lastName || "",
+        email: current_user.email || "",
+        phone: current_user.phone || "",
+        address: current_user.address || "",
+        githubUsername: current_user.githubUsername || "",
+      });
+    }else {
+      setformData({
+        username: user.username || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        githubUsername: user.githubUsername || "",
+      });
+    }
+    
   }
+
   useEffect(() => {
     setInit();
   }, []);
@@ -215,6 +229,7 @@ const UserInfo = ({ current_user, errors, editUserInfo }) => {
 
 const mapStateToProps = (state) => ({
   current_user: state.user.current_user,
+  user: state.auth.user,
   errors: state.errors,
 });
 export default connect(mapStateToProps, { editUserInfo })(UserInfo);

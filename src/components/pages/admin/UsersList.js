@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
+import moment from "moment";
 import { connect, useDispatch } from "react-redux";
-import { withRouter } from 'react-router-dom';
+import { withRouter } from "react-router-dom";
 import {
   getUsers,
   editUserInfo,
   deleteUser,
 } from "../../../store/actions/user";
-import { SAVE_CURRENT_USER } from '../../../store/actions/types';
+import { SAVE_CURRENT_USER } from "../../../store/actions/types";
+import { DATE_TIME } from "../../../utils/common";
 
 import { forwardRef } from "react";
 
@@ -27,8 +29,7 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import Visibility from '@material-ui/icons/Visibility';
-import moment from "moment";
+import Visibility from "@material-ui/icons/Visibility";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
@@ -67,7 +68,7 @@ const UsersList = ({
   const dispatch = useDispatch();
   const [state, setState] = useState({
     columns: [
-      { title: "Username", field: "username", editable: "never" },
+      { title: "Username", field: "username"},
       { title: "Fullname", field: "fullname" },
       { title: "Email", field: "email", type: "email" },
       {
@@ -75,12 +76,19 @@ const UsersList = ({
         field: "role",
       },
       {
+        title: "Total Posts",
+        field: "totalPosts",
+        editable: "never"
+      },
+      {
         title: "Created at",
         field: "createdAt",
+        editable: "never"
       },
       {
         title: "Updated at",
         field: "updatedAt",
+        editable: "never"
       },
     ],
     data: [
@@ -100,7 +108,7 @@ const UsersList = ({
   }, [loading]);
 
   const getFullname = (firstname, lastname) => {
-    console.log(firstname, lastname)
+    console.log(firstname, lastname);
     let fullname = "";
     if (firstname) {
       fullname += firstname + " ";
@@ -109,16 +117,20 @@ const UsersList = ({
       fullname += lastname;
     }
     return fullname;
-  }
+  };
+
+  const getDateTime = (date) => moment(date).format(DATE_TIME);
 
   const usersArray = Object.keys(users).map((userId) => ({
     ...users[userId],
-    fullname: getFullname(users[userId].firstName, users[userId].lastName)
+    createdAt: getDateTime(users[userId].createdAt),
+    updatedAt: getDateTime(users[userId].updatedAt),
+    fullname: getFullname(users[userId].firstName, users[userId].lastName),
   }));
 
   return (
     <PageLoader loading={loading}>
-      <div style={{ maxWidth: `100%`, overflowY: "auto" }}>
+      <div style={{ maxWidth: `100%`, overflowX: 'auto' }}>
         <MaterialTable
           icons={tableIcons}
           title="List Of Users"
@@ -129,34 +141,50 @@ const UsersList = ({
             headerStyle: {
               fontWeight: "bold",
             },
+            rowStyle: {
+              overflowX: 'auto'
+            }
           }}
           actions={[
             {
-              icon: () => <Edit/>,
-              tooltip: 'Edit User',
+              icon: () => <Edit />,
+              tooltip: "Edit User",
               onClick: (event, rowData) => {
-                console.log('edit---', rowData)
+                console.log("edit---", rowData);
                 dispatch({
                   type: SAVE_CURRENT_USER,
-                  currentUser: rowData
-                })
-                history.push(`/edit-user/${rowData.id}`)
+                  currentUser: rowData,
+                });
+                history.push(`/edit-user/${rowData.id}`);
                 // Do save operation
-              }
+              },
             },
             {
-              icon: () => <Delete/>,
-              tooltip: 'Delete User',
+              icon: () => <Delete />,
+              tooltip: "Delete User",
               onClick: (event, rowData) => {
-                // Do save operation
-              }
+                Swal.fire({
+                  title: `Are you sure to delete ?`,
+                  text: "You won't be able to revert this!",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, delete it!",
+                }).then((result) => {
+                  if (result.value) {
+                    setLoading(true);
+                    deleteUser(setLoading, rowData.id);
+                  }
+                });
+              },
             },
             {
-              icon: () => <Visibility/>,
-              tooltip: 'View user',
+              icon: () => <Visibility />,
+              tooltip: "View user",
               onClick: (event, rowData) => {
                 // Do save operation
-              }
+              },
             },
           ]}
           editable={{
@@ -167,37 +195,32 @@ const UsersList = ({
                   Swal.fire({
                     position: "center",
                     type: "error",
-                    title: "Admin can not add new user",
+                    title: "Admin can not add new user \n Add new account when register",
                     showConfirmButton: false,
                     timer: 1500,
                   });
-                  // setState((prevState) => {
-                  //   const data = [...prevState.data];
-                  //   data.push(newData);
-                  //   return { ...prevState, data };
-                  // });
                 }, 600);
               }),
             // onRowUpdate: (newData, oldData) =>
             //   new Promise((resolve) => {
             //     console.log('herera')
             //     history.push(`/edit-user/${oldData.id}`)
-            //     // setTimeout(() => {
-            //     //   resolve();
-            //     //   editUserInfo(setLoading, {
-            //     //     id: oldData.id,
-            //     //     email: newData.email,
-            //     //     fullname: newData.fullname,
-            //     //     role: newData.role,
-            //     //   });
-            //     //   if (oldData) {
-            //     //     setState((prevState) => {
-            //     //       const data = [...prevState.data];
-            //     //       data[data.indexOf(oldData)] = newData;
-            //     //       return { ...prevState, data };
-            //     //     });
-            //     //   }
-            //     // }, 600);
+            // setTimeout(() => {
+            //   resolve();
+            //   editUserInfo(setLoading, {
+            //     id: oldData.id,
+            //     email: newData.email,
+            //     fullname: newData.fullname,
+            //     role: newData.role,
+            //   });
+            //   if (oldData) {
+            //     setState((prevState) => {
+            //       const data = [...prevState.data];
+            //       data[data.indexOf(oldData)] = newData;
+            //       return { ...prevState, data };
+            //     });
+            //   }
+            // }, 600);
             //   }),
             // onRowDelete: (oldData) =>
             //   new Promise((resolve) => {
