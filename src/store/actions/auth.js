@@ -1,8 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 import logoutDispatch from "../../utils/logoutDispatch";
-import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE } from "./types";
+import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE, BASE_URL } from "./types";
 import { hera } from "hera-js";
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 import Swal from "sweetalert2";
 //LOGIN User
@@ -10,8 +10,8 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
   // try {
   // const res = await axios.post('', data: {});
   const { data, errors } = await hera({
-    option: {
-      url: process.env.REACT_APP_API_HOST || "http://localhost:9000/graphql",
+    options: {
+      url: BASE_URL,
     },
     query: `
         query {
@@ -112,8 +112,8 @@ export const signUpUser = (isAuthenticated, history, userData) => async (
 
   const { username, password } = userData;
   const { data, errors } = await hera({
-    option: {
-      url: "http://localhost:9000/graphql",
+    options: {
+      url: BASE_URL,
     },
     query: `
         mutation {
@@ -151,7 +151,7 @@ export const signUpUser = (isAuthenticated, history, userData) => async (
     if (error.includes('Username')) {
       formatedError.username = error;
     }
-    
+
     dispatch({
       type: GET_ERRORS,
       errors: {...formatedError},

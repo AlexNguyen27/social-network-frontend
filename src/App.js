@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 // import { connect } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import jwt_decode from 'jwt-decode';
+// import jwt_decode from 'jwt-decode';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -11,12 +11,17 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 // COMPONENT
 import Navbar from './components/layout/Navbar';
-import Landing from './components/layout/Landing';
+// import Landing from './components/layout/Landing';
 import RouterList from './components/layout/RouterList';
-import Footer from './components/layout/Footer';
+// import Footer from './components/layout/Footer';
 
 import './css/index.css';
-import { logoutUser } from './store/actions/auth';
+// import { logoutUser } from './store/actions/auth';
+
+import { BASE_URL } from './store/actions/types';
+import { globalOptions } from 'hera-js';
+globalOptions.url = BASE_URL;
+// import { BASE_URL } from './store/actions/types';
 
 // Check if token is expired
 if (localStorage.token) {

@@ -8,7 +8,7 @@ export const graphqlRequest = (
   variables,
 ) => {
   return hera({
-    option: {
+    options: {
       url,
       headers,
     },

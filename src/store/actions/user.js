@@ -1,8 +1,6 @@
-import axios from "../../utils/axios";
 import {
   GET_ERRORS,
   CLEAR_ERRORS,
-  EDIT_USER_INFO,
   GET_USERS,
   DELETE_USER,
   EDIT_USER,
@@ -11,14 +9,13 @@ import {
 import { arrayToObject } from "../../utils/commonFunction";
 import { hera } from "hera-js";
 import Swal from "sweetalert2";
-import { graphqlRequest } from "../../utils/graphqlRequest";
 import logoutDispatch from "../../utils/logoutDispatch";
 // GET majors data
 export const getUsers = (setLoading) => async (dispatch, getState) => {
   const { token } = getState().auth;
 
   const { data, errors } = await hera({
-    option: {
+    options: {
       url: BASE_URL,
       headers: {
         token,
@@ -187,7 +184,7 @@ export const editUserInfo = (setLoading, userData) => async (
   const { user } = state;
 
   const { data, errors } = await hera({
-    option: {
+    options: {
       url: "http://localhost:9000/graphql",
       headers: {
         token,
@@ -233,7 +230,6 @@ export const editUserInfo = (setLoading, userData) => async (
     });
 
     setLoading(false);
-    // using sweetalert2
     Swal.fire({
       position: "center",
       type: "success",
@@ -266,7 +262,7 @@ export const deleteUser = (setLoading, userId) => async (
   const { token } = getState().auth;
 
   const { data, errors } = await hera({
-    option: {
+    options: {
       url: "http://localhost:9000/graphql",
       headers: {
         token,
