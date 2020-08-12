@@ -19,6 +19,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Badge from "@material-ui/core/Badge";
+import "../../css/index.css";
 
 // MATERIAL ICONS
 import MenuIcon from "@material-ui/icons/Menu";
@@ -57,6 +58,8 @@ import { Avatar } from "@material-ui/core";
 import UserInfo from "./user/UserInfo";
 import ChangePasswordModal from "./user/ChangePasswordModal";
 import { BASE_URL } from "../../store/actions/types";
+import Posts from "./post/Posts";
+import UserProfile from "./user/UserProfile";
 
 const drawerWidth = 240;
 
@@ -64,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     margin: 0,
+    maxWidth: 1500,
   },
   appBar: {
     background: Colors.purple,
@@ -151,6 +155,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
   content: {
+    backgroundColor: "white",
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -160,6 +165,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -drawerWidth,
   },
   contentShift: {
+    backgroundColor: "white",
+
     // background: Colors.accent,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -189,7 +196,7 @@ const DashBoard = ({
   if (token) {
     const decoded = jwt_decode(token);
     console.log(decoded);
-    // const currentTime = Date.now() / 1000;
+    const currentTime = Date.now() / 1000;
     // if (decoded.iat <= currentTime) {
     //   logoutUser();
     // }
@@ -229,7 +236,7 @@ const DashBoard = ({
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    history.push("/user-profile");
+    history.push("/user-info");
   };
 
   const handeOnChangePassword = () => {
@@ -297,15 +304,24 @@ const DashBoard = ({
         />
       );
     }
+    console.log(match, '------------------------ ')
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (match.params.userId) {
+    if (match.params.userId && match.path.includes('edit-user')) {
       return (
         <>
           <div className={classes.header}>Dashboard / Edit User</div>
           <UserInfo />
+        </>
+      );
+    }
+
+    if (match.params.userId && match.path.includes('user-profile')) {
+      return (
+        <>
+          <UserProfile userId={match.params.userId}/>
         </>
       );
     }
@@ -317,31 +333,23 @@ const DashBoard = ({
             <UsersList />
           </>
         );
-      case "/user-courses":
+      case "/posts":
         return (
           <>
-            <CoursesList />
+            <Posts />
           </>
         );
-      case "/user-profile":
+      case "/posts":
+        return (
+          <>
+            <Posts />
+          </>
+        );
+      case "/user-info":
         return (
           <>
             <div className={classes.header}>Dashboard / My Account</div>
             <UserInfo />
-          </>
-        );
-      case "/all-courses":
-        return (
-          <>
-            <div className={classes.header}>Dashboard / All Courses</div>
-            <Courses match={match} location={location} />
-          </>
-        );
-      case "/your-courses":
-        return (
-          <>
-            <div className={classes.header}>Dashboard / Your Courses</div>
-            <UserCourses location={location} />
           </>
         );
       case "/statistics":
@@ -422,16 +430,16 @@ const DashBoard = ({
       title: "Users List",
     },
     {
+      key: "posts",
+      icon: <AccountBalanceIcon />,
+      to: "/posts",
+      title: "Posts",
+    },
+    {
       key: "report",
       icon: <ArtTrackIcon />,
       to: "/reports",
       title: "Reports",
-    },
-    {
-      key: "posts",
-      icon: <AccountBalanceIcon />,
-      to: "/posts",
-      title: "Post",
     },
     {
       key: "category",
@@ -599,7 +607,7 @@ const DashBoard = ({
         }}
       >
         <div className={classes.drawerHeader}>
-          <strong>DEV CONNECTOR</strong>
+          <strong>DEV TROOPS</strong>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />

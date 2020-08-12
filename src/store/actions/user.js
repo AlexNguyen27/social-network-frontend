@@ -185,7 +185,7 @@ export const editUserInfo = (setLoading, userData) => async (
 
   const { data, errors } = await hera({
     options: {
-      url: "http://localhost:9000/graphql",
+      url: BASE_URL,
       headers: {
         token,
         "Content-Type": "application/json",
@@ -263,7 +263,7 @@ export const deleteUser = (setLoading, userId) => async (
 
   const { data, errors } = await hera({
     options: {
-      url: "http://localhost:9000/graphql",
+      url: BASE_URL,
       headers: {
         token,
         "Content-Type": "application/json",

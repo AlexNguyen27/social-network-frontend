@@ -52,7 +52,7 @@ const Navbar = ({ logoutUser }) => {
         style={{ background: Colors.purple }}
       >
         <Link className="navbar-brand" to="/login">
-          Dev connector
+          Dev Troops
         </Link>
 
         <button

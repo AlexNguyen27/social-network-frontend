@@ -7,10 +7,11 @@ html {
   font-family: "Montserrat", sans-serif;
 }
 body {
-  background: #eee;
   font-family: "Montserrat", sans-serif;
 }
-
+.test {
+  color: red;
+}
 footer {
   position: "absolute";
   margin-top: 20px;
@@ -21,11 +22,11 @@ footer {
 }
 
 .MuiContainer-root .MuiContainer-maxWidthLg {
-  @media (min-width: 1280px) {
-    .MuiContainer-maxWidthLg {
+  /* @media (min-width: 1280px) {
+    .MuiContainer-maxWidth {
       max-width: 1500px !important;
     }
-  }
+  } */
 }
 footer p {
   color: #ccc;
