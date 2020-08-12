@@ -69,7 +69,8 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   };
 
   const setInit = () => {
-    if (JSON.stringify(current_user) !== "{}") {
+    if (current_user && JSON.stringify(current_user) !== "{}") {
+      console.log('herer-------------------');
       setformData({
         username: current_user.username || "",
         firstName: current_user.firstName || "",
@@ -86,7 +87,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
         lastName: user.lastName || "",
         email: user.email || "",
         phone: user.phone || "",
-        address: user.address || "",
+        address: user.address || "",  
         githubUsername: user.githubUsername || "",
       });
     }
@@ -97,22 +98,11 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
     setInit();
   }, []);
 
+  useEffect(() => {
+    setInit();
+  }, [current_user]);
+
   const onSubmit = () => {
-    // const error = {};
-
-    // Object.keys(formData).map((key) => {
-    //   if (!formData[key] || formData[key].trim() === "") {
-    //     error[key] = "This field is required";
-    //   }
-    // });
-
-    // dispatch({
-    //   type: GET_ERRORS,
-    //   errors: error,
-    // });
-
-    // if (JSON.stringify(error) === "{}") {
-    // setLoading(true);
     console.log(formData);
     const formatData = trimObjProperties(formData);
     editUserInfo(setLoading, formatData);

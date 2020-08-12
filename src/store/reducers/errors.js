@@ -9,6 +9,8 @@ export default (state = initialState, action) => {
     case UNAUTHENTICATE:
     case CLEAR_ERRORS:
       return {};
+    case UNAUTHENTICATE: 
+      return initialState;
     default:
       return state;
   }

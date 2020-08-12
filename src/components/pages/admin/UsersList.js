@@ -137,7 +137,7 @@ const UsersList = ({
           columns={state.columns}
           data={usersArray || []}
           options={{
-            pageSize: 10,
+            pageSize: 8,
             headerStyle: {
               fontWeight: "bold",
             },
@@ -183,6 +183,7 @@ const UsersList = ({
               icon: () => <Visibility />,
               tooltip: "View user",
               onClick: (event, rowData) => {
+                history.push(`user-profile/${rowData.id}`)
                 // Do save operation
               },
             },

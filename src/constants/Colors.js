@@ -13,8 +13,5 @@ export default {
   purple: '#40356F',
   light_purple: '#dcd6f7',
   white: 'white',
-  linear1: '#fce8d5',
-  linear2: '#ffffff',
-  linear3: '#f0f0f0',
-  linear4: '#ffd3e1',
+  light_pink: '#f8e1f4'
 };

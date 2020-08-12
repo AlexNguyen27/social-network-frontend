@@ -11,7 +11,7 @@ const ProtectedRoute = ({
   path,
   ...rest
 }) => {
-  const teacherUnauthorized = ["/users-list", "/edit-user"];
+  const teacherUnauthorized = ["/users-list", "/edit-user/:userId"];
   const page = (props) => {
     if (isAuthenticated) {
       if (

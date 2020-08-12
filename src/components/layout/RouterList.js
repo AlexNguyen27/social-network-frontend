@@ -20,7 +20,9 @@ const RouterList = (props) => {
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/news-feed" component={DashBoard} />
         <ProtectedRoute exact path="/edit-user/:userId" component={DashBoard} />
-        <ProtectedRoute exact path="/user-profile" component={DashBoard} />
+        <ProtectedRoute exact path="/user-info" component={DashBoard} />
+        <ProtectedRoute exact path="/user-profile/:userId" component={DashBoard} />
+        <ProtectedRoute exact path="/posts" component={DashBoard} />
         <ProtectedRoute exact path="/users-list" component={DashBoard} />
         <ProtectedRoute exact path="/statistics" component={DashBoard} />
         <ProtectedRoute exact path="/help" component={DashBoard} />
