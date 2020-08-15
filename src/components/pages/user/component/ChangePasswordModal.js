@@ -12,11 +12,11 @@ import {
   Form,
 } from "reactstrap";
 import Button from "@material-ui/core/Button";
-import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
-import { GET_ERRORS } from "../../../store/actions/types";
-import { clearErrors } from "../../../store/actions/common";
-import { updatePassword } from "../../../store/actions/user";
-import PageLoader from "../../custom/PageLoader";
+import TextFieldInputWithHeader from "../../../custom/TextFieldInputWithheader";
+import { GET_ERRORS } from "../../../../store/actions/types";
+import { clearErrors } from "../../../../store/actions/common";
+import { updatePassword } from "../../../../store/actions/user";
+import PageLoader from "../../../custom/PageLoader";
 
 const ChangePasswordModal = ({
   auth: { user },

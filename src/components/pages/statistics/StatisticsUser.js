@@ -20,7 +20,7 @@ const Statistics = ({ user_courses }) => {
 
   return (
     <>
-      {console.log('totalStudentEnrollArr', totalStudentEnrollArr)}
+      {/* {console.log('totalStudentEnrollArr', totalStudentEnrollArr)} */}
       <h4>Statistics of students who have studied your course</h4>
       <MultipleSummary
         courseName={courseNameArr}

@@ -124,7 +124,7 @@ export const getCourseById = (setLoading, courseId) => async (
 // DELETE GROUP
 export const deleteCourse = (setLoading, courseId) => async (dispatch) => {
   try {
-    console.log('courseid----------', courseId);
+    // console.log('courseid----------', courseId);
     await axios.delete(`api/courses/${courseId}`, {
       headers: { Authorization: localStorage.token },
     });

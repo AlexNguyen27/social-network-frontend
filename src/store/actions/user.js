@@ -178,7 +178,7 @@ export const editUserInfo = (setLoading, userData) => async (
   dispatch,
   getState
 ) => {
-  console.log('userdata-------------', userData);
+  // console.log('userdata-------------', userData);
   const state = getState();
   const { auth: { token, user: { id: userId} } } = state;
   const { user } = state;
@@ -238,13 +238,13 @@ export const editUserInfo = (setLoading, userData) => async (
       timer: 1500,
     });
   } else {
-    console.log(errors);
+    // console.log(errors);
     const error = errors[0].extensions.payload ? errors[0].extensions.payload : errors[0].message;
     const formatedError = {};
     errors[0].extensions.payload && Object.keys(error).map(key => {
       formatedError[key] = error[key].message
     })
-    console.log(formatedError);
+    // console.log(formatedError);
 
     logoutDispatch(dispatch, errors);
     dispatch({

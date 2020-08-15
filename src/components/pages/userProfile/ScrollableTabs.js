@@ -8,15 +8,15 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import PostCard from "./component/post/PostCard";
+import PostCard from "../../custom/PostCard";
 import SubjectIcon from "@material-ui/icons/Subject";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 
-import SubUserInfo from "./component/post/SubUserInfo";
-import Connection from "./component/connection/Connection";
-import Favorites from "./component/favorite/Favorites";
-import Albums from "./component/albums/Albums";
+import SubUserInfo from "./SubUserInfo";
+import Connection from "./connection/Connection";
+import Favorites from "./favorite/Favorites";
+import Albums from "./albums/Albums";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

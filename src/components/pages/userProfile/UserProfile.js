@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import AboutCard from "./component/AboutCard";
-import PostCard from "./component/post/PostCard";
+import AboutCard from "./AboutCard";
+import PostCard from "../../custom/PostCard";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import ScrollableTabs from "./ScrollableTabs";
@@ -22,7 +22,7 @@ const UserProfile = ({ userId }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    console.log("userid---------", userId);
+    // console.log("userid---------", userId);
   }, {});
   return (
     <div className={classes.root}>

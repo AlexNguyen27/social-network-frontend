@@ -27,7 +27,7 @@ const StatisticsPost = ({ }) => {
 
   return (
     <>
-      {console.log('postLike', total)}
+      {/* {console.log('postLike', total)} */}
       <h4>Statistics Post</h4>
       <MultipleSummary
         name={postName}

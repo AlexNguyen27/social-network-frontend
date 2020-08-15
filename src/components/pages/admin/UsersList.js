@@ -108,7 +108,7 @@ const UsersList = ({
   }, [loading]);
 
   const getFullname = (firstname, lastname) => {
-    console.log(firstname, lastname);
+    // console.log(firstname, lastname);
     let fullname = "";
     if (firstname) {
       fullname += firstname + " ";
@@ -150,7 +150,7 @@ const UsersList = ({
               icon: () => <Edit />,
               tooltip: "Edit User",
               onClick: (event, rowData) => {
-                console.log("edit---", rowData);
+                // console.log("edit---", rowData);
                 dispatch({
                   type: SAVE_CURRENT_USER,
                   currentUser: rowData,

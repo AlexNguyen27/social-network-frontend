@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { green, pink } from "@material-ui/core/colors";
-import Colors from "../../../../constants/Colors";
+import Colors from "../../../constants/Colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '0px !important' 
   },
   cover: {
-    borderRadius: "130px 0px",
+    borderRadius: "130px",
     width: 250,
     height: 250,
   },

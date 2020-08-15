@@ -39,7 +39,7 @@ import HelpIcon from "@material-ui/icons/Help";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import jwt_decode from "jwt-decode";
-import HomeIcon from '@material-ui/icons/Home';
+import HomeIcon from "@material-ui/icons/Home";
 // import { Breadcrumbs, BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { Link, NavLink } from "react-router-dom";
 
@@ -55,13 +55,14 @@ import MultipleSummary from "./statistics/MultipleSummary";
 import ViewLecture from "./lectures/ViewLecture";
 import { Avatar } from "@material-ui/core";
 import UserInfo from "./user/UserInfo";
-import ChangePasswordModal from "./user/ChangePasswordModal";
+import ChangePasswordModal from "./user/component/ChangePasswordModal";
 import { BASE_URL } from "../../store/actions/types";
 import PostsList from "./post/PostsList";
-import UserProfile from "./user/UserProfile";
+import UserProfile from "./userProfile/UserProfile";
 import CategoryList from "./category/CategoryList";
 import ReportsList from "./report/ReportsList";
 import StatisticsPost from "./statistics/user/StatisticsPost";
+import NewsFeed from "./newsFeed/NewsFeed";
 
 const drawerWidth = 240;
 
@@ -197,7 +198,7 @@ const DashBoard = ({
   // Check if token is expired
   if (token) {
     const decoded = jwt_decode(token);
-    console.log(decoded);
+    // console.log(decoded);
     const currentTime = Date.now() / 1000;
     // if (decoded.iat <= currentTime) {
     //   logoutUser();
@@ -306,7 +307,7 @@ const DashBoard = ({
         />
       );
     }
-    console.log(match, "------------------------ ");
+    // console.log(match, "------------------------ ");
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
@@ -314,7 +315,6 @@ const DashBoard = ({
     if (match.params.userId && match.path.includes("edit-user")) {
       return (
         <>
-          <div className={classes.header}>Dashboard / Edit User</div>
           <UserInfo />
         </>
       );
@@ -359,6 +359,12 @@ const DashBoard = ({
         return (
           <>
             <CategoryList />
+          </>
+        );
+      case "/news-feed":
+        return (
+          <>
+            <NewsFeed />
           </>
         );
       case "/user-info":
@@ -475,16 +481,13 @@ const DashBoard = ({
   ];
 
   const formatUrl = (url) => {
-    const test = url
-      .split("/")
-      .pop()
-      .replace(/[^a-zA-Z0-9]/g, " ");
-    const res = test
+    const test = url.split("/");
+    const res = test[1]
+      .replace(/[^a-zA-Z0-9]/g, " ")
       .toLowerCase()
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(" ");
-      console.log(res.replace("id", ""))
     return res.replace("id", "");
   };
 
