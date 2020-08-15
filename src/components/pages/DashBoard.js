@@ -39,8 +39,8 @@ import HelpIcon from "@material-ui/icons/Help";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import jwt_decode from "jwt-decode";
-
-import { Breadcrumbs, BreadcrumbsItem } from "react-breadcrumbs-dynamic";
+import HomeIcon from '@material-ui/icons/Home';
+// import { Breadcrumbs, BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { Link, NavLink } from "react-router-dom";
 
 // COMPONENT
@@ -52,14 +52,16 @@ import CoursesList from "./admin/CoursesList";
 // ACTION
 import { logoutUser } from "../../store/actions/auth";
 import MultipleSummary from "./statistics/MultipleSummary";
-import Statistics from "./statistics/Statistics";
 import ViewLecture from "./lectures/ViewLecture";
 import { Avatar } from "@material-ui/core";
 import UserInfo from "./user/UserInfo";
 import ChangePasswordModal from "./user/ChangePasswordModal";
 import { BASE_URL } from "../../store/actions/types";
-import Posts from "./post/Posts";
+import PostsList from "./post/PostsList";
 import UserProfile from "./user/UserProfile";
+import CategoryList from "./category/CategoryList";
+import ReportsList from "./report/ReportsList";
+import StatisticsPost from "./statistics/user/StatisticsPost";
 
 const drawerWidth = 240;
 
@@ -304,12 +306,12 @@ const DashBoard = ({
         />
       );
     }
-    console.log(match, '------------------------ ')
+    console.log(match, "------------------------ ");
     if (match.params.courseId) {
       return <ViewCourse courseId={match.params.courseId} />;
     }
 
-    if (match.params.userId && match.path.includes('edit-user')) {
+    if (match.params.userId && match.path.includes("edit-user")) {
       return (
         <>
           <div className={classes.header}>Dashboard / Edit User</div>
@@ -318,10 +320,18 @@ const DashBoard = ({
       );
     }
 
-    if (match.params.userId && match.path.includes('user-profile')) {
+    if (match.params.userId && match.path.includes("user-profile")) {
       return (
         <>
-          <UserProfile userId={match.params.userId}/>
+          <UserProfile userId={match.params.userId} />
+        </>
+      );
+    }
+
+    if (match.params.userId && match.path.includes("statistics")) {
+      return (
+        <>
+          <StatisticsPost />
         </>
       );
     }
@@ -333,30 +343,28 @@ const DashBoard = ({
             <UsersList />
           </>
         );
-      case "/posts":
+      case "/posts-list":
         return (
           <>
-            <Posts />
+            <PostsList />
           </>
         );
-      case "/posts":
+      case "/reports-list":
         return (
           <>
-            <Posts />
+            <ReportsList />
+          </>
+        );
+      case "/categories-list":
+        return (
+          <>
+            <CategoryList />
           </>
         );
       case "/user-info":
         return (
           <>
-            <div className={classes.header}>Dashboard / My Account</div>
             <UserInfo />
-          </>
-        );
-      case "/statistics":
-        return (
-          <>
-            <div className={classes.header}>Dashboard / Statistics</div>
-            <Statistics />
           </>
         );
       default:
@@ -403,21 +411,21 @@ const DashBoard = ({
 
   const navList1 = [
     {
-      key: "allCourses",
-      icon: <AccountBalanceIcon />,
-      to: "/all-courses",
-      title: "All Courses",
+      key: "newsFeed",
+      icon: <HomeIcon />,
+      to: "/news-feed",
+      title: "News Feed",
     },
     {
-      key: "yourCourses",
+      key: "userProfile",
       icon: <ArtTrackIcon />,
-      to: "/your-courses",
-      title: "Your Courses",
+      to: `/user-profile/${user.id}`,
+      title: "Your Profile",
     },
     {
       key: "statistics",
       icon: <BarChartIcon />,
-      to: "/statistics",
+      to: `/statistics/${user.id}`,
       title: "Statistics",
     },
   ];
@@ -427,37 +435,25 @@ const DashBoard = ({
       key: "usersList",
       icon: <ArtTrackIcon />,
       to: "/users-list",
-      title: "Users List",
+      title: "User",
     },
     {
       key: "posts",
       icon: <AccountBalanceIcon />,
-      to: "/posts",
-      title: "Posts",
+      to: "/posts-list",
+      title: "Post",
     },
     {
       key: "report",
       icon: <ArtTrackIcon />,
-      to: "/reports",
-      title: "Reports",
+      to: "/reports-list",
+      title: "Report",
     },
     {
       key: "category",
       icon: <ArtTrackIcon />,
-      to: "/categories",
+      to: "/categories-list",
       title: "Category",
-    },
-    {
-      key: "statisticUser",
-      icon: <ArtTrackIcon />,
-      to: "/statistic-user",
-      title: "Statistic User",
-    },
-    {
-      key: "statisticPost",
-      icon: <ArtTrackIcon />,
-      to: "/statistic-post",
-      title: "Statistic Post",
     },
   ];
 
@@ -488,6 +484,7 @@ const DashBoard = ({
       .split(" ")
       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
       .join(" ");
+      console.log(res.replace("id", ""))
     return res.replace("id", "");
   };
 
