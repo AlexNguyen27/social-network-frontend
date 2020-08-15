@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 //   ],
 // };
 
-const MultipleSummary = ({ courseName, totalStudentEnroll }) => {
+const MultipleSummary = ({ name, like, dislike }) => {
   const classes = useStyles();
   // Array option of question
   // const options = [
@@ -52,11 +52,11 @@ const MultipleSummary = ({ courseName, totalStudentEnroll }) => {
   //   "June",
   //   "July",
   // ];
-  const options = courseName;
+  const options = name;
   // let optionLabels = options.map((option) => option.text);
   // const totalAnswers = [65, 59, 80, 81, 56, 55, 40];
 
-  const totalAnswers = totalStudentEnroll;
+  const totalAnswers = like;
   // PIE CHART
   const dataPie = {
     labels: options,
@@ -74,7 +74,7 @@ const MultipleSummary = ({ courseName, totalStudentEnroll }) => {
     labels: options,
     datasets: [
       {
-        label: `Student enrolled`,
+        label: `Like`,
         fill: false,
         lineTension: 0.1,
         backgroundColor: 'rgba(75,192,192,0.4)',
