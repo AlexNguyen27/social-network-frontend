@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,42 +19,42 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const data = [
-    {name: 'Technology'},
-    {name: 'Fashion'},
-    {name: 'Experience'},
-    {name: 'Funny'},
-    {name: 'Photography'},
-]
-const CatergoryCard = () => {
+const date = [
+  { name: "December", year: 2020, posts: 100 },
+  { name: "August", year: 2020, posts: 100 },
+  { name: "July", year: 2020, posts: 100 },
+  { name: "June", year: 2020, posts: 100 },
+  { name: "May", year: 2020, posts: 100 },
+];
+const Archives = () => {
   const classes = useStyles();
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>
-        Categories
+        Archives
       </Typography>
       <List
         component="nav"
         className={classes.root}
         aria-label="mailbox folders"
       >
-        <ListItem button>
-          <ListItemText primary="Inbox" />
-        </ListItem>
-        <Divider />
-        <ListItem button divider>
-          <ListItemText primary="Drafts" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Trash" />
-        </ListItem>
-        <Divider light />
-        <ListItem button>
-          <ListItemText primary="Spam" />
-        </ListItem>
+        {date.map((item) => (
+          <ListItem button divider>
+            <Grid container justify="space-between">
+              <Grid item xs={6}>
+                <ListItemText>
+                  {item.name} {item.year}
+                </ListItemText>
+              </Grid>
+              <Grid item xs={6}>
+                <ListItemText>({item.posts})</ListItemText>
+              </Grid>
+            </Grid>
+          </ListItem>
+        ))}
       </List>
     </>
   );
 };
 
-export default CatergoryCard;
+export default Archives;
