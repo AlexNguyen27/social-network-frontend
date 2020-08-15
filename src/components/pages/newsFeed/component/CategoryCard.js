@@ -15,16 +15,16 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
-  }
+  },
 }));
 
 const data = [
-    {name: 'Technology'},
-    {name: 'Fashion'},
-    {name: 'Experience'},
-    {name: 'Funny'},
-    {name: 'Photography'},
-]
+  { name: "Technology" },
+  { name: "Fashion" },
+  { name: "Experience" },
+  { name: "Funny" },
+  { name: "Photography" },
+];
 const CatergoryCard = () => {
   const classes = useStyles();
   return (
@@ -37,20 +37,11 @@ const CatergoryCard = () => {
         className={classes.root}
         aria-label="mailbox folders"
       >
-        <ListItem button>
-          <ListItemText primary="Inbox" />
-        </ListItem>
-        <Divider />
-        <ListItem button divider>
-          <ListItemText primary="Drafts" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Trash" />
-        </ListItem>
-        <Divider light />
-        <ListItem button>
-          <ListItemText primary="Spam" />
-        </ListItem>
+        {data.map((item) => (
+          <ListItem button divider>
+            <ListItemText>{item.name}</ListItemText>
+          </ListItem>
+        ))}
       </List>
     </>
   );

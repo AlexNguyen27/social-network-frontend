@@ -191,7 +191,7 @@ const UsersList = ({
               icon: () => <EqualizerTwoToneIcon />,
               tooltip: "Statictis",
               onClick: (event, rowData) => {
-                history.push(`statictis/${rowData.id}`);
+                history.push(`statistics/${rowData.id}`);
                 // Do save operation
               },
             },
