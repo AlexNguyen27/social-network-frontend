@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import { Paper } from "@material-ui/core";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import { albums } from "../../../../../mockup/albums";
+import { albums } from "../../../mockup/albums";
 import ImageIcon from "@material-ui/icons/Image";
 import EventIcon from "@material-ui/icons/Event";
 import CallIcon from "@material-ui/icons/Call";

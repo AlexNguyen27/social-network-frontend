@@ -38,11 +38,11 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
     },
   });
 
-  console.log(data);
-  console.log("erer----------------", errors);
+  // console.log(data);
+  // console.log("erer----------------", errors);
 
   if (errors) {
-    console.log("eror------------------", errors);
+    // console.log("eror------------------", errors);
     // If login fails, set user info to null
     logoutDispatch(dispatch, errors);
     // if (errors.message === "Login fail") {
@@ -140,8 +140,8 @@ export const signUpUser = (isAuthenticated, history, userData) => async (
 
   console.log(data);
   if (errors) {
-    console.log('error---------', errors);
-    logoutUser(dispatch, errors);
+    // console.log('error---------', errors);
+    // logoutUser(dispatch, errors);
 
     const formatedError = {};
     const error = errors[0].message;

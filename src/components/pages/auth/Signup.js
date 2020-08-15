@@ -39,8 +39,8 @@ const Signup = ({ errors, auth: { isAuthenticated }, history, signUpUser }) => {
     //   delete formData.role;
     // }
     Object.keys(formData).map((key) => {
-      console.log("-------------------", formData);
-      console.log(key);
+      // console.log("-------------------", formData);
+      // console.log(key);
       if (!formData[key] || (formData[key] && formData[key].trim() === "")) {
         error[key] = "This field is required";
       }
@@ -67,7 +67,7 @@ const Signup = ({ errors, auth: { isAuthenticated }, history, signUpUser }) => {
     });
 
     if (JSON.stringify(error) === "{}") {
-      console.log(formData);
+      // console.log(formData);
       const data = { ...formData };
       delete data.confirmPassword;
       signUpUser(isAuthenticated, history, data);

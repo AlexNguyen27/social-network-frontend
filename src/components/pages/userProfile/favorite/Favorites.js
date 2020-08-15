@@ -1,5 +1,5 @@
 import React from "react";
-import PostCard from "../post/PostCard";
+import PostCard from "../../../custom/PostCard";
 import Grid from "@material-ui/core/Grid";
 
 import { makeStyles } from "@material-ui/core/styles";

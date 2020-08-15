@@ -76,7 +76,7 @@ export const deleteLecture = (setLoading, lectureId) => async (dispatch) => {
       timer: 1500,
     });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     logoutUser(dispatch, error);
     dispatch({
       type: GET_ERRORS,

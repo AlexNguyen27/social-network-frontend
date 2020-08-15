@@ -130,7 +130,7 @@ const PostsList = ({
               icon: () => <Edit />,
               tooltip: "Edit Post",
               onClick: (event, rowData) => {
-                console.log("edit---", rowData);
+                // console.log("edit---", rowData);
                 // dispatch({
                 //   type: SAVE_CURRENT_USER,
                 //   currentUser: rowData,

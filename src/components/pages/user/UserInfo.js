@@ -70,7 +70,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
 
   const setInit = () => {
     if (current_user && JSON.stringify(current_user) !== "{}") {
-      console.log('herer-------------------');
+      // console.log('herer-------------------');
       setformData({
         username: current_user.username || "",
         firstName: current_user.firstName || "",
@@ -103,7 +103,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   }, [current_user]);
 
   const onSubmit = () => {
-    console.log(formData);
+    // console.log(formData);
     const formatData = trimObjProperties(formData);
     editUserInfo(setLoading, formatData);
     if (!errors) {

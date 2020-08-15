@@ -107,7 +107,7 @@ const CategoriesList = ({ history }) => {
               icon: () => <Edit />,
               tooltip: "Edit Category",
               onClick: (event, rowData) => {
-                console.log("edit---", rowData);
+                // console.log("edit---", rowData);
                 dispatch({
                   type: SAVE_CURRENT_USER,
                   currentUser: rowData,
