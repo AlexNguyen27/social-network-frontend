@@ -5,9 +5,17 @@ import { Grid, Button } from "@material-ui/core";
 import { Row, Col } from "reactstrap";
 import Paper from "@material-ui/core/Paper";
 import EditIcon from "@material-ui/icons/Edit";
+import DateFnsUtils from "@date-io/date-fns";
 
-import { BASE_URL, GET_ERRORS, CLEAR_ERRORS } from "../../../store/actions/types";
-import { capitalizeSnakeCase, trimObjProperties } from "../../../utils/formatString";
+import {
+  BASE_URL,
+  GET_ERRORS,
+  CLEAR_ERRORS,
+} from "../../../store/actions/types";
+import {
+  capitalizeSnakeCase,
+  trimObjProperties,
+} from "../../../utils/formatString";
 
 import PageLoader from "../../custom/PageLoader";
 import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
@@ -37,6 +45,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setformData] = useState({
     username: "",
+    quote: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -54,6 +63,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   const {
     username,
     firstName,
+    quote,
     lastName,
     email,
     phone,
@@ -68,6 +78,18 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
     });
   };
 
+  // const [selectedDate, setSelectedDate] = React.useState(
+  //   new Date("2014-08-18T21:11:54")
+  // );
+
+  // const handleDateChange = (date) => {
+  //   setSelectedDate(date);
+  //   setformData({
+  //     ...formData,
+  //     dob: date,
+  //   });
+  // };
+
   const setInit = () => {
     if (current_user && JSON.stringify(current_user) !== "{}") {
       // console.log('herer-------------------');
@@ -75,24 +97,25 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
         username: current_user.username || "",
         firstName: current_user.firstName || "",
         lastName: current_user.lastName || "",
+        quote: current_user.quote || "",
         email: current_user.email || "",
         phone: current_user.phone || "",
         address: current_user.address || "",
         githubUsername: current_user.githubUsername || "",
       });
-    }else {
+    } else {
       setformData({
         username: user.username || "",
         firstName: user.firstName || "",
         lastName: user.lastName || "",
+        quote: user.quote || "",
         email: user.email || "",
         phone: user.phone || "",
-        address: user.address || "",  
+        address: user.address || "",
         githubUsername: user.githubUsername || "",
       });
     }
-    
-  }
+  };
 
   useEffect(() => {
     setInit();
@@ -128,8 +151,8 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
     setIsEdit(false);
     setInit();
     dispatch({
-      type: CLEAR_ERRORS
-    })
+      type: CLEAR_ERRORS,
+    });
   };
 
   return (
@@ -144,32 +167,9 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
             >
               <EditIcon className="mr-2" /> Edit Info
             </Button>
-            <Button variant="contained" className="ml-3" component="label">
-              <ImageIcon className="mr-2" /> Update avatar
-              <input
-                accept="image/*"
-                type="file"
-                onChange={handleCapture}
-                style={{ display: "none" }}
-              />
-            </Button>
           </Grid>
           <Grid item xs={12}>
             <Row>
-              <Col xs="6">
-                <Paper className={classes.paper}>
-                  <img
-                    src={
-                      current_user && current_user.image
-                        ? `${BASE_URL}/images/${current_user.image}`
-                        : "https://vcdn-giaitri.vnecdn.net/2020/03/27/lisa55_1200x0.jpg?"
-                    }
-                    alt="Girl in a jacket"
-                    width="100%"
-                    height={400}
-                  />
-                </Paper>
-              </Col>
               <Col xs="6">
                 {Object.keys(formData).map((key) => (
                   <Paper className={[classes.info, "mt-2"].join(" ")}>
@@ -208,6 +208,35 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
                     </Row>
                   </Col>
                 )}
+              </Col>
+              <Col xs="6">
+                <Paper className={classes.paper}>
+                  <img
+                    src={
+                      current_user && current_user.image
+                        ? `${BASE_URL}/images/${current_user.image}`
+                        : "https://vcdn-giaitri.vnecdn.net/2020/03/27/lisa55_1200x0.jpg?"
+                    }
+                    alt="Girl in a jacket"
+                    width="100%"
+                    height={400}
+                  />
+                </Paper>
+                <Row style={{ marginTop: '20px', justifyContent: 'center'}}>
+                  <Button
+                    variant="contained"
+                    className="ml-3"
+                    component="label"
+                  >
+                    <ImageIcon className="mr-2" /> Update avatar
+                    <input
+                      accept="image/*"
+                      type="file"
+                      onChange={handleCapture}
+                      style={{ display: "none" }}
+                    />
+                  </Button>
+                </Row>
               </Col>
             </Row>
           </Grid>

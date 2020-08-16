@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import { connect } from "react-redux";
 import PostCard from "../../custom/PostCard";
 import SubNewsFeed from "./component/SubNewsFeed";
+import { getPosts } from "../../../store/actions/post";
+import { getCategories } from "../../../store/actions/category";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,8 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = () => {
+const NewsFeed = ({ getPosts, getCategories }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    getPosts();
+    getCategories();
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -50,4 +58,5 @@ const NewsFeed = () => {
   );
 };
 
-export default NewsFeed;
+const mapStateToProps = (state) => ({});
+export default connect(mapStateToProps, { getPosts, getCategories })(NewsFeed);

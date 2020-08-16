@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -48,8 +49,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubUserInfo = () => {
+const SubUserInfo = ({ userInfo, users, connections }) => {
   const classes = useStyles();
+
+  const {
+    username,
+    firstName,
+    lastName,
+    email,
+    phone,
+    address,
+    githubUsername,
+    quote,
+    posts,
+    followed,
+  } = userInfo;
+
+  // const connections = followed.map((con) => ({
+  //   userId: users[con.toUserId].id,
+  //   firstName: users[con.toUserId].firstName,
+  //   lastName: users[con.toUserId].lastName,
+  //   githubUsername: users[con.toUserId].githubUsername,
+  // }));
+
   return (
     <>
       {/* ABOUT ME */}
@@ -57,10 +79,7 @@ const SubUserInfo = () => {
         <Typography variant="h5" bold>
           About Me
         </Typography>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          sed urna in justo euismod condimentum.
-        </Typography>
+        <Typography>{}</Typography>
         <hr></hr>
         <Grid container>
           <Grid item xs={2}>
@@ -69,8 +88,10 @@ const SubUserInfo = () => {
             </Avatar>
           </Grid>
           <Grid item xs={10}>
-            <Typography>Born</Typography>
-            <Typography variant="caption">Jan 9, 1994</Typography>
+            <Typography>Full name</Typography>
+            <Typography variant="caption">
+              {firstName} {lastName}
+            </Typography>
           </Grid>
         </Grid>
         <hr></hr>
@@ -82,7 +103,7 @@ const SubUserInfo = () => {
           </Grid>
           <Grid item xs={10}>
             <Typography>Phone</Typography>
-            <Typography variant="caption">(+62)8765432190</Typography>
+            <Typography variant="caption">{phone}</Typography>
           </Grid>
         </Grid>
         <hr></hr>
@@ -94,8 +115,22 @@ const SubUserInfo = () => {
           </Grid>
           <Grid item xs={10}>
             <Typography>Address</Typography>
+            <Typography variant="caption">{address}</Typography>
+          </Grid>
+        </Grid>{" "}
+        <hr></hr>
+        <Grid container>
+          <Grid item xs={2}>
+            <Avatar className={classes.green}>
+              <HomeIcon />
+            </Avatar>
+          </Grid>
+          <Grid item xs={10}>
+            <Typography>Github</Typography>
             <Typography variant="caption">
-              Chicendo Street no.105 Block A/5A - Barcelona, Spain
+              <a href={`https://github.com/${githubUsername}`}>
+                {githubUsername}
+              </a>
             </Typography>
           </Grid>
         </Grid>
@@ -121,44 +156,33 @@ const SubUserInfo = () => {
           My Connection
         </Typography>
         <hr></hr>
-        <Grid container>
-          <Grid item xs={2}>
-            <Avatar className={classes.avatar}>
-              <ImageIcon />
-            </Avatar>
-          </Grid>
-          <Grid item xs={10}>
-            <Typography>Thanh Nguyen</Typography>
-            <Typography variant="caption">2 Matual Connection</Typography>
-          </Grid>
-        </Grid>
-        <hr></hr>
-        <Grid container>
-          <Grid item xs={2}>
-            <Avatar className={classes.pink}>
-              <ImageIcon />
-            </Avatar>
-          </Grid>
-          <Grid item xs={10}>
-            <Typography>Cuong Nguyen</Typography>
-            <Typography variant="caption">2 Matual Connection</Typography>
-          </Grid>
-        </Grid>
-        <hr></hr>
-        <Grid container>
-          <Grid item xs={2}>
-            <Avatar className={classes.green}>
-              <ImageIcon />
-            </Avatar>
-          </Grid>
-          <Grid item xs={10}>
-            <Typography>Duc Nguyen</Typography>
-            <Typography variant="caption">2 Matual Connection</Typography>
-          </Grid>
-        </Grid>
+        {connections.map((item) => (
+          <>
+            <Grid container>
+              <Grid item xs={2}>
+                <Avatar className={classes.avatar}>
+                  <ImageIcon />
+                </Avatar>
+              </Grid>
+              <Grid item xs={10}>
+                <Typography>
+                  {item.firstName} {item.lastName}
+                </Typography>
+                <Typography variant="caption">
+                  <a href={`https://github.com/${githubUsername}`}>
+                    {githubUsername}
+                  </a>
+                </Typography>
+              </Grid>
+            </Grid>
+            <hr></hr>
+          </>
+        ))}
       </Paper>
     </>
   );
 };
-
-export default SubUserInfo;
+const mapStateToProps = (state) => ({
+  users: state.user.users,
+});
+export default connect(mapStateToProps, {})(SubUserInfo);

@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: "1 0 auto",
-    paddingBottom: '0px !important' 
+    paddingBottom: "0px !important",
   },
   cover: {
     borderRadius: "130px",
@@ -38,40 +39,55 @@ const useStyles = makeStyles((theme) => ({
     width: 38,
   },
   btn: {
-    marginTop: '16px'
+    marginTop: "16px",
   },
   title: {
     color: Colors.black,
     lineHeight: 1.5,
-  }
+  },
 }));
 
-export default function AboutCard() {
+const AboutCard = ({ userId, userProfile = {} }) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const { imageUrl, firstName, lastName, quote } = userProfile || {};
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
         <CardMedia
           className={classes.cover}
-          image="https://i.ytimg.com/vi/rEfNiR8A1Og/maxresdefault.jpg"
+          image={
+            imageUrl || "https://i.ytimg.com/vi/rEfNiR8A1Og/maxresdefault.jpg"
+          }
           title="Live from space album cover"
         />
       </Grid>
       <Grid container justify="center" style={{ textAlign: "center" }}>
         <CardContent className={classes.content}>
           <Typography component="h4" variant="h4" className={classes.title}>
-            Shaking Chloe
+            {firstName} {lastName}
           </Typography>
-          <Typography variant="subtitle1" color="textSecondary" className={classes.title}>
-            Shaking Chloe gonna make you movin
+          <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            className={classes.title}
+          >
+            {quote}
           </Typography>
-          <Button variant="contained" color="primary" className={classes.btn}>
-            Add to connection
-          </Button>
+          {userProfile.id !== userId && (
+            <Button variant="contained" color="primary" className={classes.btn}>
+              Add to connection
+            </Button>
+          )}
         </CardContent>
       </Grid>
     </Card>
   );
-}
+};
+
+const mapStateToProps = (state) => ({
+  userId: state.auth.user.id,
+});
+
+export default connect(mapStateToProps, {})(AboutCard);

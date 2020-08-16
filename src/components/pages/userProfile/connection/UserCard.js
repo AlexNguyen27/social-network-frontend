@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -44,9 +45,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserCard() {
+export default function UserCard({ userInfo }) {
   const classes = useStyles();
+  const history = useHistory();
 
+  const { firstName, lastName, quote } = userInfo || {};
+  const userId = userInfo.userId || userInfo.id;
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
@@ -58,17 +62,22 @@ export default function UserCard() {
       </Grid>
       <Grid container justify="center" style={{ textAlign: "center" }}>
         <CardContent className={classes.content}>
-          <Typography component="h4" variant="h4" className={classes.title}>
-            Shaking Chloe
+          <Typography component="h5" variant="h5" className={classes.title}>
+            {firstName} {lastName}
           </Typography>
           <Typography
             variant="subtitle1"
             color="textSecondary"
             className={classes.title}
           >
-            Shaking Chloe gonna make you movin
+            {quote}
           </Typography>
-          <Button variant="contained" color="secondary" className={classes.btn}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => history.push(`/user-profile/${userId}`)}
+            className={classes.btn}
+          >
             See profile
           </Button>
         </CardContent>
