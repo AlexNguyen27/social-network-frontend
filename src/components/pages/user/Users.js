@@ -1,17 +1,15 @@
 import React from "react";
-import UserCard from "./UserCard";
 import { connect } from "react-redux";
-
 import { Grid } from "@material-ui/core";
+import UserCard from "../userProfile/connection/UserCard";
 
-const Connection = ({ connections }) => {
-
+const Users = ({ users }) => {
   return (
     <div style={{ marginRight: "-24px", marginLeft: "-24px" }}>
       <Grid container spacing={3}>
-        {connections.map((item) => (
+        {Object.keys(users).map((key) => (
           <Grid item xs={4}>
-            <UserCard userInfo={item}/>
+            <UserCard userInfo={users[key]} />
           </Grid>
         ))}
       </Grid>
@@ -20,5 +18,6 @@ const Connection = ({ connections }) => {
 };
 
 const mapStateToProps = (state) => ({
+  users: state.user.users,
 });
-export default  connect(mapStateToProps, {})(Connection);
+export default connect(mapStateToProps, {})(Users);

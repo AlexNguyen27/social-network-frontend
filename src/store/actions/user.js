@@ -5,11 +5,14 @@ import {
   DELETE_USER,
   EDIT_USER,
   BASE_URL,
+  GET_USER_PROFILE,
+  GET_FRIEND_PROFILE,
 } from "./types";
 import { arrayToObject } from "../../utils/commonFunction";
 import { hera } from "hera-js";
 import Swal from "sweetalert2";
 import logoutDispatch from "../../utils/logoutDispatch";
+
 // GET majors data
 export const getUsers = (setLoading) => async (dispatch, getState) => {
   const { token } = getState().auth;
@@ -30,6 +33,7 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
               firstName,
               lastName,
               email,
+              quote, 
               phone,
               address,
               imageUrl,
@@ -66,6 +70,96 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
   }
 };
 
+// GET majors data
+export const getUserProfile = (userId, setLoading) => async (dispatch, getState) => {
+  const { token, user: { id: authUserId } } = getState().auth;
+
+  const { data, errors } = await hera({
+    options: {
+      url: BASE_URL,
+      headers: {
+        token,
+        "Content-Type": "application/json",
+      },
+    },
+    query: `
+          query {
+            getUserProfile(userId: $userId) {
+              id
+              username
+              firstName,
+              lastName,
+              quote
+              email,
+              phone,
+              address,
+              githubUsername,
+              imageUrl
+              posts {
+                id
+                title,
+                description
+                status
+                categoryId
+                createdAt
+                updatedAt
+                comments {
+                  id
+                  comment
+                  userId
+                  parentId
+                  createdAt
+                  updatedAt
+                }
+                reactions {
+                  userId
+                  reactionTypeId
+                  postId
+                }
+              }
+              followed {
+                fromUserId,
+                toUserId
+                createdAt
+              }
+              userFavoritePosts {
+                id
+                userId
+                categoryId
+              }
+            }
+          }
+        `,
+        variables: {
+          userId
+        },
+  });
+
+  if (!errors) {
+    // const usersListObj = arrayToObject(data.getUsers);
+    if (authUserId === userId) {
+      dispatch({
+        type: GET_USER_PROFILE,
+        user_profile: data.getUserProfile,
+      }); 
+    } else {
+      dispatch({
+        type: GET_FRIEND_PROFILE,
+        friend_profile: data.getUserProfile,
+      }); 
+    }
+
+    setLoading(false);
+  } else {
+    console.log(errors);
+    logoutDispatch(dispatch, errors);
+    dispatch({
+      type: GET_ERRORS,
+      errors: errors[0].message,
+    });
+  }
+};
+
 export const updatePassword = (setLoading, password) => async (
   dispatch,
   getState
@@ -83,7 +177,6 @@ export const updatePassword = (setLoading, password) => async (
   //       headers: { Authorization: localStorage.token },
   //     }
   //   );
-
   //   dispatch({
   //     type: CLEAR_ERRORS,
   //   });
@@ -106,81 +199,17 @@ export const updatePassword = (setLoading, password) => async (
   // }
 };
 
-// export const editUserInfo = (setLoading, userData, image) => async (
-//   dispatch,
-//   getState
-// ) => {
-  // try {
-  //   const { user, isUser } = getState().auth;
-
-  //   if (image) {
-  //     const imageData = new FormData();
-  //     imageData.append("file", image);
-
-  //     const res = await axios.post(`api/users/upload/${user.id}`, imageData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: localStorage.token,
-  //       },
-  //     });
-
-  //     dispatch({
-  //       type: EDIT_USER_INFO,
-  //       userInfo: {
-  //         image: res.data.data.image,
-  //       },
-  //     });
-  //   } else {
-  //     userData.role = isUser ? "ROLE_TEACHER" : "ROLE_ADMIN";
-  //     const res = await axios.put(
-  //       `api/users/update_profile/${user.id}`,
-  //       userData,
-  //       {
-  //         headers: {
-  //           Authorization: localStorage.token,
-  //         },
-  //       }
-  //     );
-
-  //     dispatch({
-  //       type: EDIT_USER_INFO,
-  //       userInfo: {
-  //         email: res.data.data.email,
-  //         fullname: res.data.data.fullname,
-  //       },
-  //     });
-  //   }
-
-  //   dispatch({
-  //     type: CLEAR_ERRORS,
-  //   });
-
-  //   setLoading(false);
-  //   // using sweetalert2
-  //   Swal.fire({
-  //     position: "center",
-  //     type: "success",
-  //     title: "Your work has been saved",
-  //     showConfirmButton: false,
-  //     timer: 1500,
-  //   });
-  // } catch (errors) {
-  //   console.log(error);
-  //   logoutDispatch(dispatch, errors);
-  //   dispatch({
-  //     type: GET_ERRORS,
-  //     errors: errors[0].message,
-  //   });
-  // }
-// };
-
 export const editUserInfo = (setLoading, userData) => async (
   dispatch,
   getState
 ) => {
-  // console.log('userdata-------------', userData);
   const state = getState();
-  const { auth: { token, user: { id: userId} } } = state;
+  const {
+    auth: {
+      token,
+      user: { id: userId },
+    },
+  } = state;
   const { user } = state;
 
   const { data, errors } = await hera({
@@ -205,14 +234,14 @@ export const editUserInfo = (setLoading, userData) => async (
             githubUsername,
             createdAt,
             updatedAt,
-
+            quote
           }
         }
       `,
     variables: {
       info: {
         id: user.current_user ? user.current_user.id : userId,
-        ...userData
+        ...userData,
       },
     },
   });
@@ -238,18 +267,19 @@ export const editUserInfo = (setLoading, userData) => async (
       timer: 1500,
     });
   } else {
-    // console.log(errors);
-    const error = errors[0].extensions.payload ? errors[0].extensions.payload : errors[0].message;
+    const error = errors[0].extensions.payload
+      ? errors[0].extensions.payload
+      : errors[0].message;
     const formatedError = {};
-    errors[0].extensions.payload && Object.keys(error).map(key => {
-      formatedError[key] = error[key].message
-    })
-    // console.log(formatedError);
+    errors[0].extensions.payload &&
+      Object.keys(error).map((key) => {
+        formatedError[key] = error[key].message;
+      });
 
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,
-      errors: {...formatedError},
+      errors: { ...formatedError },
     });
   }
 };

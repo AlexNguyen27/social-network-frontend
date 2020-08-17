@@ -6,10 +6,14 @@ import course from "./course";
 import question from "./question";
 import lecture from "./lecture";
 import user from "./user";
+import post from "./post";
+import category from "./category";
 
 export default combineReducers({
   errors,
   auth,
+  post,
+  category,
   user,
   user_profile,
 });

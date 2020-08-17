@@ -44,15 +44,8 @@ import HomeIcon from "@material-ui/icons/Home";
 import { Link, NavLink } from "react-router-dom";
 
 // COMPONENT
-import Courses from "./courses/Courses";
-import UserCourses from "./courses/UserCourses";
-import ViewCourse from "./courses/ViewCourse";
-import UsersList from "./admin/UsersList";
-import CoursesList from "./admin/CoursesList";
 // ACTION
 import { logoutUser } from "../../store/actions/auth";
-import MultipleSummary from "./statistics/MultipleSummary";
-import ViewLecture from "./lectures/ViewLecture";
 import { Avatar } from "@material-ui/core";
 import UserInfo from "./user/UserInfo";
 import ChangePasswordModal from "./user/component/ChangePasswordModal";
@@ -63,6 +56,9 @@ import CategoryList from "./category/CategoryList";
 import ReportsList from "./report/ReportsList";
 import StatisticsPost from "./statistics/user/StatisticsPost";
 import NewsFeed from "./newsFeed/NewsFeed";
+import Users from "./user/Users";
+import AddPost from "./post/component/AddPost";
+import UsersList from "./admin/UsersList";
 
 const drawerWidth = 240;
 
@@ -299,19 +295,6 @@ const DashBoard = ({
   );
 
   const renderContent = (drawerId) => {
-    if (match.params.lectureId) {
-      return (
-        <ViewLecture
-          courseId={match.params.courseId}
-          lectureId={match.params.lectureId}
-        />
-      );
-    }
-    // console.log(match, "------------------------ ");
-    if (match.params.courseId) {
-      return <ViewCourse courseId={match.params.courseId} />;
-    }
-
     if (match.params.userId && match.path.includes("edit-user")) {
       return (
         <>
@@ -365,6 +348,18 @@ const DashBoard = ({
         return (
           <>
             <NewsFeed />
+          </>
+        );
+      case "/add-new-post":
+        return (
+          <>
+            <AddPost />
+          </>
+        );
+      case "/friends":
+        return (
+          <>
+            <Users />
           </>
         );
       case "/user-info":
@@ -427,6 +422,12 @@ const DashBoard = ({
       icon: <ArtTrackIcon />,
       to: `/user-profile/${user.id}`,
       title: "Your Profile",
+    },
+    {
+      key: "friends",
+      icon: <AccountBalanceIcon />,
+      to: "/friends",
+      title: "Friends",
     },
     {
       key: "statistics",
@@ -492,7 +493,7 @@ const DashBoard = ({
   };
 
   const setSearchText = (search) => {
-    if (match.path === "/all-courses" || match.path === "/your-courses") {
+    if (match.path === "/friends") {
       history.push({
         pathname: `${window.location.pathname}`,
         search: `?search=${search}`,
@@ -530,17 +531,14 @@ const DashBoard = ({
           <div
             className={classes.search}
             style={{
-              display:
-                match.path === "/all-courses" || match.path === "/your-courses"
-                  ? "block"
-                  : "none",
+              display: match.path === "/friends" ? "block" : "none",
             }}
           >
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search courses…"
+              placeholder="Search friends…"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,

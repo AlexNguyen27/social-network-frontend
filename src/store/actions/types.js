@@ -37,3 +37,16 @@ export const EDIT_USER = 'EDIT_USER';
 export const SAVE_CURRENT_USER = 'SAVE_CURRENT_USER';
 
 export const GET_USER_PROFILE = 'GET_USER_PROFILE';
+
+export const GET_POSTS = 'GET_POSTS';
+export const DELETE_POST = 'DELETE_POST';
+export const EDIT_POST = 'EDIT_POST';
+export const ADD_POST = 'ADD_POST';
+
+export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const DELETE_CATEGORY = 'DELETE_CATEGORY';
+export const EDIT_CATEGORY = 'EDIT_CATEGORY';
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+
+export const GET_FRIEND_PROFILE = 'GET_FRIEND_PROFILE';
+
