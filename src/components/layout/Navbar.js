@@ -8,22 +8,21 @@ import Landing from "./Landing";
 
 const Navbar = ({ logoutUser }) => {
   const isAuthenticated = true;
-  // eslint-disable-next-line no-unused-vars
-  const logoutButton = (
-    <ul className="navbar-nav">
-      <li className="nav-item">
-        <Link
-          className="nav-link"
-          to=""
-          onClick={() => {
-            logoutUser();
-          }}
-        >
-          Log out
-        </Link>
-      </li>
-    </ul>
-  );
+  // const logoutButton = (
+  //   <ul className="navbar-nav">
+  //     <li className="nav-item">
+  //       <Link
+  //         className="nav-link"
+  //         to=""
+  //         onClick={() => {
+  //           logoutUser();
+  //         }}
+  //       >
+  //         Log out
+  //       </Link>
+  //     </li>
+  //   </ul>
+  // );
 
   // const loginButton = (
   //   <ul className="navbar-nav">
@@ -87,7 +86,7 @@ const Navbar = ({ logoutUser }) => {
           </ul>
           {/* {loginButton} */}
           {signUpButton}
-          {logoutButton}
+          {/* {logoutButton} */}
         </div>
       </nav>
       {!isAuthenticated && <Landing />}

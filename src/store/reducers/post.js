@@ -4,14 +4,16 @@ import {
   EDIT_POST,
   ADD_POST,
   DELETE_POST,
+  GET_SELECTED_POST,
 } from "../actions/types";
 
 const initialState = {
   posts: {},
+  selected_post: {},
 };
 
 export default function (state = initialState, action) {
-  const { type, posts, selectedId } = action;
+  const { type, posts, selectedId, post } = action;
   switch (type) {
     case GET_POSTS:
       return {
@@ -19,7 +21,6 @@ export default function (state = initialState, action) {
       };
     case EDIT_POST:
     case ADD_POST:
-      const post = action.post;
       return {
         ...state,
         [post.id]: post,
@@ -30,6 +31,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         posts: newPosts,
+      };
+    case GET_SELECTED_POST:
+      return {
+        ...state,
+        selected_post: post,
       };
     case UNAUTHENTICATE:
       return initialState;

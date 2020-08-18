@@ -55,3 +55,5 @@ export const GET_REPORTS = "GET_REPORTS";
 export const DELETE_REPORT = "DELETE_REPORT";
 export const EDIT_REPORT = "EDIT_REPORT";
 export const ADD_REPORT = "ADD_REPORT";
+
+export const GET_SELECTED_POST = 'GET_SELECTED_POST';

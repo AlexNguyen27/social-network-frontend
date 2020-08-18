@@ -5,6 +5,7 @@ import {
   AUTHENTICATE,
   BASE_URL,
   GET_POSTS,
+  GET_SELECTED_POST,
 } from "./types";
 import { hera } from "hera-js";
 import { arrayToObject } from "../../utils/commonFunction";
@@ -72,7 +73,6 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
   dispatch,
   getState
 ) => {
-  console.log(bodyText)
   const {
     token,
     user: { id: userId },
@@ -119,6 +119,94 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
       showConfirmButton: false,
       timer: 1500,
     });
+  } else {
+    console.log(errors);
+    logoutDispatch(dispatch, errors);
+    dispatch({
+      type: GET_ERRORS,
+      errors: errors[0].message,
+    });
+  }
+};
+
+//LOGIN User
+export const getPostById = (
+  setLoading,
+  id,
+  setCurrentLike,
+  setIsLike
+) => async (dispatch, getState) => {
+  const {
+    token,
+    user: { id: userId },
+  } = getState().auth;
+
+  const { data, errors } = await hera({
+    options: {
+      url: BASE_URL,
+      headers: {
+        token,
+        "Content-Type": "application/json",
+      },
+    },
+    query: `
+            query {
+              getPostById(id: $id) {
+                    id
+                    title
+                    description
+                    status
+                    imageUrl
+                    createdAt
+                    updatedAt
+                    categoryId
+                    user {
+                      id 
+                      username
+                      firstName
+                      lastName
+                      email
+                      phone
+                      address 
+                      imageUrl
+                      githubUsername
+                    }
+                    comments{
+                        id
+                        comment
+                        userId
+                        parentId
+                        createdAt
+                        updatedAt
+                    }
+                    reactions {
+                        userId
+                        reactionTypeId
+                        postId
+                    }
+                    
+                }
+            }
+        `,
+    variables: {
+      id,
+    },
+  });
+  if (!errors) {
+    const { getPostById: currentPost } = data;
+    dispatch({
+      type: GET_SELECTED_POST,
+      post: currentPost,
+    });
+
+    setLoading(false);
+    if (
+      currentPost.reactions.length &&
+      !!currentPost.reactions.find((reaction) => reaction.userId === userId)
+    ) {
+      setCurrentLike(1);
+      setIsLike(true);
+    }
   } else {
     console.log(errors);
     logoutDispatch(dispatch, errors);
