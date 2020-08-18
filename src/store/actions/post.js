@@ -130,8 +130,16 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
 };
 
 //LOGIN User
-export const getPostById = (setLoading, id) => async (dispatch, getState) => {
-  const { token } = getState().auth;
+export const getPostById = (
+  setLoading,
+  id,
+  setCurrentLike,
+  setIsLike
+) => async (dispatch, getState) => {
+  const {
+    token,
+    user: { id: userId },
+  } = getState().auth;
 
   const { data, errors } = await hera({
     options: {
@@ -185,12 +193,20 @@ export const getPostById = (setLoading, id) => async (dispatch, getState) => {
     },
   });
   if (!errors) {
+    const { getPostById: currentPost } = data;
     dispatch({
       type: GET_SELECTED_POST,
-      post: data.getPostById,
+      post: currentPost,
     });
 
     setLoading(false);
+    if (
+      currentPost.reactions.length &&
+      !!currentPost.reactions.find((reaction) => reaction.userId === userId)
+    ) {
+      setCurrentLike(1);
+      setIsLike(true);
+    }
   } else {
     console.log(errors);
     logoutDispatch(dispatch, errors);

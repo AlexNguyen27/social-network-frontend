@@ -63,14 +63,9 @@ const ViewPost = ({
   const [isLiked, setIsLiked] = useState(false);
   const [currentLike, setCurrentLike] = useState(0);
 
+
   useEffect(() => {
-    getPostById(setLoading, postId);
-    setIsLiked(
-      selectedPost &&
-        selectedPost.reactions &&
-        selectedPost.reactions.length &&
-        !!reactions.find((reaction) => reaction.userId === authUserId)
-    );
+    getPostById(setLoading, postId, setCurrentLike, setIsLiked);
   }, []);
 
   const handleExpandClick = () => {
@@ -80,7 +75,7 @@ const ViewPost = ({
   const {
     title,
     description,
-    user: { firstName, lastName, githubUsername },
+    user: { firstName, lastName, githubUsername, imageUrl: avatar } = {},
     comments,
     reactions,
     updatedAt,
@@ -90,12 +85,12 @@ const ViewPost = ({
     likeReaction(selectedPost.id, setIsLiked, setCurrentLike);
   };
 
-  // if (isLiked) {
-  //   setCurrentLike(1);
-  // }
-
   const totalLikes =
-    reactions && reactions.length && isLiked ? reactions.length : reactions.length + currentLike;
+    selectedPost && selectedPost.reactions
+      ? selectedPost.reactions.length && isLiked
+        ? reactions.length
+        : reactions.length + currentLike
+      : 0;
   const totalComments = comments && comments.length;
 
   return (
@@ -107,7 +102,10 @@ const ViewPost = ({
             <Grid item xs={1} className="text-center">
               <img
                 className="userImage"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT8yP_D9E4ioICCCVIu6Y0tIRDDZ6JCKEdFhA&usqp=CAU"
+                src={
+                  avatar ||
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT8yP_D9E4ioICCCVIu6Y0tIRDDZ6JCKEdFhA&usqp=CAU"
+                }
                 alt="user image"
               />
             </Grid>
