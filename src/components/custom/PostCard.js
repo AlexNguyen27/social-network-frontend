@@ -18,7 +18,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ChatIcon from "@material-ui/icons/Chat";
 import Colors from "../../constants/Colors";
-import ViewText from "../pages/post/component/ViewText";
+import ViewText from "./ViewText";
 import Visibility from "@material-ui/icons/Visibility";
 
 const useStyles = makeStyles((theme) => ({

@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
 import PageTitle from "../../../custom/PageTitle";
-import TextEditor from "./TextEditor";
+import TextEditor from "../../../custom/TextEditor";
 import Button from "@material-ui/core/Button";
 import { Row } from "reactstrap";
 import { Grid } from "@material-ui/core";

@@ -19,6 +19,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import Badge from "@material-ui/core/Badge";
+import ReportIcon from "@material-ui/icons/Report";
+import CategoryIcon from "@material-ui/icons/Category";
 import "../../css/index.css";
 
 // MATERIAL ICONS
@@ -37,6 +39,8 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import ArtTrackIcon from "@material-ui/icons/ArtTrack";
 import HelpIcon from "@material-ui/icons/Help";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
+import ChromeReaderModeIcon from "@material-ui/icons/ChromeReaderMode";
 
 import jwt_decode from "jwt-decode";
 import HomeIcon from "@material-ui/icons/Home";
@@ -323,7 +327,7 @@ const DashBoard = ({
     if (match.params.postId && match.path.includes("view-post")) {
       return (
         <>
-          <ViewPost />
+          <ViewPost postId={match.params.postId} />
         </>
       );
     }
@@ -427,16 +431,16 @@ const DashBoard = ({
       title: "News Feed",
     },
     {
+      key: "friends",
+      icon: <PeopleAltIcon />,
+      to: "/friends",
+      title: "Friends",
+    },
+    {
       key: "userProfile",
       icon: <ArtTrackIcon />,
       to: `/user-profile/${user.id}`,
       title: "Your Profile",
-    },
-    {
-      key: "friends",
-      icon: <AccountBalanceIcon />,
-      to: "/friends",
-      title: "Friends",
     },
     {
       key: "statistics",
@@ -449,25 +453,25 @@ const DashBoard = ({
   const navList3 = [
     {
       key: "usersList",
-      icon: <ArtTrackIcon />,
+      icon: <PeopleAltIcon />,
       to: "/users-list",
       title: "User",
     },
     {
       key: "posts",
-      icon: <AccountBalanceIcon />,
+      icon: <ChromeReaderModeIcon />,
       to: "/posts-list",
       title: "Post",
     },
     {
       key: "report",
-      icon: <ArtTrackIcon />,
+      icon: <ReportIcon />,
       to: "/reports-list",
       title: "Report",
     },
     {
       key: "category",
-      icon: <ArtTrackIcon />,
+      icon: <CategoryIcon />,
       to: "/categories-list",
       title: "Category",
     },
