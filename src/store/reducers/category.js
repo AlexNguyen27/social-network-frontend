@@ -22,7 +22,10 @@ export default function (state = initialState, action) {
       const category = action.category;
       return {
         ...state,
-        [category.id]: category,
+        categories: {
+          ...state.categories,
+          [category.id]: category,
+        },
       };
     case DELETE_CATEGORY:
       const newCategories = state.categories;

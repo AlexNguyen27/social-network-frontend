@@ -5,7 +5,6 @@ import { hera } from "hera-js";
 // import jwt_decode from "jwt-decode";
 
 import Swal from "sweetalert2";
-import { getPosts } from "./post";
 //LOGIN User
 export const loginUser = ({ username, password }) => async (dispatch) => {
   // try {
