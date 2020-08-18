@@ -44,6 +44,11 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
               posts{
                 id
                 title
+                reactions {
+                  userId
+                  postId
+                  reactionTypeId
+                }
               }
             }
           }
