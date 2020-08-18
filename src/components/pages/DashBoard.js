@@ -59,6 +59,7 @@ import NewsFeed from "./newsFeed/NewsFeed";
 import Users from "./user/Users";
 import AddPost from "./post/component/AddPost";
 import UsersList from "./admin/UsersList";
+import ViewPost from "./post/component/ViewPost";
 
 const drawerWidth = 240;
 
@@ -315,6 +316,14 @@ const DashBoard = ({
       return (
         <>
           <StatisticsPost />
+        </>
+      );
+    }
+
+    if (match.params.postId && match.path.includes("view-post")) {
+      return (
+        <>
+          <ViewPost />
         </>
       );
     }
