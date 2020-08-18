@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { connect } from "react-redux";
@@ -6,6 +6,7 @@ import PostCard from "../../custom/PostCard";
 import SubNewsFeed from "./component/SubNewsFeed";
 import { getPosts } from "../../../store/actions/post";
 import { getCategories } from "../../../store/actions/category";
+import PageLoader from "../../custom/PageLoader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,36 +24,39 @@ const useStyles = makeStyles((theme) => ({
 const NewsFeed = ({ getPosts, getCategories }) => {
   const classes = useStyles();
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     getPosts();
-    getCategories();
+    getCategories(setLoading);
   }, []);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <div style={{ margin: "0px " }}>
-            <Grid
-              container
-              justify="center"
-              spacing={5}
-              className={classes.containRoot}
-            >
-              <Grid item xs={4}>
-                <SubNewsFeed />
+        <PageLoader loading={loading}>
+          <Grid item xs={12}>
+            <div style={{ margin: "0px " }}>
+              <Grid
+                container
+                justify="center"
+                spacing={5}
+                className={classes.containRoot}
+              >
+                <Grid item xs={4}>
+                  <SubNewsFeed />
+                </Grid>
+                <Grid item xs={8}>
+                  {[1, 2, 3, 4, 5, 6].map((item) => (
+                    <Grid item style={{ marginBottom: "20px" }}>
+                      <PostCard />
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
-              <Grid item xs={8}>
-                {[1, 2, 3, 4, 5, 6].map((item) => (
-                  <Grid item style={{ marginBottom: "20px" }}>
-                    <PostCard />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          </div>
-        </Grid>
-        <Grid item xs={12}></Grid>
+            </div>
+          </Grid>
+        </PageLoader>
       </Grid>
     </div>
   );

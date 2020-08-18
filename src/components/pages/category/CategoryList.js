@@ -3,8 +3,14 @@ import MaterialTable from "material-table";
 import moment from "moment";
 import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { SAVE_CURRENT_USER } from "../../../store/actions/types";
+// import { SAVE_CURRENT_USER } from "../../../store/actions/types";
 import { DATE_TIME } from "../../../utils/common";
+import {
+  getCategories,
+  addCategory,
+  deleteCatgory,
+  updateCategory,
+} from "../../../store/actions/category";
 
 import { forwardRef } from "react";
 
@@ -14,7 +20,6 @@ import Check from "@material-ui/icons/Check";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import FilterList from "@material-ui/icons/FilterList";
@@ -24,7 +29,6 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import Visibility from "@material-ui/icons/Visibility";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
@@ -37,7 +41,7 @@ const tableIcons = {
   DetailPanel: forwardRef((props, ref) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  // Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -53,13 +57,29 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const CategoriesList = ({ history }) => {
+const CategoriesList = ({
+  categories,
+  getCategories,
+  addCategory,
+  updateCategory,
+  deleteCatgory,
+}) => {
   const dispatch = useDispatch();
   const [state, setState] = useState({
     columns: [
-      { title: "Name", field: "name" },
-      { title: "Status", field: "status" },
-      { title: "Created At", field: "createdAt" },
+      {
+        title: "Name",
+        field: "name",
+        
+        validate: rowData => rowData.name === '' ? { isValid: false, helperText: 'Name cannot be empty' } : true,
+      },
+      {
+        title: "Status",
+        field: "status",
+        lookup: { public: "Public", private: "Private" },
+        initialEditValue: "public",
+      },
+      { title: "Created At", field: "createdAt", editable: "never" },
     ],
     data: [
       {
@@ -70,20 +90,17 @@ const CategoriesList = ({ history }) => {
     ],
   });
 
-  // mock up
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    // getUsers(setLoading);
+    getCategories(setLoading);
   }, [loading]);
 
   const getDateTime = (date) => moment(date).format(DATE_TIME);
 
-  //   const usersArray = Object.keys(users).map((userId) => ({
-  //     ...users[userId],
-  //     createdAt: getDateTime(users[userId].createdAt),
-  //     updatedAt: getDateTime(users[userId].updatedAt),
-  //     fullname: getFullname(users[userId].firstName, users[userId].lastName),
-  //   }));
+  const categoryArr = Object.keys(categories).map((cateId) => ({
+    ...categories[cateId],
+    createdAt: getDateTime(categories[cateId].createdAt),
+  }));
 
   return (
     <PageLoader loading={loading}>
@@ -92,7 +109,7 @@ const CategoriesList = ({ history }) => {
           icons={tableIcons}
           title="List Of Categories"
           columns={state.columns}
-          data={state.data || []}
+          data={categoryArr || []}
           options={{
             pageSize: 8,
             headerStyle: {
@@ -103,19 +120,6 @@ const CategoriesList = ({ history }) => {
             },
           }}
           actions={[
-            {
-              icon: () => <Edit />,
-              tooltip: "Edit Category",
-              onClick: (event, rowData) => {
-                // console.log("edit---", rowData);
-                dispatch({
-                  type: SAVE_CURRENT_USER,
-                  currentUser: rowData,
-                });
-                // history.push(`/edit-user/${rowData.id}`);
-                // Do save operation
-              },
-            },
             {
               icon: () => <Delete />,
               tooltip: "Delete Category",
@@ -131,34 +135,42 @@ const CategoriesList = ({ history }) => {
                 }).then((result) => {
                   if (result.value) {
                     setLoading(true);
+                    deleteCatgory(setLoading, rowData.id);
                     // deleteUser(setLoading, rowData.id);
                   }
                 });
               },
             },
-            {
-              icon: () => <Visibility />,
-              tooltip: "View Category",
-              onClick: (event, rowData) => {
-                // history.push(`user-profile/${rowData.id}`);
-                // Do save operation
-              },
-            },
           ]}
           editable={{
             onRowAdd: (newData) =>
-              new Promise((resolve) => {
+              new Promise((resolve, reject) => {
+
+                console.log(reject)
+                setTimeout(() => {
+                  console.log(newData);
+                  const { name, status } = newData;
+                  setLoading(true);
+                  addCategory(setLoading, name, status);
+                  resolve();
+                }, 1000);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve,reject) => {
                 setTimeout(() => {
                   resolve();
-                  Swal.fire({
-                    position: "center",
-                    type: "error",
-                    title:
-                      "Admin can not add new user \n Add new account when register",
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
-                }, 600);
+                  // edit categories
+                  setLoading(true);
+                  const { name, status, id } = newData;
+                  updateCategory(setLoading, name, status, id);
+                  if (oldData) {
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data[data.indexOf(oldData)] = newData;
+                      return { ...prevState, data };
+                    });
+                  }
+                }, 100);
               }),
           }}
         />
@@ -166,5 +178,12 @@ const CategoriesList = ({ history }) => {
     </PageLoader>
   );
 };
-const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps, {})(withRouter(CategoriesList));
+const mapStateToProps = (state) => ({
+  categories: state.category.categories,
+});
+export default connect(mapStateToProps, {
+  getCategories,
+  addCategory,
+  deleteCatgory,
+  updateCategory,
+})(withRouter(CategoriesList));
