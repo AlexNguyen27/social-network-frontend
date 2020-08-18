@@ -54,7 +54,6 @@ const ViewPost = ({
   postId,
   getPostById,
   selectedPost,
-  authUserId,
   likeReaction,
 }) => {
   const [loading, setLoading] = useState(true);
@@ -63,10 +62,9 @@ const ViewPost = ({
   const [isLiked, setIsLiked] = useState(false);
   const [currentLike, setCurrentLike] = useState(0);
 
-
   useEffect(() => {
-    getPostById(setLoading, postId, setCurrentLike, setIsLiked);
-  }, []);
+    getPostById(setLoading, postId, false, setCurrentLike, setIsLiked);
+  }, [postId]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -82,7 +80,10 @@ const ViewPost = ({
   } = selectedPost || {};
 
   const handleOnLike = () => {
-    likeReaction(selectedPost.id, setIsLiked, setCurrentLike);
+    console.log(isEdit)
+    if (!isEdit) {
+      likeReaction(selectedPost.id, setIsLiked, setCurrentLike);
+    }
   };
 
   const totalLikes =
@@ -92,6 +93,8 @@ const ViewPost = ({
         : reactions.length + currentLike
       : 0;
   const totalComments = comments && comments.length;
+
+  const isEdit = window.location.pathname.includes("edit-post");
 
   return (
     <PageLoader loading={loading}>
@@ -176,13 +179,13 @@ const ViewPost = ({
           </Grid>
         </Grid>
       </Grid>
+      
     </PageLoader>
   );
 };
 
 const mapStateToProps = (state) => ({
   categories: state.category.categories,
-  authUserId: state.auth.user.id,
   selectedPost: state.post.selected_post,
 });
 export default connect(mapStateToProps, { getPostById, likeReaction })(

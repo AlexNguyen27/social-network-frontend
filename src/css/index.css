@@ -42,12 +42,12 @@ button:focus {
 }
 
 .viewMode .ql-container {
-  height: 800px !important;
+  /* height: 800px !important; */
   border: none !important;
 }
 
 .viewMode .ql-editor {
-  height: 800px !important;
+  /* height: 800px !important; */
 }
 
 .userImage {
