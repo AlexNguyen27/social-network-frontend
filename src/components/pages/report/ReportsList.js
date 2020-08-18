@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
-import {
-  getUsers,
-  editUserInfo,
-  deleteUser,
-} from "../../../store/actions/user";
-import { SAVE_CURRENT_USER } from "../../../store/actions/types";
-import { DATE_TIME } from "../../../utils/common";
+import { DATE_TIME, REPORT_STATUS_OBJECT } from "../../../utils/common";
 
 import { forwardRef } from "react";
 
@@ -19,7 +14,7 @@ import Check from "@material-ui/icons/Check";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import ChromeReaderModeIcon from "@material-ui/icons/ChromeReaderMode";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import FilterList from "@material-ui/icons/FilterList";
@@ -33,6 +28,9 @@ import Visibility from "@material-ui/icons/Visibility";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
+import { getReports, deleteReport } from "../../../store/actions/report";
+import EditReportModal from "./component/EditReportModal";
+import ViewReport from "./component/ViewReport";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -58,29 +56,31 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const ReportsList = ({
-}) => {
+const ReportsList = ({ getReports, deleteReport, reports, users }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [state, setState] = useState({
     columns: [
-      { title: "Post", field: "title"},
-      { title: "Reason", field: "reason" },
-      { title: "Status", field: "status" },
-      { title: "Total Reporters", field: "totalReporters" },
+      { title: "Post", field: "title", editable: "never" },
+      { title: "Author", field: "username", editable: "never" },
+      { title: "Reason", field: "reason", editable: "never" },
+      { title: "Status", field: "status", lookup: REPORT_STATUS_OBJECT },
+      { title: "Total Reporters", field: "totalReporters", editable: "never" },
       {
         title: "Created at",
         field: "createdAt",
-        editable: "never"
+        editable: "never",
       },
       {
         title: "Updated at",
         field: "updatedAt",
-        editable: "never"
+        editable: "never",
       },
     ],
     data: [
       {
         title: "Weather",
+        username: "thanh",
         reason: "Violent",
         status: "waiting_for_approve",
         totalReporters: 10,
@@ -90,49 +90,64 @@ const ReportsList = ({
     ],
   });
 
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-  }, [loading]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getReports(setLoading);
+  }, [loading]);
 
   const getDateTime = (date) => moment(date).format(DATE_TIME);
 
-  // const usersArray = Object.keys(users).map((userId) => ({
-  //   ...users[userId],
-  //   createdAt: getDateTime(users[userId].createdAt),
-  //   updatedAt: getDateTime(users[userId].updatedAt),
-  //   fullname: getFullname(users[userId].firstName, users[userId].lastName),
-  // }));
+  const formatedData = (reports || []).map((report) => {
+    const { title, userId, id: postId } = report.post || {};
+    return {
+      ...report,
+      title,
+      username: users[userId].username,
+      totalReporters: reports.filter((report) => report.postId === postId)
+        .length,
+      createdAt: getDateTime(report.createdAt),
+      updatedAt: getDateTime(report.updatedAt),
+    };
+  });
+
+  const [modalEdit, setModalEdit] = useState(false);
+  const [modalViewReport, setModalViewReport] = useState(false);
+  const [reportData, setReportData] = useState();
+
+  const onEditReport = (report) => {
+    setModalEdit(true);
+    setReportData(report);
+  };
+
+  const onViewReport = (report) => {
+    setModalViewReport(true);
+    setReportData(report);
+  };
 
   return (
     <PageLoader loading={loading}>
-      <div style={{ maxWidth: `100%`, overflowX: 'auto' }}>
+      <div style={{ maxWidth: `100%`, overflowX: "auto" }}>
         <MaterialTable
           icons={tableIcons}
           title="List Of Reports"
           columns={state.columns}
-          data={state.data || []}
+          data={formatedData || []}
           options={{
             pageSize: 8,
             headerStyle: {
               fontWeight: "bold",
             },
             rowStyle: {
-              overflowX: 'auto'
-            }
+              overflowX: "auto",
+            },
           }}
           actions={[
             {
               icon: () => <Edit />,
-              tooltip: "Edit Report",
+              tooltip: "Edit Reported Post",
               onClick: (event, rowData) => {
-                console.log("edit---", rowData);
-                // dispatch({
-                //   type: SAVE_CURRENT_USER,
-                //   currentUser: rowData,
-                // });
-                // history.push(`/edit-user/${rowData.id}`);
-                // Do save operation
+                onEditReport(rowData);
               },
             },
             {
@@ -150,7 +165,8 @@ const ReportsList = ({
                 }).then((result) => {
                   if (result.value) {
                     setLoading(true);
-                    // deleteUser(setLoading, rowData.id);
+                    const { reportedBy, postId } = rowData;
+                    deleteReport(setLoading, reportedBy, postId);
                   }
                 });
               },
@@ -159,18 +175,36 @@ const ReportsList = ({
               icon: () => <Visibility />,
               tooltip: "View Report",
               onClick: (event, rowData) => {
-                // history.push(`user-profile/${rowData.id}`)
-                // Do save operation
+                onViewReport(rowData);
+              },
+            },
+            {
+              icon: () => <ChromeReaderModeIcon />,
+              tooltip: "View reported post",
+              onClick: (event, rowData) => {
+                history.push(`view-post/${rowData.postId}`);
               },
             },
           ]}
         />
       </div>
+      <EditReportModal
+        setModal={setModalEdit}
+        modal={modalEdit}
+        reportData={reportData}
+      />
+      <ViewReport
+        setModal={setModalViewReport}
+        modal={modalViewReport}
+        reportData={reportData}
+      />
     </PageLoader>
   );
 };
 const mapStateToProps = (state) => ({
-  user: state.user,
+  users: state.user.users,
+  reports: state.report.reports,
 });
-export default connect(mapStateToProps, {
-})(withRouter(ReportsList));
+export default connect(mapStateToProps, { getReports, deleteReport })(
+  withRouter(ReportsList)
+);

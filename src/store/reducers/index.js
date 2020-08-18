@@ -8,6 +8,7 @@ import lecture from "./lecture";
 import user from "./user";
 import post from "./post";
 import category from "./category";
+import report from './report'
 
 export default combineReducers({
   errors,
@@ -15,5 +16,6 @@ export default combineReducers({
   post,
   category,
   user,
+  report,
   user_profile,
 });
