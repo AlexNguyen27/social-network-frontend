@@ -187,64 +187,16 @@ const UsersList = ({
                 // Do save operation
               },
             },
-            {
-              icon: () => <EqualizerTwoToneIcon />,
+            rowData => ({
+              icon: (props) => <EqualizerTwoToneIcon />,
               tooltip: "Statictis",
               onClick: (event, rowData) => {
                 history.push(`statistics/${rowData.id}`);
-                // Do save operation
               },
-            },
+              disabled: !rowData.posts.length
+            }),
+            
           ]}
-          // editable={{
-          //   onRowAdd: (newData) =>
-          //     new Promise((resolve) => {
-          //       setTimeout(() => {
-          //         resolve();
-          //         Swal.fire({
-          //           position: "center",
-          //           type: "error",
-          //           title:
-          //             "Admin can not add new user \n Add new account when register",
-          //           showConfirmButton: false,
-          //           timer: 1500,
-          //         });
-          //       }, 600);
-          //     }),
-            // onRowUpdate: (newData, oldData) =>
-            //   new Promise((resolve) => {
-            //     console.log('herera')
-            //     history.push(`/edit-user/${oldData.id}`)
-            // setTimeout(() => {
-            //   resolve();
-            //   editUserInfo(setLoading, {
-            //     id: oldData.id,
-            //     email: newData.email,
-            //     fullname: newData.fullname,
-            //     role: newData.role,
-            //   });
-            //   if (oldData) {
-            //     setState((prevState) => {
-            //       const data = [...prevState.data];
-            //       data[data.indexOf(oldData)] = newData;
-            //       return { ...prevState, data };
-            //     });
-            //   }
-            // }, 600);
-            //   }),
-            // onRowDelete: (oldData) =>
-            //   new Promise((resolve) => {
-            //     setTimeout(() => {
-            //       resolve();
-            //       deleteUser(setLoading, oldData.id);
-            //       setState((prevState) => {
-            //         const data = [...prevState.data];
-            //         data.splice(data.indexOf(oldData), 1);
-            //         return { ...prevState, data };
-            //       });
-            //     }, 600);
-            //   }),
-          // }}
         />
       </div>
     </PageLoader>

@@ -1,21 +1,21 @@
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Row, Col } from 'reactstrap';
+import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { Row, Col } from "reactstrap";
 // react-chart-js
-import { Line } from 'react-chartjs-2';
-import { Pie } from 'react-chartjs-2';
-import { HorizontalBar } from 'react-chartjs-2';
+import { Line } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
+import { HorizontalBar } from "react-chartjs-2";
 // MATERIAL UI
-import { makeStyles } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import { makeStyles } from "@material-ui/core/styles";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 // Material UI style
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   formControl: {
     margin: theme.spacing(3),
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 //   ],
 // };
 
-const MultipleSummary = ({ name, like, dislike }) => {
+const MultipleSummary = ({ name, like }) => {
   const classes = useStyles();
   // Array option of question
   // const options = [
@@ -52,6 +52,8 @@ const MultipleSummary = ({ name, like, dislike }) => {
   //   "June",
   //   "July",
   // ];
+  console.log(name);
+  console.log(like);
   const options = name;
   // let optionLabels = options.map((option) => option.text);
   // const totalAnswers = [65, 59, 80, 81, 56, 55, 40];
@@ -63,32 +65,33 @@ const MultipleSummary = ({ name, like, dislike }) => {
     datasets: [
       {
         data: totalAnswers,
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       },
     ],
   };
 
+  const lineName = "Likes";
   // LINE CHART
   const dataLine = {
     labels: options,
     datasets: [
       {
-        label: `Like`,
+        label: lineName,
         fill: false,
         lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,0.4)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
+        backgroundColor: "rgba(75,192,192,0.4)",
+        borderColor: "rgba(75,192,192,1)",
+        borderCapStyle: "butt",
         borderDash: [],
         borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
+        borderJoinStyle: "miter",
+        pointBorderColor: "rgba(75,192,192,1)",
+        pointBackgroundColor: "#fff",
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
+        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        pointHoverBorderColor: "rgba(220,220,220,1)",
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
@@ -103,12 +106,12 @@ const MultipleSummary = ({ name, like, dislike }) => {
     labels: options,
     datasets: [
       {
-        label: `Student enrolled`,
-        backgroundColor: 'rgba(255,99,132,0.2)',
-        borderColor: 'rgba(255,99,132,1)',
+        label: lineName,
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
-        hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-        hoverBorderColor: 'rgba(255,99,132,1)',
+        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+        hoverBorderColor: "rgba(255,99,132,1)",
         data: totalAnswers,
       },
     ],
@@ -126,7 +129,7 @@ const MultipleSummary = ({ name, like, dislike }) => {
   ];
 
   // CHART ID STATE
-  const [chartId, setChartId] = React.useState('1');
+  const [chartId, setChartId] = React.useState("1");
   // HANDLE ON CLICK A CHART
   const handleChange = (event) => {
     setChartId(event.target.value);

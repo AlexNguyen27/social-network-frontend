@@ -320,7 +320,7 @@ const DashBoard = ({
     if (match.params.userId && match.path.includes("statistics")) {
       return (
         <>
-          <StatisticsPost />
+          <StatisticsPost userId={match.params.userId} />
         </>
       );
     }

@@ -1,43 +1,21 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import MultipleSummary from '../MultipleSummary';
+import React from "react";
+import { connect } from "react-redux";
+import MultipleSummary from "../MultipleSummary";
 
-// TODO: thống kê số sinh viên đã theo học trong từng khóa học theo từng tháng
-// get all course
-// get all lecture
-// get all total student enroll
-const StatisticsPost = ({ }) => {
-  // const userCourses = Object.keys(user_courses).map(
-  //   (courseId) => user_courses[courseId]
-  // );
+const StatisticsPost = ({ users, userId }) => {
 
-  const posts = [
-    {name: 'like', total: 100},
-    {name: 'dislike', total: 10},
-  ]
-  const postName = posts.map((post) => post.name);
-  const total = posts.map((post) =>
-    post.total
-  );
-  const postDislike = posts.map((post) =>
-    post.dislike
-  );
-
-  // const postLike = [345, 4545, 1343, 2345];
+  const postName = (users[userId].posts || []).map((post) => post.title);
+  const postReactionLike = (users[userId].posts || []).map((post) => post.reactions.length);
 
   return (
     <>
-      {/* {console.log('postLike', total)} */}
-      <h4>Statistics Post</h4>
-      <MultipleSummary
-        name={postName}
-        like={total}
-        dislike={postDislike}
-      />
+      <h4 className="mt-4">Statistics User Post</h4>
+      <MultipleSummary name={postName} like={postReactionLike}/>
     </>
   );
 };
 
 const mapStateToProps = (state) => ({
+  users: state.user.users,
 });
 export default connect(mapStateToProps, null)(StatisticsPost);
