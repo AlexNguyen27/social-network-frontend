@@ -62,6 +62,7 @@ import StatisticsPost from "./statistics/user/StatisticsPost";
 import NewsFeed from "./newsFeed/NewsFeed";
 import Users from "./user/Users";
 import AddPost from "./post/component/AddPost";
+import EditPost from "./post/component/EditPost";
 import UsersList from "./admin/UsersList";
 import ViewPost from "./post/component/ViewPost";
 
@@ -332,6 +333,13 @@ const DashBoard = ({
       );
     }
 
+    if (match.params.postId && match.path.includes("edit-post")) {
+      return (
+        <>
+          <EditPost postId={match.params.postId} />
+        </>
+      );
+    }
     switch (match.path) {
       case "/users-list":
         return (

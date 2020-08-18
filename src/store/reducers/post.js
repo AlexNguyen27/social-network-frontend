@@ -17,13 +17,24 @@ export default function (state = initialState, action) {
   switch (type) {
     case GET_POSTS:
       return {
+        ...state,
         posts: { ...posts },
       };
-    case EDIT_POST:
     case ADD_POST:
       return {
         ...state,
-        [post.id]: post,
+        posts: {
+          ...state.posts,
+          [post.id]: post,
+        },
+      };
+    case EDIT_POST:
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [post.id]: { ...state.posts[post.id], ...post },
+        },
       };
     case DELETE_POST:
       const newPosts = state.posts;

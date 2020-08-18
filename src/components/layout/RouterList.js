@@ -41,6 +41,7 @@ const RouterList = (props) => {
         <ProtectedRoute exact path="/user-info" component={DashBoard} />
         <ProtectedRoute exact path="/add-new-post" component={DashBoard} />
         <ProtectedRoute exact path="/view-post/:postId" component={DashBoard} />
+        <ProtectedRoute exact path="/edit-post/:postId" component={DashBoard} />
 
         <ProtectedRoute
           exact

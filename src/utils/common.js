@@ -18,3 +18,13 @@ export const REPORT_STATUS_OBJECT = {
   waiting_for_approve: "WAITTING FOR APPROVE",
   approve: "APPROVE",
 };
+
+export const POST_STATUS_ARRAY = [
+  { name: "public", value: "PUBLIC" },
+  { name: "private", value: "PRIVATE" },
+];
+
+export const POST_STATUS_OBJECT = {
+  public: "PUBLIC",
+  private: "PRIVATE",
+};

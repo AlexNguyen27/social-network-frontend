@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -9,7 +10,7 @@ import {
   deleteUser,
 } from "../../../store/actions/user";
 import { SAVE_CURRENT_USER } from "../../../store/actions/types";
-import { DATE_TIME } from "../../../utils/common";
+import { DATE_TIME, POST_STATUS_OBJECT } from "../../../utils/common";
 
 import { forwardRef } from "react";
 
@@ -19,7 +20,6 @@ import Check from "@material-ui/icons/Check";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import FilterList from "@material-ui/icons/FilterList";
@@ -33,6 +33,9 @@ import Visibility from "@material-ui/icons/Visibility";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
+import { getPosts, deletePost } from "../../../store/actions/post";
+import { Button } from "@material-ui/core";
+import { getCategories } from "../../../store/actions/category";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -59,25 +62,29 @@ const tableIcons = {
 };
 
 const PostsList = ({
+  getPosts,
+  posts,
+  deletePost,
+  categories,
+  getCategories,
 }) => {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const [state, setState] = useState({
     columns: [
-      { title: "Name", field: "title"},
-      { title: "Category", field: "category" },
-      { title: "Status", field: "status" },
-      { title: "Author", field: "author" },
+      { title: "Name", field: "title" },
+      { title: "Category", field: "categoryName" },
+      { title: "Status", field: "status", lookup: POST_STATUS_OBJECT },
+      { title: "Author", field: "username" },
       { title: "Like", field: "totalLike" },
-      { title: "Dislike", field: "totalDislike" },
       {
         title: "Created at",
         field: "createdAt",
-        editable: "never"
+        editable: "never",
       },
       {
         title: "Updated at",
         field: "updatedAt",
-        editable: "never"
+        editable: "never",
       },
     ],
     data: [
@@ -87,56 +94,68 @@ const PostsList = ({
         status: "public",
         author: "Thanh Nguyen",
         totalLike: 100,
-        totalDislike: 10,
         createdAt: moment("2020-05-29T14:49:05.661Z").format(DATE_TIME),
         updatedAt: moment("2020-05-29T14:49:05.661Z").format(DATE_TIME),
       },
     ],
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    getPosts(setLoading);
+    if (!categories) {
+      setLoading(false);
+      getCategories(setLoading);
+    }
   }, [loading]);
-
 
   const getDateTime = (date) => moment(date).format(DATE_TIME);
 
-  // const usersArray = Object.keys(users).map((userId) => ({
-  //   ...users[userId],
-  //   createdAt: getDateTime(users[userId].createdAt),
-  //   updatedAt: getDateTime(users[userId].updatedAt),
-  //   fullname: getFullname(users[userId].firstName, users[userId].lastName),
-  // }));
+  const postsArray = Object.keys(posts).map((postId) => {
+    const post = posts[postId];
+    return {
+      ...post,
+      createdAt: getDateTime(post.createdAt),
+      updatedAt: getDateTime(post.updatedAt),
+      categoryName: post.category ? post.category.name : "",
+      username: post.user.username,
+      totalLike: post.reactions ? post.reactions.length : 0,
+    };
+  });
 
   return (
     <PageLoader loading={loading}>
-      <div style={{ maxWidth: `100%`, overflowX: 'auto' }}>
+      <div style={{ maxWidth: `100%`, overflowX: "auto" }}>
         <MaterialTable
           icons={tableIcons}
           title="List Of Posts"
           columns={state.columns}
-          data={state.data || []}
+          data={postsArray || []}
           options={{
             pageSize: 8,
             headerStyle: {
               fontWeight: "bold",
             },
             rowStyle: {
-              overflowX: 'auto'
-            }
+              overflowX: "auto",
+            },
+          }}
+          components={{
+            onRowAdd: (props) => {
+              return (
+                <Button onClick={() => console.log("click")}>
+                  Hello World
+                </Button>
+              );
+            },
           }}
           actions={[
             {
               icon: () => <Edit />,
               tooltip: "Edit Post",
               onClick: (event, rowData) => {
-                // console.log("edit---", rowData);
-                // dispatch({
-                //   type: SAVE_CURRENT_USER,
-                //   currentUser: rowData,
-                // });
-                // history.push(`/edit-user/${rowData.id}`);
-                // Do save operation
+                // window.open(`edit-post/${rowData.id}`, "_blank");
+                history.push(`/edit-post/${rowData.id}`);
               },
             },
             {
@@ -154,7 +173,7 @@ const PostsList = ({
                 }).then((result) => {
                   if (result.value) {
                     setLoading(true);
-                    // deleteUser(setLoading, rowData.id);
+                    deletePost(setLoading, rowData.id);
                   }
                 });
               },
@@ -163,27 +182,19 @@ const PostsList = ({
               icon: () => <Visibility />,
               tooltip: "View Post",
               onClick: (event, rowData) => {
-                // history.push(`user-profile/${rowData.id}`)
-                // Do save operation
+                // window.open(`view-post/${rowData.id}`, "_blank");
+                history.push(`/view-post/${rowData.id}`);
               },
             },
+            {
+              icon: () => <AddBox />,
+              onClick: (event, rowData) => {
+                history.push("/add-new-post");
+              },
+              isFreeAction: true,
+              tooltip: "Add Post",
+            },
           ]}
-          // editable={{
-          //   onRowAdd: (newData) =>
-          //     new Promise((resolve) => {
-          //       setTimeout(() => {
-          //         resolve();
-          //         Swal.fire({
-          //           position: "center",
-          //           type: "error",
-          //           title: "Admin can not add new user \n Add new account when register",
-          //           showConfirmButton: false,
-          //           timer: 1500,
-          //         });
-          //       }, 600);
-          //     }),
-            
-          // }}
         />
       </div>
     </PageLoader>
@@ -191,6 +202,11 @@ const PostsList = ({
 };
 const mapStateToProps = (state) => ({
   user: state.user,
+  posts: state.post.posts,
+  categories: state.category.categories,
 });
 export default connect(mapStateToProps, {
+  getPosts,
+  deletePost,
+  getCategories,
 })(withRouter(PostsList));
