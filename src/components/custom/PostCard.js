@@ -1,5 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import moment from "moment";
 import Card from "@material-ui/core/Card";
@@ -10,6 +12,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -20,6 +23,8 @@ import ChatIcon from "@material-ui/icons/Chat";
 import Colors from "../../constants/Colors";
 import ViewText from "./ViewText";
 import Visibility from "@material-ui/icons/Visibility";
+import { truncateMultilineString } from "../../utils/formatString";
+import { likeReaction } from "../../store/actions/like";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,17 +49,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostCard = ({ liked, userProfile, post, authUserId }) => {
+const PostCard = ({
+  liked,
+  userProfile,
+  post,
+  authUserId,
+  likeReaction,
+  isCurrentAuth,
+}) => {
   const classes = useStyles();
+  const history = useHistory();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
-    setExpanded(!expanded);
+    // setExpanded(!expanded);
   };
 
   const { imageUrl } = userProfile || {};
 
-  const { title, description, status, createdAt, comments, reactions } =
+  const { id, title, description, status, createdAt, comments, reactions } =
     post || {};
 
   let isLiked = false;
@@ -63,7 +76,7 @@ const PostCard = ({ liked, userProfile, post, authUserId }) => {
   }
 
   const handleOnLike = () => {
-    // creae like
+    likeReaction(id);
   };
 
   return (
@@ -84,17 +97,16 @@ const PostCard = ({ liked, userProfile, post, authUserId }) => {
         title={title}
         subheader={moment(createdAt).format("LLLL")}
       />
-      <CardMedia
+      {/* <CardMedia
         className={classes.media}
         image={"https://i.ytimg.com/vi/ddxsa3_hv-w/maxresdefault.jpg"}
         title="Paella dish"
-      />
+      /> */}
       <CardContent>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          component="p"
-        ></Typography>
+        <ViewText
+          textBody={truncateMultilineString(description, 200)}
+          className="viewMode"
+        />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton
@@ -103,37 +115,41 @@ const PostCard = ({ liked, userProfile, post, authUserId }) => {
           onClick={() => handleOnLike()}
         >
           <FavoriteIcon />
-          <span style={{ fontSize: "16px" }}>
-            {reactions && reactions.length}
-          </span>
+          <span className="like">{reactions && reactions.length}</span>
         </IconButton>
         <IconButton aria-label="comment">
           <ChatIcon />
-          <span style={{ fontSize: "16px" }}>
-            {comments && comments.length}
-          </span>
+          <span className="like">{comments && comments.length}</span>
         </IconButton>
-        <IconButton aria-label="share" style={{ marginLeft: "0" }}>
-          <ShareIcon />
-        </IconButton>
+        {isCurrentAuth && (
+          <IconButton
+            aria-label="edit"
+            onClick={() => post && window.open(`/edit-post/${id}`, "_blank")}
+          >
+            <EditIcon />
+          </IconButton>
+        )}
         <IconButton
           className={clsx(classes.expand, {
             [classes.expandOpen]: expanded,
           })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
+          style={{ fontSize: "16px" }}
+          onClick={() => post && window.open(`/view-post/${id}`, "_blank")}
+          // aria-expanded={expanded}
           aria-label="show more"
         >
-          <Visibility />
+          {/* <Visibility /> */}
+          SEE MORE
         </IconButton>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <ViewText textBody={description} />I
+          <ViewText textBody={description} className="viewMode" />
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
   );
 };
 
-export default PostCard;
+const mapStateToProps = (state) => ({});
+export default connect(mapStateToProps, { likeReaction })(PostCard);

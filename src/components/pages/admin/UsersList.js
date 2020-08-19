@@ -105,7 +105,7 @@ const UsersList = ({
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUsers(setLoading);
-  }, [loading]);
+  }, []);
 
   const getFullname = (firstname, lastname) => {
     // console.log(firstname, lastname);
@@ -181,7 +181,7 @@ const UsersList = ({
             },
             {
               icon: () => <Visibility />,
-              tooltip: "View user",
+              tooltip: "View user profile",
               onClick: (event, rowData) => {
                 history.push(`user-profile/${rowData.id}`);
                 // Do save operation

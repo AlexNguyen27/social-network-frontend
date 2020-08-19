@@ -38,6 +38,5 @@ const Favorites = ({ favoritePosts, userProfile, authUserId}) => {
 };
 
 const mapStateToProps = (state) => ({
-  users: state.user.users,
 });
 export default connect(mapStateToProps, {})(Favorites);

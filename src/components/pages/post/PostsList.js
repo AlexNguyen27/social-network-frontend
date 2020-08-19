@@ -118,7 +118,7 @@ const PostsList = ({
       createdAt: getDateTime(post.createdAt),
       updatedAt: getDateTime(post.updatedAt),
       categoryName: post.category ? post.category.name : "",
-      username: post.user.username,
+      username: post.user ? post.user.username : '',
       totalLike: post.reactions ? post.reactions.length : 0,
     };
   });

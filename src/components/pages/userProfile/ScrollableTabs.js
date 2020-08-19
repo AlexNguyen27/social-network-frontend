@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   btn: {
-    marginBottom: "12px",
+    marginBottom: "16px",
   },
 }));
 
@@ -82,26 +82,36 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
     setValue(newValue);
   };
 
-  const connections = ((user_profile || {}).followed || []).map((con) => ({
-    userId: users[con.toUserId].id,
-    firstName: users[con.toUserId].firstName,
-    lastName: users[con.toUserId].lastName,
-    githubUsername: users[con.toUserId].githubUsername,
-    quote: users[con.toUserId].quote,
-  }));
+  const connections =
+    user_profile && user_profile.followed.length > 0
+      ? user_profile.followed.map((con) => ({
+          userId: users[con.toUserId].id,
+          firstName: users[con.toUserId].firstName,
+          lastName: users[con.toUserId].lastName,
+          githubUsername: users[con.toUserId].githubUsername,
+          quote: users[con.toUserId].quote,
+        }))
+      : [];
 
-  const favoritePosts = user_profile && (user_profile.userFavoritePosts || []).map((item) => ({
-    title: posts[item.id].title,
-    description: posts[item.id].description,
-    status: posts[item.id].status,
-    createdAt: posts[item.id].createdAt,
-    comments: posts[item.id].comments,
-    reactions: posts[item.id].reactions,
-  }));
+  const favoritePosts =
+    user_profile && user_profile.userFavoritePosts.length > 0
+      ? user_profile.userFavoritePosts.map((item) => ({
+          title: item.title,
+          description: item.description,
+          status: item.status,
+          createdAt: item.createdAt,
+          comments: posts[item.id] && posts[item.id].comments || [],
+          reactions: posts[item.id] && posts[item.id].reactions || [],
+          id: item.id,
+        }))
+      : [];
+  // const favoritePosts = [];
+  // console.log(favoritePosts);
+
+  const isCurrentAuth = authUserId === user_profile.id;
 
   return (
     <div className={classes.root}>
-      {console.log(connections)}
       <AppBar position="static" color="default">
         <Tabs
           value={value}
@@ -120,42 +130,75 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
         <div style={{ margin: "0px -24px" }}>
           <Grid container spacing={3} className={classes.containRoot}>
             <Grid item xs={7}>
-              {!user_profile.posts ||
-                (!user_profile.posts.length && <h1>NO POSTS</h1>)}
-              {authUserId === user_profile.id && (
+              {(!user_profile && !user_profile.posts) ||
+                (!user_profile.posts.length && (
+                  <Typography
+                    variant="h6"
+                    className="text-center"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {" "}
+                    NO POSTS, MAY BE YOU SHOULD ADD SOME :D
+                  </Typography>
+                ))}
+              {isCurrentAuth && (
                 <Button
                   variant="contained"
                   color="primary"
                   className={classes.btn}
-                  onClick={() => {history.push('/add-new-post')}}
+                  onClick={() => {
+                    history.push("/add-new-post");
+                  }}
                 >
                   Add new post
                 </Button>
               )}
               {user_profile.posts &&
                 user_profile.posts.map((item) => (
-                  <Grid item style={{ marginBottom: "20px" }}>
-                    <PostCard
-                      userProfile={user_profile}
-                      post={item}
-                      authUserId={authUserId}
-                    />
-                  </Grid>
+                  <>
+                    <Grid item style={{ marginBottom: "20px" }} key={item.id}>
+                      <PostCard
+                        userProfile={user_profile}
+                        post={item}
+                        authUserId={authUserId}
+                        isCurrentAuth={isCurrentAuth}
+                      />
+                    </Grid>
+                  </>
                 ))}
             </Grid>
-            <Grid item xs={5} spacing={2}>
+            <Grid item xs={5}>
               <SubUserInfo userInfo={user_profile} connections={connections} />
             </Grid>
           </Grid>
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        {!connections.length && <h1>NO CONNECTIONS</h1>}
+        {!connections.length && (
+          <Typography
+            variant="h6"
+            className="text-center"
+            component="p"
+            color="textSecondary"
+          >
+            NO CONNECTIONS
+          </Typography>
+        )}
         <Connection connections={connections} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         {!user_profile.userFavoritePosts ||
-          (!user_profile.userFavoritePosts.length && <h1>NO FAVORITE</h1>)}
+          (!user_profile.userFavoritePosts.length && (
+            <Typography
+              variant="h6"
+              className="text-center"
+              component="p"
+              color="textSecondary"
+            >
+              NO FAVORITE POSTS
+            </Typography>
+          ))}
         <Favorites
           favoritePosts={favoritePosts}
           userProfile={user_profile}
@@ -170,8 +213,6 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
 };
 
 const mapStateToProps = (state) => ({
-  user_profile:
-    state.user_profile.user_profile || state.user_profile.friend_profile,
   users: state.user.users,
   authUserId: state.auth.user.id,
   posts: state.post.posts,

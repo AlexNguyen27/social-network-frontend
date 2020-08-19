@@ -109,7 +109,7 @@ const EditPost = ({
           </Grid>
         </Grid>
         <Grid container justify="flex-end">
-          <Grid item xs={2}>
+          <Grid item xs={2} className="mt-2">
             <DropdownV2
               fullWidth
               label="Status"
