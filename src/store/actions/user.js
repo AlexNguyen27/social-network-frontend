@@ -131,6 +131,8 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
                 id
                 userId
                 categoryId
+                title
+                description
               }
             }
           }

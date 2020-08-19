@@ -77,7 +77,7 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,
-      errors: errors[0].message,
+      errors: errors[0].message,  
     });
   }
 };
@@ -107,6 +107,30 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
             imageUrl
             createdAt
             updatedAt
+            categoryId
+            comments{
+                id
+                comment
+                userId
+                parentId
+                createdAt
+                updatedAt
+            }
+            reactions {
+                userId
+                reactionTypeId
+                postId
+            }
+            user {
+              id 
+              username
+              firstName
+              lastName
+            }  
+            category {
+              id 
+              name
+            }
           }
         }
       `,

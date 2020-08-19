@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import PageTitle from "../../../custom/PageTitle";
 import TextEditor from "../../../custom/TextEditor";
@@ -7,6 +7,7 @@ import { Row } from "reactstrap";
 import { Grid } from "@material-ui/core";
 import DropdownV2 from "../../../custom/DropdownV2";
 import { addNewPost } from "../../../../store/actions/post";
+import { getCategories } from "../../../../store/actions/category";
 
 const blogData1 = {
   textBody: "body",
@@ -26,7 +27,7 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
   const { textBody, pageId, pageName } = blogData || {};
 
   const categoryArr = Object.keys(categories).map((key) => categories[key]);
-
+  
   // status: 0: private, 1: public
   const [selectedDropdownData, setSelectedDropdownData] = useState({
     selectedCategoryIndex: categoryArr[0].id,
@@ -100,7 +101,7 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
         </Grid>
       </Grid>
       <Grid container justify="flex-end">
-        <Grid item xs={2}>
+        <Grid item xs={2} className="mt-2">
           <DropdownV2
             fullWidth
             label="Status"

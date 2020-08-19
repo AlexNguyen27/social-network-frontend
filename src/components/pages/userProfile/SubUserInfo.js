@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import FolderIcon from "@material-ui/icons/Folder";
 import PageviewIcon from "@material-ui/icons/Pageview";
-import { green, pink } from "@material-ui/core/colors";
+import { green, pink, grey } from "@material-ui/core/colors";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +16,8 @@ import ImageIcon from "@material-ui/icons/Image";
 import EventIcon from "@material-ui/icons/Event";
 import CallIcon from "@material-ui/icons/Call";
 import HomeIcon from "@material-ui/icons/Home";
+import { Fragment } from "react";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
   green: {
     color: "#fff",
     backgroundColor: green[500],
+    margin: "0 auto",
+  },
+  gray: {
+    backgroundColor: "#888",
+    color: "#fff",
     margin: "0 auto",
   },
   paper: {
@@ -79,7 +86,6 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
         <Typography variant="h5" bold>
           About Me
         </Typography>
-        <Typography>{}</Typography>
         <hr></hr>
         <Grid container>
           <Grid item xs={2}>
@@ -121,14 +127,18 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
         <hr></hr>
         <Grid container>
           <Grid item xs={2}>
-            <Avatar className={classes.green}>
-              <HomeIcon />
+            <Avatar className={classes.gray}>
+              <GitHubIcon />
             </Avatar>
           </Grid>
           <Grid item xs={10}>
             <Typography>Github</Typography>
             <Typography variant="caption">
-              <a href={`https://github.com/${githubUsername}`}>
+              <a
+                href={`https://github.com/${githubUsername}`}
+                className="aSubText"
+                target="_blank"
+              >
                 {githubUsername}
               </a>
             </Typography>
@@ -143,7 +153,7 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
         <div className={classes.root}>
           <GridList cellHeight={160} className={classes.gridList} cols={3}>
             {albums.map((tile) => (
-              <GridListTile key={tile.img} cols={tile.cols || 1}>
+              <GridListTile key={tile.id} cols={tile.cols || 1}>
                 <img src={tile.img} alt={tile.title} />
               </GridListTile>
             ))}
@@ -157,7 +167,7 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
         </Typography>
         <hr></hr>
         {connections.map((item) => (
-          <>
+          <Fragment key={item.userId}>
             <Grid container>
               <Grid item xs={2}>
                 <Avatar className={classes.avatar}>
@@ -169,14 +179,18 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
                   {item.firstName} {item.lastName}
                 </Typography>
                 <Typography variant="caption">
-                  <a href={`https://github.com/${githubUsername}`}>
+                  <a
+                    href={`https://github.com/${githubUsername}`}
+                    target="_blank"
+                    className="aSubText"
+                  >
                     {githubUsername}
                   </a>
                 </Typography>
               </Grid>
             </Grid>
             <hr></hr>
-          </>
+          </Fragment>
         ))}
       </Paper>
     </>

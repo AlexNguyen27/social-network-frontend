@@ -65,3 +65,7 @@ button:focus {
   font-size: 16px;
   margin-left: 6px;
 }
+
+.MuiBox-root .MuiBox-root-36 {
+  padding: 24px 0px !important;
+}

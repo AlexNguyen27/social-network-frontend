@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import ScrollableTabs from "./ScrollableTabs";
 import { getUserProfile, getUsers } from "../../../store/actions/user";
 import PageLoader from "../../custom/PageLoader";
+import { getCategories } from "../../../store/actions/category";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,13 +22,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserProfile = ({ userId, getUserProfile, getUsers, user_profile }) => {
+const UserProfile = ({
+  users,
+  userId,
+  getUserProfile,
+  getCategories,
+  categories,
+  user_profile,
+}) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getUserProfile(userId, setLoading);
-    getUsers(setLoading);
-    // console.log("userid---------", userId);
+    if (JSON.stringify(categories) === "{}") {
+      setLoading(false);
+      getCategories(setLoading);
+    }
   }, [userId]);
   return (
     <div className={classes.root}>
@@ -37,7 +47,7 @@ const UserProfile = ({ userId, getUserProfile, getUsers, user_profile }) => {
             <AboutCard userProfile={user_profile} />
           </Grid>
           <Grid item xs={12}>
-            <ScrollableTabs />
+            <ScrollableTabs user_profile={user_profile} />
           </Grid>
         </Grid>
       </PageLoader>
@@ -48,7 +58,11 @@ const UserProfile = ({ userId, getUserProfile, getUsers, user_profile }) => {
 const mapStateToProps = (state) => ({
   user_profile:
     state.user_profile.user_profile || state.user_profile.friend_profile,
+  users: state.user.users,
+  categories: state.category.categories,
 });
-export default connect(mapStateToProps, { getUserProfile, getUsers })(
-  UserProfile
-);
+export default connect(mapStateToProps, {
+  getUserProfile,
+  getCategories,
+  getUsers,
+})(UserProfile);
