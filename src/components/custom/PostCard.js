@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -53,31 +53,46 @@ const PostCard = ({
   liked,
   userProfile,
   post,
-  authUserId,
   likeReaction,
   isCurrentAuth,
+  authProfile,
 }) => {
   const classes = useStyles();
   const history = useHistory();
   const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    // setExpanded(!expanded);
-  };
-
   const { imageUrl } = userProfile || {};
 
-  const { id, title, description, status, createdAt, comments, reactions } =
-    post || {};
+  const {
+    id,
+    title,
+    categoryId,
+    description,
+    status,
+    createdAt,
+    comments,
+    reactions,
+  } = post || {};
 
-  let isLiked = false;
-  if (reactions && reactions.length) {
-    isLiked = !!reactions.find((reaction) => reaction.userId === authUserId);
-  }
 
+  const [isLiked, setIsLiked] = useState(
+    authProfile && authProfile.userFavoritePosts.find((item) => item.id === id)
+  );
+  const [totalLike, setTotalLike] = useState(reactions && reactions.length);
+
+  // update reaction of post
   const handleOnLike = () => {
-    likeReaction(id);
+    likeReaction(id, categoryId, title, description, setIsLiked, setTotalLike);
   };
+
+  useEffect(() => {
+    setIsLiked(
+      authProfile &&
+        authProfile.userFavoritePosts.find((item) => item.id === id)
+    );
+  }, [handleOnLike, setIsLiked]);
+
+  const totalComments = comments ? comments.length : 0;
 
   return (
     <Card className={classes.root}>
@@ -115,11 +130,11 @@ const PostCard = ({
           onClick={() => handleOnLike()}
         >
           <FavoriteIcon />
-          <span className="like">{reactions && reactions.length}</span>
+          <span className="like">{totalLike}</span>
         </IconButton>
         <IconButton aria-label="comment">
           <ChatIcon />
-          <span className="like">{comments && comments.length}</span>
+          <span className="like">{totalComments}</span>
         </IconButton>
         {isCurrentAuth && (
           <IconButton
@@ -130,26 +145,19 @@ const PostCard = ({
           </IconButton>
         )}
         <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
+          className={classes.expand}
           style={{ fontSize: "16px" }}
           onClick={() => post && window.open(`/view-post/${id}`, "_blank")}
-          // aria-expanded={expanded}
           aria-label="show more"
         >
-          {/* <Visibility /> */}
           SEE MORE
         </IconButton>
       </CardActions>
-      {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <ViewText textBody={description} className="viewMode" />
-        </CardContent>
-      </Collapse> */}
     </Card>
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  authProfile: state.user_profile.user_profile,
+});
 export default connect(mapStateToProps, { likeReaction })(PostCard);

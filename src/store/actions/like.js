@@ -1,11 +1,15 @@
 import logoutDispatch from "../../utils/logoutDispatch";
-import { GET_ERRORS, CLEAR_ERRORS, BASE_URL } from "./types";
+import { GET_ERRORS, CLEAR_ERRORS, BASE_URL, LIKE_REACTION } from "./types";
 import { hera } from "hera-js";
 
-export const likeReaction = (postId, setIsLiked, setIsCurrentLike) => async (
-  dispatch,
-  getState
-) => {
+export const likeReaction = (
+  postId,
+  categoryId,
+  title,
+  description,
+  setIsLiked,
+  setTotalLike
+) => async (dispatch, getState) => {
   const {
     token,
     user: { id: userId },
@@ -42,9 +46,28 @@ export const likeReaction = (postId, setIsLiked, setIsCurrentLike) => async (
     });
 
     if (data.createReaction.message.includes("Delete")) {
+      dispatch({
+        type: LIKE_REACTION,
+        isLike: false,
+        postId,
+      });
       setIsLiked(false);
-      setIsCurrentLike(-1);
+      setTotalLike(prev => prev - 1);
     } else {
+      const newPost = {
+        id: postId,
+        userId: userId,
+        categoryId,
+        title,
+        description,
+      };
+      dispatch({
+        type: LIKE_REACTION,
+        isLike: true,
+        postId,
+        newPost,
+      });
+      setTotalLike(prev => prev + 1);
       setIsLiked(true);
     }
   } else {

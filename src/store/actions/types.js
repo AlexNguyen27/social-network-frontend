@@ -56,4 +56,7 @@ export const DELETE_REPORT = "DELETE_REPORT";
 export const EDIT_REPORT = "EDIT_REPORT";
 export const ADD_REPORT = "ADD_REPORT";
 
-export const GET_SELECTED_POST = 'GET_SELECTED_POST';
+export const GET_SELECTED_POST = "GET_SELECTED_POST";
+
+export const FOLLOW_UNFOLLOW = "FOLLOW_UNFOLLOW";
+export const LIKE_REACTION = "LIKE_REACTION";

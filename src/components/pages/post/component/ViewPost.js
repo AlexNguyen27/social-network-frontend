@@ -43,15 +43,13 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.shortest,
     }),
   },
-  //   expandOpen: {
-  //     transform: "rotate(180deg)",
-  //   },
   avatar: {
     backgroundColor: red[500],
   },
 }));
 const ViewPost = ({
   postId,
+  userProfile,
   getPostById,
   selectedPost,
   likeReaction,
@@ -59,11 +57,13 @@ const ViewPost = ({
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [currentLike, setCurrentLike] = useState(0);
+  const [isLiked, setIsLiked] = useState(
+    userProfile &&
+      userProfile.userFavoritePosts.find((item) => item.id === postId)
+  );
 
   useEffect(() => {
-    getPostById(setLoading, postId, false, setCurrentLike, setIsLiked);
+    getPostById(setLoading, postId);
   }, [postId]);
 
   const handleExpandClick = () => {
@@ -73,28 +73,33 @@ const ViewPost = ({
   const {
     title,
     description,
+    categoryId,
     user: { firstName, lastName, githubUsername, imageUrl: avatar } = {},
     comments,
     reactions,
     updatedAt,
   } = selectedPost || {};
+  const [totalLike, setTotalLike] = useState(reactions && reactions.length);
+  const totalComments = comments ? comments.length : 0;
 
   const handleOnLike = () => {
-    console.log(isEdit)
-    if (!isEdit) {
-      likeReaction(selectedPost.id, setIsLiked, setCurrentLike);
-    }
+    likeReaction(
+      selectedPost.id,
+      categoryId,
+      title,
+      description,
+      setIsLiked,
+      setTotalLike
+    );
   };
 
-  const totalLikes =
-    selectedPost && selectedPost.reactions
-      ? selectedPost.reactions.length && isLiked
-        ? reactions.length
-        : reactions.length + currentLike
-      : 0;
-  const totalComments = comments && comments.length;
-
-  const isEdit = window.location.pathname.includes("edit-post");
+  useEffect(() => {
+    setIsLiked(
+      userProfile &&
+        userProfile.userFavoritePosts.find((item) => item.id === postId)
+    );
+    setTotalLike(reactions && reactions.length);
+  }, [handleOnLike]);
 
   return (
     <PageLoader loading={loading}>
@@ -153,7 +158,7 @@ const ViewPost = ({
                 onClick={() => handleOnLike()}
               >
                 <FavoriteIcon />
-                <span className="like">{totalLikes}</span>
+                <span className="like">{totalLike}</span>
               </IconButton>
               <IconButton
                 className={clsx(classes.expand, {
@@ -179,7 +184,6 @@ const ViewPost = ({
           </Grid>
         </Grid>
       </Grid>
-      
     </PageLoader>
   );
 };
@@ -187,6 +191,7 @@ const ViewPost = ({
 const mapStateToProps = (state) => ({
   categories: state.category.categories,
   selectedPost: state.post.selected_post,
+  userProfile: state.user_profile.user_profile,
 });
 export default connect(mapStateToProps, { getPostById, likeReaction })(
   ViewPost

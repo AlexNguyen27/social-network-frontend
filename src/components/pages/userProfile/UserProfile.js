@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserProfile = ({
-  users,
+  authId,
   userId,
   getUserProfile,
   getCategories,
@@ -39,15 +39,18 @@ const UserProfile = ({
       getCategories(setLoading);
     }
   }, [userId]);
+
+  const userProfile =
+    userId === authId ? user_profile.user_profile : user_profile.friend_profile;
   return (
     <div className={classes.root}>
       <PageLoader loading={loading}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <AboutCard userProfile={user_profile} />
+            <AboutCard userProfile={userProfile} />
           </Grid>
           <Grid item xs={12}>
-            <ScrollableTabs user_profile={user_profile} />
+            <ScrollableTabs user_profile={userProfile} />
           </Grid>
         </Grid>
       </PageLoader>
@@ -56,9 +59,8 @@ const UserProfile = ({
 };
 
 const mapStateToProps = (state) => ({
-  user_profile:
-    state.user_profile.user_profile || state.user_profile.friend_profile,
-  users: state.user.users,
+  user_profile: state.user_profile,
+  authId: state.auth.user.id,
   categories: state.category.categories,
 });
 export default connect(mapStateToProps, {

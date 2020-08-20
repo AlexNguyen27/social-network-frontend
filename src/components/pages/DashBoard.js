@@ -65,6 +65,7 @@ import AddPost from "./post/component/AddPost";
 import EditPost from "./post/component/EditPost";
 import UsersList from "./admin/UsersList";
 import ViewPost from "./post/component/ViewPost";
+import { getUserProfile } from "../../store/actions/user";
 
 const drawerWidth = 240;
 
@@ -194,6 +195,7 @@ const DashBoard = ({
   history,
   location,
   logoutUser,
+  getUserProfile,
   auth: { isAuthenticated, user, isAdmin, token },
   match,
 }) => {
@@ -208,6 +210,13 @@ const DashBoard = ({
   }
   const classes = useStyles();
   const theme = useTheme();
+
+  const [loading, setLoading] = useState(true);
+  // get user profile after get into dashboard
+  useEffect(() => {
+    getUserProfile(user.id, setLoading);
+  }, [])
+
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -679,4 +688,4 @@ const DashBoard = ({
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, { logoutUser })(DashBoard);
+export default connect(mapStateToProps, { logoutUser, getUserProfile })(DashBoard);

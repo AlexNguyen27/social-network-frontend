@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import Card from "@material-ui/core/Card";
@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { green, pink } from "@material-ui/core/colors";
 import Colors from "../../../constants/Colors";
+import { followToUser } from "../../../store/actions/follow";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,11 +48,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AboutCard = ({ userId, userProfile = {} }) => {
+const AboutCard = ({
+  authId,
+  userProfile = {},
+  authProfile = {},
+  followToUser,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  // todo: get user profile to check connection
+  const [connect, setConnect] = useState(
+    authProfile &&
+      authProfile.followed.find((item) => item.toUserId === userProfile.id)
+  );
+
+  useEffect(() => {
+    setConnect( authProfile &&
+      authProfile.followed.find((item) => item.toUserId === userProfile.id))
+  }, [userProfile])
+
   const { imageUrl, firstName, lastName, quote } = userProfile || {};
+
+  const handleOnFollow = () => {
+    followToUser(userProfile.id, setConnect);
+  };
+
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
@@ -75,9 +97,14 @@ const AboutCard = ({ userId, userProfile = {} }) => {
           >
             {quote}
           </Typography>
-          {userProfile.id !== userId && (
-            <Button variant="contained" color="primary" className={classes.btn}>
-              Add to connection
+          {userProfile.id !== authId && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
+              onClick={() => handleOnFollow()}
+            >
+              {!connect ? "Add to connection" : "Followed"}
             </Button>
           )}
         </CardContent>
@@ -87,7 +114,8 @@ const AboutCard = ({ userId, userProfile = {} }) => {
 };
 
 const mapStateToProps = (state) => ({
-  userId: state.auth.user.id,
+  authId: state.auth.user.id,
+  authProfile: state.user_profile.user_profile,
 });
 
-export default connect(mapStateToProps, {})(AboutCard);
+export default connect(mapStateToProps, { followToUser })(AboutCard);

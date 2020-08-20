@@ -72,13 +72,6 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
     followed,
   } = userInfo;
 
-  // const connections = followed.map((con) => ({
-  //   userId: users[con.toUserId].id,
-  //   firstName: users[con.toUserId].firstName,
-  //   lastName: users[con.toUserId].lastName,
-  //   githubUsername: users[con.toUserId].githubUsername,
-  // }));
-
   return (
     <>
       {/* ABOUT ME */}

@@ -24,7 +24,7 @@ const EditPost = ({
 }) => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getPostById(setLoading, postId, true);
+    getPostById(setLoading, postId);
   }, [postId]);
 
   // IF THERE IS PRE-DEFINED PAGE CONTENTS, INITIALIZE BLOG DATA WITH IT
