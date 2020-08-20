@@ -143,7 +143,6 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
   });
 
   if (!errors) {
-    // const usersListObj = arrayToObject(data.getUsers);
     if (authUserId === userId) {
       dispatch({
         type: GET_USER_PROFILE,

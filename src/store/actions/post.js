@@ -169,9 +169,6 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
 export const getPostById = (
   setLoading,
   id,
-  isEdit,
-  setCurrentLike,
-  setIsLike
 ) => async (dispatch, getState) => {
   const {
     token,
@@ -238,17 +235,17 @@ export const getPostById = (
       type: GET_SELECTED_POST,
       post: currentPost,
     });
-
     setLoading(false);
-    if (!isEdit) {
-      if (
-        currentPost.reactions.length &&
-        !!currentPost.reactions.find((reaction) => reaction.userId === userId)
-      ) {
-        setCurrentLike(1);
-        setIsLike(true);
-      }
-    }
+
+    // if (!isEdit) {
+    //   if (
+    //     currentPost.reactions.length &&
+    //     !!currentPost.reactions.find((reaction) => reaction.userId === userId)
+    //   ) {
+    //     setCurrentLike(1);
+    //     setIsLike(true);
+    //   }
+    // }
   } else {
     console.log(errors);
     logoutDispatch(dispatch, errors);

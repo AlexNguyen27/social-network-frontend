@@ -84,13 +84,16 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
 
   const connections =
     user_profile && user_profile.followed.length > 0
-      ? user_profile.followed.map((con) => ({
+      ? user_profile.followed.map((con) => {
+        if (con.toUserId)
+        return {
           userId: users[con.toUserId].id,
           firstName: users[con.toUserId].firstName,
           lastName: users[con.toUserId].lastName,
           githubUsername: users[con.toUserId].githubUsername,
           quote: users[con.toUserId].quote,
-        }))
+        }
+      })
       : [];
 
   const favoritePosts =
@@ -100,8 +103,8 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
           description: item.description,
           status: item.status,
           createdAt: item.createdAt,
-          comments: posts[item.id] && posts[item.id].comments || [],
-          reactions: posts[item.id] && posts[item.id].reactions || [],
+          comments: (posts[item.id] && posts[item.id].comments) || [],
+          reactions: (posts[item.id] && posts[item.id].reactions) || [],
           id: item.id,
         }))
       : [];
@@ -130,18 +133,6 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
         <div style={{ margin: "0px -24px" }}>
           <Grid container spacing={3} className={classes.containRoot}>
             <Grid item xs={7}>
-              {(!user_profile && !user_profile.posts) ||
-                (!user_profile.posts.length && (
-                  <Typography
-                    variant="h6"
-                    className="text-center"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {" "}
-                    NO POSTS, MAY BE YOU SHOULD ADD SOME :D
-                  </Typography>
-                ))}
               {isCurrentAuth && (
                 <Button
                   variant="contained"
@@ -154,6 +145,19 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
                   Add new post
                 </Button>
               )}
+              {(!user_profile && !user_profile.posts) ||
+                (!user_profile.posts.length && (
+                  <Typography
+                    variant="h6"
+                    className="text-center"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {" "}
+                    NO POSTS, MAY BE YOU SHOULD ADD SOME :D
+                  </Typography>
+                ))}
+
               {user_profile.posts &&
                 user_profile.posts.map((item) => (
                   <>
