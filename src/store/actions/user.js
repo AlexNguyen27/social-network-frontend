@@ -111,6 +111,7 @@ export const getUserProfile = (userId, setLoading) => async (
                 title,
                 description
                 status
+                userId
                 categoryId
                 createdAt
                 updatedAt

@@ -69,3 +69,13 @@ button:focus {
 .MuiBox-root .MuiBox-root-36 {
   /* padding: 24px 0px !important; */
 }
+
+.MuiTreeItem-iconContainer {
+  width: 0 !important;
+}
+
+.MuiTreeItem-label  {
+  padding: 0 0 20px 0 !important;
+  font-size: 20px !important;
+  background-color: none !important;
+}

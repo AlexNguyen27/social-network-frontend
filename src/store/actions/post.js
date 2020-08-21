@@ -209,6 +209,12 @@ export const getPostById = (
                         id
                         comment
                         userId
+                        user {
+                          username
+                          firstName
+                          lastName
+                          imageUrl
+                        }
                         parentId
                         createdAt
                         updatedAt
