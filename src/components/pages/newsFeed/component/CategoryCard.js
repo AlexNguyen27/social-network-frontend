@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +26,13 @@ const data = [
   { name: "Funny" },
   { name: "Photography" },
 ];
-const CatergoryCard = () => {
+const CatergoryCard = ({ categories }) => {
   const classes = useStyles();
+
+  const categoryArr =
+    categories && Object.keys(categories).map((cateId) => categories[cateId]);
+
+  console.log(categoryArr);
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>
@@ -37,14 +43,19 @@ const CatergoryCard = () => {
         className={classes.root}
         aria-label="mailbox folders"
       >
-        {data.map((item) => (
-          <ListItem button divider>
-            <ListItemText>{item.name}</ListItemText>
-          </ListItem>
-        ))}
+        {categoryArr &&
+          categoryArr.length &&
+          categoryArr.map((item) => (
+            <ListItem button divider>
+              <ListItemText>{item.name}</ListItemText>
+            </ListItem>
+          ))}
       </List>
     </>
   );
 };
 
-export default CatergoryCard;
+const mapStateToProps = (state) => ({
+  categories: state.category.categories,
+});
+export default connect(mapStateToProps, {})(CatergoryCard);

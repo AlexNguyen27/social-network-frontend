@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = ({ getPosts, getCategories }) => {
+const NewsFeed = ({ getPosts, getCategories, categories }) => {
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getPosts();
+    getPosts(setLoading);
     getCategories(setLoading);
   }, []);
 
@@ -44,7 +44,7 @@ const NewsFeed = ({ getPosts, getCategories }) => {
                 className={classes.containRoot}
               >
                 <Grid item xs={4}>
-                  <SubNewsFeed />
+                  <SubNewsFeed/>
                 </Grid>
                 <Grid item xs={8}>
                   {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -62,5 +62,7 @@ const NewsFeed = ({ getPosts, getCategories }) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  categories: state.category.categories,
+});
 export default connect(mapStateToProps, { getPosts, getCategories })(NewsFeed);

@@ -386,7 +386,7 @@ const DashBoard = ({
             <AddPost />
           </>
         );
-      case "/friends":
+      case "/people":
         return (
           <>
             <Users />
@@ -448,10 +448,10 @@ const DashBoard = ({
       title: "News Feed",
     },
     {
-      key: "friends",
+      key: "people",
       icon: <PeopleAltIcon />,
-      to: "/friends",
-      title: "Friends",
+      to: "/people",
+      title: "People",
     },
     {
       key: "userProfile",
@@ -523,7 +523,7 @@ const DashBoard = ({
   };
 
   const setSearchText = (search) => {
-    if (match.path === "/friends") {
+    if (match.path === "/people") {
       history.push({
         pathname: `${window.location.pathname}`,
         search: `?search=${search}`,
@@ -561,7 +561,7 @@ const DashBoard = ({
           <div
             className={classes.search}
             style={{
-              display: match.path === "/friends" ? "block" : "none",
+              display: match.path === "/people" ? "block" : "none",
             }}
           >
             <div className={classes.searchIcon}>

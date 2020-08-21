@@ -12,7 +12,7 @@ import Colors from "../../../../constants/Colors";
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "20px",
-    backgroundColor: Colors.light_pink,
+    backgroundColor: Colors.light_purple,
   },
   details: {
     display: "flex",
@@ -74,7 +74,7 @@ export default function UserCard({ userInfo }) {
           </Typography>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={() => history.push(`/user-profile/${userId}`)}
             className={classes.btn}
           >

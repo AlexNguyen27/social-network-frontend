@@ -76,8 +76,14 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
 };
 
 // GET majors data
-export const getUserProfile = (userId, setLoading) => async (dispatch, getState) => {
-  const { token, user: { id: authUserId } } = getState().auth;
+export const getUserProfile = (userId, setLoading) => async (
+  dispatch,
+  getState
+) => {
+  const {
+    token,
+    user: { id: authUserId },
+  } = getState().auth;
 
   const { data, errors } = await hera({
     options: {
@@ -133,13 +139,24 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
                 categoryId
                 title
                 description
+                reactions {
+                  userId
+                  reactionTypeId
+                  postId
+                }
+                comments {
+                  id
+                  comment
+                  userId
+                  parentId
+                }
               }
             }
           }
         `,
-        variables: {
-          userId
-        },
+    variables: {
+      userId,
+    },
   });
 
   if (!errors) {
@@ -147,12 +164,12 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
       dispatch({
         type: GET_USER_PROFILE,
         user_profile: data.getUserProfile,
-      }); 
+      });
     } else {
       dispatch({
         type: GET_FRIEND_PROFILE,
         friend_profile: data.getUserProfile,
-      }); 
+      });
     }
 
     setLoading(false);
@@ -166,43 +183,89 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
   }
 };
 
-export const updatePassword = (setLoading, password) => async (
-  dispatch,
-  getState
-) => {
-  // password includes newPassword, currentPassword, confirmPassword
-  // const { user, isUser } = getState().auth;
-  // try {
-  //   const res = await axios.put(
-  //     `api/users/change_password/${user.id}`,
-  //     {
-  //       currentPassword: password.currentPassword,
-  //       newPassword: password.newPassword,
-  //     },
-  //     {
-  //       headers: { Authorization: localStorage.token },
-  //     }
-  //   );
-  //   dispatch({
-  //     type: CLEAR_ERRORS,
-  //   });
-  //   setLoading(false);
-  //   Swal.fire({
-  //     // using sweetalert2
-  //     position: "center",
-  //     type: "success",
-  //     title: "Your work has been saved",
-  //     showConfirmButton: false,
-  //     timer: 1500,
-  //   });
-  // } catch (error) {
-  //   logoutDispatch(dispatch, error);
-  //   dispatch({
-  //     type: GET_ERRORS,
-  //     errors: errors[0].message,
-  //   });
-  //   setLoading(false);
-  // }
+export const updatePassword = (
+  setLoading,
+  currentPassword,
+  newPassword,
+  confirmPassword,
+  userId
+) => async (dispatch, getState) => {
+  const state = getState();
+  const {
+    auth: {
+      token,
+      user: { id: authId },
+    },
+  } = state;
+
+  const { data, errors } = await hera({
+    options: {
+      url: BASE_URL,
+      headers: {
+        token,
+        "Content-Type": "application/json",
+      },
+    },
+    query: `
+        mutation {
+          changePassword(
+            ${userId ? `userId: ${userId}` : ""} 
+            currentPassword: $currentPassword, 
+            newPassword: $newPassword, 
+            confirmPassword: $confirmPassword
+          ) {
+            status
+            message
+          }
+        }
+      `,
+    variables: {
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    },
+  });
+
+  if (!errors) {
+    dispatch({
+      type: CLEAR_ERRORS,
+    });
+
+    setLoading(false);
+    Swal.fire({
+      position: "center",
+      type: "success",
+      title: "Your work has been saved",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } else {
+    setLoading(false);
+
+    const { message } = errors[0];
+
+    const error = {};
+    if (message.includes("Current password")) {
+      error.currentPassword = message;
+    } else if (message.includes("Password")) {
+      error.newPassword = message;
+    } else if (message.includes("Confirm password")) {
+      error.confirmPassword = message;
+    }else {
+      Swal.fire({
+        position: "center",
+        type: "Error",
+        title: message,
+        showConfirmButton: true,
+      });
+    }
+
+    logoutDispatch(dispatch, errors);
+    dispatch({
+      type: GET_ERRORS,
+      errors: { ...error },
+    });
+  }
 };
 
 export const editUserInfo = (setLoading, userData) => async (
@@ -344,4 +407,31 @@ export const deleteUser = (setLoading, userId) => async (
       errors: errors[0].message,
     });
   }
+};
+
+// TODO: NOT WOKRING YET
+export const getGithubProfile = (setLoading) => async (dispatch) => {
+  // try {
+  //   const allCoursesArray = await axios.get(
+  //     `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`,
+  //     {
+  //       headers: {
+  //         "user-agent": "node.js",
+  //         Authorization: `token ${config.get("githubToken")}`,
+  //       },
+  //     }
+  //   );
+  //   const allCoursesToObject = arrayToObject(allCoursesArray.data.data);
+  //   dispatch({
+  //     type: GET_COURSES,
+  //     all_courses: allCoursesToObject,
+  //   });
+  //   setLoading(false);
+  // } catch (error) {
+  //   logoutUser(dispatch, error);
+  //   dispatch({
+  //     type: GET_ERRORS,
+  //     errors: error.response.data,
+  //   });
+  // }
 };

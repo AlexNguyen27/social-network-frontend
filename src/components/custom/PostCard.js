@@ -16,13 +16,13 @@ import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Tooltip from "@material-ui/core/Tooltip";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ChatIcon from "@material-ui/icons/Chat";
 import Colors from "../../constants/Colors";
 import ViewText from "./ViewText";
 import Visibility from "@material-ui/icons/Visibility";
+import LockIcon from "@material-ui/icons/Lock";
 import { truncateMultilineString } from "../../utils/formatString";
 import { likeReaction } from "../../store/actions/like";
 
@@ -74,7 +74,6 @@ const PostCard = ({
     reactions,
   } = post || {};
 
-
   const [isLiked, setIsLiked] = useState(
     authProfile && authProfile.userFavoritePosts.find((item) => item.id === id)
   );
@@ -94,6 +93,7 @@ const PostCard = ({
 
   const totalComments = comments ? comments.length : 0;
 
+  const isPrivate = post && status === "private";
   return (
     <Card className={classes.root}>
       <CardHeader
@@ -105,13 +105,23 @@ const PostCard = ({
           ></Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
+          <>
+            {isPrivate && (
+              <Tooltip title="Private">
+                <IconButton aria-label="delete">
+                  <LockIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          </>
         }
         title={title}
         subheader={moment(createdAt).format("LLLL")}
       />
+
       {/* <CardMedia
         className={classes.media}
         image={"https://i.ytimg.com/vi/ddxsa3_hv-w/maxresdefault.jpg"}
