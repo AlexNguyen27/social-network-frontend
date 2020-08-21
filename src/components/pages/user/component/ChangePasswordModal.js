@@ -67,7 +67,10 @@ const ChangePasswordModal = ({
     });
 
     if (newPassword.trim() !== confirmPassword.trim()) {
-      error.confirmPassword = "Wrong confirm password!";
+      error.confirmPassword = "Confirm password did not match!!";
+    }
+    if (newPassword.trim().length < 6 || newPassword.trim().length > 42) {
+      error.newPassword = 'Password must be more than 6 and 42 characters';
     }
 
     dispatch({
@@ -77,7 +80,8 @@ const ChangePasswordModal = ({
 
     if (JSON.stringify(error) === "{}") {
       setLoading(true);
-      updatePassword(setLoading, password);
+      const { currentPassword, newPassword, confirmPassword } = password;
+      updatePassword(setLoading, currentPassword, newPassword, confirmPassword);
     }
   };
 
@@ -113,7 +117,7 @@ const ChangePasswordModal = ({
                   value={newPassword}
                   fullWidth
                   onChange={onChange}
-                  error={errors.message || errors.newPassword}
+                  error={errors.newPassword}
                 />
               </Col>
               <Col xs="12" className="mt-4">
