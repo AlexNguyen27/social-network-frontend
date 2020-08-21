@@ -8,6 +8,7 @@ import { Grid } from "@material-ui/core";
 import DropdownV2 from "../../../custom/DropdownV2";
 import { addNewPost } from "../../../../store/actions/post";
 import { getCategories } from "../../../../store/actions/category";
+import { POST_STATUS_ARRAY } from "../../../../utils/common";
 
 const blogData1 = {
   textBody: "body",
@@ -31,7 +32,7 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
   // status: 0: private, 1: public
   const [selectedDropdownData, setSelectedDropdownData] = useState({
     selectedCategoryIndex: categoryArr[0].id,
-    selectedStatusIndex: 0,
+    selectedStatusIndex: 'public',
   });
 
   const { selectedCategoryIndex, selectedStatusIndex } = selectedDropdownData;
@@ -68,14 +69,13 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
   };
 
   const handleOnSubmit = () => {
-    console.log("blogData", blogData);
-    console.log(selectedDropdownData);
-    const status = selectedStatusIndex === 0 ? "private" : "public";
+    // console.log("blogData", blogData);
+    // console.log(selectedDropdownData);
     addNewPost({
       bodyText: textBody,
       title: pageName,
       categoryId: selectedCategoryIndex,
-      status,
+      status: selectedStatusIndex,
     });
   };
 
@@ -106,9 +106,9 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
             fullWidth
             label="Status"
             value={selectedStatusIndex.toString()}
-            options={status || []}
-            valueBasedOnProperty="id"
-            displayProperty="name"
+            options={POST_STATUS_ARRAY || []}
+            valueBasedOnProperty="name"
+            displayProperty="value"
             onChange={(statusIndex) => onSelectStatus(statusIndex)}
           />
         </Grid>

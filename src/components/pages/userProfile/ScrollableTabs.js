@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
+const ScrollableTabs = ({ users, user_profile, authUserId, posts, role }) => {
   const classes = useStyles();
   const history = useHistory();
   const [value, setValue] = React.useState(0);
@@ -85,33 +85,33 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
   const connections =
     user_profile && user_profile.followed.length > 0
       ? user_profile.followed.map((con) => {
-        if (con.toUserId)
-        return {
-          userId: users[con.toUserId].id,
-          firstName: users[con.toUserId].firstName,
-          lastName: users[con.toUserId].lastName,
-          githubUsername: users[con.toUserId].githubUsername,
-          quote: users[con.toUserId].quote,
-        }
-      })
+          if (con.toUserId)
+            return {
+              userId: users[con.toUserId].id,
+              firstName: users[con.toUserId].firstName,
+              lastName: users[con.toUserId].lastName,
+              githubUsername: users[con.toUserId].githubUsername,
+              quote: users[con.toUserId].quote,
+            };
+        })
       : [];
 
-  const favoritePosts =
-    user_profile && user_profile.userFavoritePosts.length > 0
-      ? user_profile.userFavoritePosts.map((item) => ({
-          title: item.title,
-          description: item.description,
-          status: item.status,
-          createdAt: item.createdAt,
-          comments: (posts[item.id] && posts[item.id].comments) || [],
-          reactions: (posts[item.id] && posts[item.id].reactions) || [],
-          id: item.id,
-        }))
-      : [];
+  // const favoritePosts =
+  //   user_profile && user_profile.userFavoritePosts.length > 0
+  //     ? user_profile.userFavoritePosts.map((item) => ({
+  //         title: item.title,
+  //         description: item.description,
+  //         status: item.status,
+  //         createdAt: item.createdAt,
+  //         comments: (posts[item.id] && posts[item.id].comments) || [],
+  //         reactions: (posts[item.id] && posts[item.id].reactions) || [],
+  //         id: item.id,
+  //       }))
+  //     : [];
   // const favoritePosts = [];
   // console.log(favoritePosts);
 
-  const isCurrentAuth = authUserId === user_profile.id;
+  const isCurrentAuth = user_profile && authUserId === user_profile.id;
 
   return (
     <div className={classes.root}>
@@ -166,7 +166,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
                         userProfile={user_profile}
                         post={item}
                         authUserId={authUserId}
-                        isCurrentAuth={isCurrentAuth}
+                        isCurrentAuth={isCurrentAuth || role ===  "admin"}
                       />
                     </Grid>
                   </>
@@ -204,7 +204,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
             </Typography>
           ))}
         <Favorites
-          favoritePosts={favoritePosts}
+          favoritePosts={user_profile && user_profile.userFavoritePosts || []}
           userProfile={user_profile}
           authUserId={authUserId}
         />
@@ -219,6 +219,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts }) => {
 const mapStateToProps = (state) => ({
   users: state.user.users,
   authUserId: state.auth.user.id,
+  role: state.auth.user.role,
   posts: state.post.posts,
 });
 

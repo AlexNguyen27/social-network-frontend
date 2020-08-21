@@ -133,6 +133,17 @@ export const getUserProfile = (userId, setLoading) => async (dispatch, getState)
                 categoryId
                 title
                 description
+                reactions {
+                  userId
+                  reactionTypeId
+                  postId
+                }
+                comments {
+                  id
+                  comment
+                  userId
+                  parentId
+                }
               }
             }
           }
