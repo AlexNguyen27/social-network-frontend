@@ -145,10 +145,7 @@ const CategoriesList = ({
           editable={{
             onRowAdd: (newData) =>
               new Promise((resolve, reject) => {
-
-                console.log(reject)
                 setTimeout(() => {
-                  console.log(newData);
                   const { name, status } = newData;
                   setLoading(true);
                   addCategory(setLoading, name, status);

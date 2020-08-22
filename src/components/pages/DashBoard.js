@@ -389,7 +389,7 @@ const DashBoard = ({
       case "/people":
         return (
           <>
-            <Users />
+            <Users location={location}/>
           </>
         );
       case "/user-info":

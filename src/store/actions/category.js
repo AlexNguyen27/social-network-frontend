@@ -48,7 +48,6 @@ export const getCategories = (setLoading) => async (dispatch, getState) => {
     });
     setLoading(false);
   } else {
-    console.log(errors);
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,

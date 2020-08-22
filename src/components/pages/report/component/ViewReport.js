@@ -28,7 +28,6 @@ const ViewReportModal = ({ modal, setModal, reportData }) => {
     clearErrors();
   };
 
-  console.log(reportData);
   const {
     reason,
     description,

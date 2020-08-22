@@ -67,8 +67,6 @@ export const addReport = (
   reportedBy,
   postId,
   reason,
-  description,
-  status
 ) => async (dispatch, getState) => {
   const { token } = getState().auth;
 
@@ -87,14 +85,11 @@ export const addReport = (
                 reportedBy: $reportedBy, 
                 postId: $postId, 
                 reason: $reason, 
-                description: $description, 
-                status: $status) 
-            {
+                status: "waiting_for_approve"
+            ) {
                 reportedBy,
                 postId,
                 reason
-                imageUrl
-                description
                 status
             }
         }
@@ -103,12 +98,8 @@ export const addReport = (
       reportedBy,
       postId,
       reason,
-      description,
-      status,
     },
   });
-
-  console.log(data);
 
   if (!errors) {
     dispatch({
@@ -123,19 +114,31 @@ export const addReport = (
     Swal.fire({
       position: "center",
       type: "success",
-      title: "Added successfully!",
+      title: "Reported successfully!",
       showConfirmButton: false,
       timer: 1500,
     });
   } else {
-    console.log(errors);
+    const {
+      extensions: { payload = {} },
+    } = errors[0];
+    setLoading(false)
+    if (payload && payload.reportedBy && payload.postId) {
+      Swal.fire({
+        position: "center",
+        type: "Warning",
+        title: "You already reports this post",
+        showConfirmButton: true,
+      });
+    } else {
+      Swal.fire({
+        position: "center",
+        type: "Warning",
+        title: errors[0].message,
+        showConfirmButton: true,
+      });
+    }
     logoutDispatch(dispatch, errors);
-    Swal.fire({
-      position: "center",
-      type: "Warning",
-      title: errors[0].message,
-      showConfirmButton: true,
-    });
     dispatch({
       type: GET_ERRORS,
       errors: errors[0].message,

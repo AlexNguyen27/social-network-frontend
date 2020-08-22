@@ -25,7 +25,10 @@ const EditPost = ({
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getPostById(setLoading, postId);
-  }, [postId]);
+    setBlogData(
+      { title: selectedPost.title, description: selectedPost.description } || {}
+    );
+  }, [selectedPost.id]);
 
   // IF THERE IS PRE-DEFINED PAGE CONTENTS, INITIALIZE BLOG DATA WITH IT
   const [blogData, setBlogData] = useState(
@@ -38,8 +41,8 @@ const EditPost = ({
 
   // status: 0: private, 1: public
   const [selectedDropdownData, setSelectedDropdownData] = useState({
-    selectedCategoryIndex: selectedPost && selectedPost.categoryId || '',
-    selectedStatusValue: selectedPost && selectedPost.status || '',
+    selectedCategoryIndex: (selectedPost && selectedPost.categoryId) || "",
+    selectedStatusValue: (selectedPost && selectedPost.status) || "",
   });
 
   const { selectedCategoryIndex, selectedStatusValue } = selectedDropdownData;

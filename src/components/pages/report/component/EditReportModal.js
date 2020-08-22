@@ -80,7 +80,6 @@ const EditReportModal = ({
   };
 
   const onSelectReportStatus = (selectedReport) => {
-    console.log(selectedReport);
     setSelectedStatusValue(selectedReport);
   };
 

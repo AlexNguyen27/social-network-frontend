@@ -176,10 +176,21 @@ const ViewPost = ({
         </Grid>
         <Grid item xs={12}>
           <Grid container>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <CardContent>
-                <CommentsList />
-              </CardContent>
+            <Collapse
+              in={expanded}
+              timeout="auto"
+              style={{ width: "100%" }}
+              unmountOnExit
+            >
+              <Typography
+                variant="h6"
+                style={{ color: "#888", margin: "10px" }}
+              >
+                Comments
+              </Typography>
+              {/* <CardContent> */}
+              <CommentsList />
+              {/* </CardContent> */}
             </Collapse>
           </Grid>
         </Grid>

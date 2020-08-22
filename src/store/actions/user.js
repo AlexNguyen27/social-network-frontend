@@ -111,6 +111,11 @@ export const getUserProfile = (userId, setLoading) => async (
                 title,
                 description
                 status
+                userId
+                user {
+                  id
+                  imageUrl
+                }
                 categoryId
                 createdAt
                 updatedAt
@@ -138,6 +143,10 @@ export const getUserProfile = (userId, setLoading) => async (
                 userId
                 categoryId
                 title
+                user {
+                  id
+                  imageUrl
+                }
                 description
                 reactions {
                   userId

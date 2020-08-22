@@ -54,6 +54,7 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
                       username
                       firstName
                       lastName
+                      imageUrl
                     }  
                     category {
                       id 
@@ -209,6 +210,12 @@ export const getPostById = (
                         id
                         comment
                         userId
+                        user {
+                          username
+                          firstName
+                          lastName
+                          imageUrl
+                        }
                         parentId
                         createdAt
                         updatedAt

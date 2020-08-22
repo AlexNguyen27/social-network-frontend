@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import PostCard from "../../custom/PostCard";
 import SubNewsFeed from "./component/SubNewsFeed";
 import { getPosts } from "../../../store/actions/post";
+import { getUsers } from "../../../store/actions/user";
 import { getCategories } from "../../../store/actions/category";
 import PageLoader from "../../custom/PageLoader";
 
@@ -21,20 +22,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = ({ getPosts, getCategories, categories }) => {
+const NewsFeed = ({ getPosts, role, getCategories, authUserId, getUsers, posts }) => {
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getPosts(setLoading);
-    getCategories(setLoading);
+    getPosts(() => {});
+    getCategories(() => {});
+    getUsers(setLoading);
   }, []);
+
+  const postsArr = posts && Object.keys(posts).map(key => posts[key]);
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <PageLoader loading={loading}>
+      <PageLoader loading={loading}>
+        <Grid container spacing={3}>
           <Grid item xs={12}>
             <div style={{ margin: "0px " }}>
               <Grid
@@ -44,25 +48,36 @@ const NewsFeed = ({ getPosts, getCategories, categories }) => {
                 className={classes.containRoot}
               >
                 <Grid item xs={4}>
-                  <SubNewsFeed/>
+                  <SubNewsFeed />
                 </Grid>
                 <Grid item xs={8}>
-                  {[1, 2, 3, 4, 5, 6].map((item) => (
-                    <Grid item style={{ marginBottom: "20px" }}>
-                      <PostCard />
-                    </Grid>
-                  ))}
+                  {postsArr &&
+                    postsArr.length > 0 &&
+                    postsArr.map((item) => (
+                      <Grid item style={{ marginBottom: "20px" }}>
+                        <PostCard
+                          post={item}
+                          authUserId={authUserId}
+                          isCurrentAuth={item.user.id === authUserId || role === "admin"}
+                        />
+                      </Grid>
+                    ))}
                 </Grid>
               </Grid>
             </div>
           </Grid>
-        </PageLoader>
-      </Grid>
+        </Grid>
+      </PageLoader>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
   categories: state.category.categories,
+  authUserId: state.auth.user.id,
+  posts: state.post.posts,
+  role: state.auth.user.role
 });
-export default connect(mapStateToProps, { getPosts, getCategories })(NewsFeed);
+export default connect(mapStateToProps, { getPosts, getCategories, getUsers })(
+  NewsFeed
+);

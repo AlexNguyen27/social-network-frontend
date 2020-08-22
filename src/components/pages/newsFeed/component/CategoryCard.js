@@ -32,7 +32,6 @@ const CatergoryCard = ({ categories }) => {
   const categoryArr =
     categories && Object.keys(categories).map((cateId) => categories[cateId]);
 
-  console.log(categoryArr);
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>

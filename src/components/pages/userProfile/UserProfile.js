@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AboutCard from "./AboutCard";
 import { connect } from "react-redux";
-import PostCard from "../../custom/PostCard";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import ScrollableTabs from "./ScrollableTabs";
