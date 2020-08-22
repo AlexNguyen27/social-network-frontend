@@ -4,6 +4,7 @@ import {
   GET_FRIEND_PROFILE,
   FOLLOW_UNFOLLOW,
   LIKE_REACTION,
+  DELETE_POST,
 } from "../actions/types";
 
 const initialState = {};
@@ -21,6 +22,16 @@ export default function (state = initialState, action) {
         ...state,
         friend_profile,
       };
+    case DELETE_POST: 
+      const { selectedId } = action;
+      const newPosts = state.user_profile.posts.filter(item => item.id !== selectedId);
+      return {
+        ...state,
+        user_profile: {
+          ...state.user_profile,
+          posts: newPosts
+        }
+      }
     case FOLLOW_UNFOLLOW:
       const { followed } = state.user_profile;
       const { isFollow, toUserId } = action;

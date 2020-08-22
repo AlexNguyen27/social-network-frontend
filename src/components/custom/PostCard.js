@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
+import Swal from 'sweetalert2';
 import moment from "moment";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -11,6 +12,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
+import Delete from "@material-ui/icons/Delete";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -24,6 +26,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import { truncateMultilineString } from "../../utils/formatString";
 import { likeReaction } from "../../store/actions/like";
 import ReportModal from "../pages/post/component/ReportModal";
+import { deletePost } from "../../store/actions/post";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = ({
   liked,
+  deletePost,
   post,
   likeReaction,
   isCurrentAuth,
@@ -64,7 +68,7 @@ const PostCard = ({
   const isAuth = post && post.userId === authId;
 
   const handleClick = (event) => {
-    if(!isAuth) {
+    if (!isAuth) {
       setAnchorEl(event.currentTarget);
     }
   };
@@ -81,7 +85,7 @@ const PostCard = ({
     status,
     createdAt,
     comments,
-    user: { imageUrl  = ""},
+    user: { imageUrl = "" },
     reactions,
   } = post || {};
 
@@ -105,6 +109,24 @@ const PostCard = ({
   const handleOnReportPost = () => {
     setOpenReportModal(true);
     setAnchorEl(null);
+  };
+
+  const [loading, setLoading] = useState(false);
+  const handleOnDelete = (postId) => {
+    Swal.fire({
+      title: `Are you sure to delete ?`,
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        setLoading(true);
+        deletePost(setLoading, postId);
+      }
+    });
   };
 
   const totalComments = comments ? comments.length : 0;
@@ -179,15 +201,23 @@ const PostCard = ({
             <span className="like">{totalComments}</span>
           </IconButton>
           {isCurrentAuth && (
-            <IconButton
-              aria-label="edit"
-              onClick={
-                () => post && history.push(`/edit-post/${id}`)
-                // window.open(`/edit-post/${id}`, "_blank")
-              }
-            >
-              <EditIcon />
-            </IconButton>
+            <>
+              <IconButton
+                aria-label="edit"
+                onClick={
+                  () => post && history.push(`/edit-post/${id}`)
+                  // window.open(`/edit-post/${id}`, "_blank")
+                }
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                aria-label="detete"
+                onClick={() => handleOnDelete(id)}
+              >
+                <Delete />
+              </IconButton>
+            </>
           )}
           <IconButton
             className={classes.expand}
@@ -212,4 +242,4 @@ const mapStateToProps = (state) => ({
   authProfile: state.user_profile.user_profile,
   authId: state.auth.user.id,
 });
-export default connect(mapStateToProps, { likeReaction })(PostCard);
+export default connect(mapStateToProps, { likeReaction, deletePost })(PostCard);
