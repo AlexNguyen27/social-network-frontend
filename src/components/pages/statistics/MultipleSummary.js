@@ -52,8 +52,6 @@ const MultipleSummary = ({ name, like }) => {
   //   "June",
   //   "July",
   // ];
-  console.log(name);
-  console.log(like);
   const options = name;
   // let optionLabels = options.map((option) => option.text);
   // const totalAnswers = [65, 59, 80, 81, 56, 55, 40];

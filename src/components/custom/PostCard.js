@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = ({
   liked,
-  userProfile,
   post,
   likeReaction,
   isCurrentAuth,
@@ -63,7 +62,6 @@ const PostCard = ({
 
   const [openReportModal, setOpenReportModal] = useState(false);
   const isAuth = post && post.userId === authId;
-  console.log(post)
 
   const handleClick = (event) => {
     if(!isAuth) {
@@ -75,8 +73,6 @@ const PostCard = ({
     setAnchorEl(null);
   };
 
-  const { imageUrl } = userProfile || {};
-
   const {
     id,
     title,
@@ -85,6 +81,7 @@ const PostCard = ({
     status,
     createdAt,
     comments,
+    user: { imageUrl  = ""},
     reactions,
   } = post || {};
 

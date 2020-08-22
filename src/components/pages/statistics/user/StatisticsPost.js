@@ -7,7 +7,6 @@ const StatisticsPost = ({ users, userId, role ,userProfile}) => {
   const postName = userProfile && (role === "user" ? userProfile.posts : users[userId].posts).map((post) => post.title);
   const postReactionLike = userProfile && (role === "user" ? userProfile.posts : users[userId].posts).map((post) => post.reactions.length);
 
-  console.log(postName)
   return (
     <>
       <h4 className="mt-4">Statistics User Post</h4>

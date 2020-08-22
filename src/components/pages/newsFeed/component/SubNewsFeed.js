@@ -8,7 +8,7 @@ const SubNewsFeed = () => {
     <>
       <CatergoryCard />
       <PopularArticles />
-      <Archives />
+      {/* <Archives /> */}
     </>
   );
 };

@@ -53,7 +53,6 @@ export const addComment = (setLoading, comment, postId, parentId = null ) => asy
 
   
   } else {
-    console.log(errors);
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,

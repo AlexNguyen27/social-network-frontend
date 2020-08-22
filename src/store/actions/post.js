@@ -54,6 +54,7 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
                       username
                       firstName
                       lastName
+                      imageUrl
                     }  
                     category {
                       id 

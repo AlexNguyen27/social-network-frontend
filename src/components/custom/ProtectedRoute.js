@@ -11,13 +11,16 @@ const ProtectedRoute = ({
   path,
   ...rest
 }) => {
-  const teacherUnauthorized = ["/users-list", "/edit-user/:userId"];
+  const teacherUnauthorized = [
+    "/users-list",
+    "/edit-user/:userId",
+    "/posts-list",
+    "/reports-list",
+    "/categories-list",
+  ];
   const page = (props) => {
     if (isAuthenticated) {
-      if (
-        (isAdmin) ||
-        (isUser && !teacherUnauthorized.includes(path))
-      ) {
+      if (isAdmin || (isUser && !teacherUnauthorized.includes(path))) {
         return <Component {...props} dispatch={dispatch} />;
       }
 

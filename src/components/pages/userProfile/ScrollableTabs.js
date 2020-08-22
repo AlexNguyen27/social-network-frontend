@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ScrollableTabs = ({ users, user_profile, authUserId, posts, role }) => {
+const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
   const classes = useStyles();
   const history = useHistory();
   const [value, setValue] = React.useState(0);
@@ -163,7 +163,6 @@ const ScrollableTabs = ({ users, user_profile, authUserId, posts, role }) => {
                   <>
                     <Grid item style={{ marginBottom: "20px" }} key={item.id}>
                       <PostCard
-                        userProfile={user_profile}
                         post={item}
                         authUserId={authUserId}
                         isCurrentAuth={isCurrentAuth || role ===  "admin"}
