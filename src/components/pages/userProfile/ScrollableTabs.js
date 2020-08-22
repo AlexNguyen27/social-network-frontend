@@ -146,7 +146,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
                 </Button>
               )}
               {(!user_profile && !user_profile.posts) ||
-                (!user_profile.posts.length && (
+                (user_profile.posts && !user_profile.posts.length && (
                   <Typography
                     variant="h6"
                     className="text-center"

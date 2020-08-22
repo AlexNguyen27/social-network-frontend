@@ -1,5 +1,11 @@
 import logoutDispatch from "../../utils/logoutDispatch";
-import { GET_ERRORS, CLEAR_ERRORS, BASE_URL, LIKE_REACTION } from "./types";
+import {
+  GET_ERRORS,
+  CLEAR_ERRORS,
+  BASE_URL,
+  LIKE_REACTION,
+  EDIT_POST,
+} from "./types";
 import { hera } from "hera-js";
 
 export const likeReaction = (
@@ -10,10 +16,11 @@ export const likeReaction = (
   setIsLiked,
   setTotalLike
 ) => async (dispatch, getState) => {
+  const state = getState();
   const {
     token,
     user: { id: userId },
-  } = getState().auth;
+  } = state.auth;
   const { data, errors } = await hera({
     options: {
       url: BASE_URL,
@@ -45,6 +52,11 @@ export const likeReaction = (
       type: CLEAR_ERRORS,
     });
 
+    const { posts } = state.post;
+    // GET REACTION TYPE LIKE
+    const { reactionTypeId } =
+      posts[postId].reactions.length > 0 && posts[postId].reactions[0];
+
     if (data.createReaction.message.includes("Delete")) {
       dispatch({
         type: LIKE_REACTION,
@@ -52,7 +64,19 @@ export const likeReaction = (
         postId,
       });
       setIsLiked(false);
-      setTotalLike(prev => prev - 1);
+      setTotalLike((prev) => prev - 1);
+
+      const { reactions } = posts[postId];
+      const deletedReactionArr = reactions.filter(
+        (item) => item.userId !== userId && item.postId !== postId
+      );
+      dispatch({
+        type: EDIT_POST,
+        post: {
+          ...posts[postId],
+          reactions: deletedReactionArr || [],
+        },
+      });
     } else {
       const newPost = {
         id: postId,
@@ -61,14 +85,28 @@ export const likeReaction = (
         title,
         description,
       };
+      // FOR FAVORITE TABSS
       dispatch({
         type: LIKE_REACTION,
         isLike: true,
         postId,
         newPost,
       });
-      setTotalLike(prev => prev + 1);
+      setTotalLike((prev) => prev + 1);
       setIsLiked(true);
+
+      const newReaction = {
+        postId,
+        userId,
+        reactionTypeId,
+      };
+      dispatch({
+        type: EDIT_POST,
+        post: {
+          ...posts[postId],
+          reactions: [...posts[postId].reactions, newReaction],
+        },
+      });
     }
   } else {
     console.log(errors);

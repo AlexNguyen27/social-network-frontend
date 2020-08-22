@@ -4,12 +4,6 @@ import { useHistory } from "react-router-dom";
 import moment from "moment";
 import { connect, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
-import {
-  getUsers,
-  editUserInfo,
-  deleteUser,
-} from "../../../store/actions/user";
-import { SAVE_CURRENT_USER } from "../../../store/actions/types";
 import { DATE_TIME, POST_STATUS_OBJECT } from "../../../utils/common";
 
 import { forwardRef } from "react";
