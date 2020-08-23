@@ -35,7 +35,7 @@ const CatergoryCard = ({ categories, posts, onClickCategory }) => {
   if (posts && categories) {
     postCategories.news = {
       id: "news",
-      name: "Home Page",
+      name: "News",
     };
 
     Object.keys(posts).map((key) => {

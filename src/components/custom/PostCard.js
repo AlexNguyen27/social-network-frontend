@@ -27,6 +27,7 @@ import { truncateMultilineString } from "../../utils/formatString";
 import { likeReaction } from "../../store/actions/like";
 import ReportModal from "../pages/post/component/ReportModal";
 import { deletePost } from "../../store/actions/post";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: red[500],
+    cursor: "pointer",
   },
 }));
 
@@ -136,12 +138,14 @@ const PostCard = ({
   const totalComments = comments ? comments.length : 0;
 
   const isPrivate = post && status === "private";
+
   return (
     <>
       <Card className={classes.root}>
         <CardHeader
           avatar={
             <Avatar
+              onClick={() => history.push(`/user-profile/${post.userId}`)}
               aria-label="recipe"
               className={classes.avatar}
               src={imageUrl || "../../images/no_image.jpg"}
@@ -176,15 +180,22 @@ const PostCard = ({
               </Menu>
             </>
           }
-          title={title}
+          title={
+            post && post.user && post.user.firstName && post.user.lastName
+              ? post.user.firstName + " " + post.user.lastName
+              : post.user.username
+          }
           subheader={moment(createdAt).format("LLLL")}
         />
 
-        {/* <CardMedia
-        className={classes.media}
-        image={"https://i.ytimg.com/vi/ddxsa3_hv-w/maxresdefault.jpg"}
-        title="Paella dish"
-      /> */}
+        <Typography
+          variant="subtitle1"
+          color="colorPrimary"
+          component="p"
+          className="ml-3"
+        >
+          {title}
+        </Typography>
         <CardContent>
           <ViewText
             textBody={truncateMultilineString(description, 200)}
@@ -198,7 +209,7 @@ const PostCard = ({
             onClick={() => handleOnLike()}
           >
             <FavoriteIcon />
-            <span className="like">{liked ? '' : totalLike }</span>
+            <span className="like">{liked ? "" : totalLike}</span>
           </IconButton>
           <IconButton aria-label="comment">
             <ChatIcon />
@@ -215,12 +226,14 @@ const PostCard = ({
               >
                 <EditIcon />
               </IconButton>
-              <IconButton
-                aria-label="detete"
-                onClick={() => handleOnDelete(id)}
-              >
-                <Delete />
-              </IconButton>
+              {window.location.pathname.includes("user-profile") && (
+                <IconButton
+                  aria-label="detete"
+                  onClick={() => handleOnDelete(id)}
+                >
+                  <Delete />
+                </IconButton>
+              )}
             </>
           )}
           <IconButton

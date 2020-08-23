@@ -20,7 +20,7 @@ import FolderIcon from "@material-ui/icons/Folder";
 import Delete from "@material-ui/icons/Delete";
 import { Button } from "reactstrap";
 import TextFieldInputWithHeader from "../../../../custom/TextFieldInputWithheader";
-import { GET_ERRORS } from "../../../../../store/actions/types";
+import { GET_ERRORS, BASE_IMAGE_URL } from "../../../../../store/actions/types";
 import {
   addComment,
   deleteComment,
@@ -163,7 +163,7 @@ const CommentsList = ({
         <Grid item>
           <Avatar
             alt="Remy Sharp"
-            src="https://pbs.twimg.com/media/EU0S1yHUcAAm-ON.jpg"
+            src={nodes.user.imageUrl || BASE_IMAGE_URL}
           />
         </Grid>
         <Grid item>
@@ -203,7 +203,7 @@ const CommentsList = ({
               </IconButton>
             </>
           ) : (
-            <div className="mb-2"></div>
+            <div className="mb-3"></div>
           )}
         </Grid>
       </Grid>
@@ -265,6 +265,7 @@ const CommentsList = ({
   };
 
   const formatedComment = formatData(comments);
+
   return (
     <TreeView
       className={classes.root}
@@ -273,12 +274,6 @@ const CommentsList = ({
       defaultExpandIcon={<ChevronRightIcon />}
     >
       <Grid container className="mb-3">
-        {/* <Grid item xs={1}>
-          <Avatar
-            alt="Remy Sharp"
-            src="https://pbs.twimg.com/media/EU0S1yHUcAAm-ON.jpg"
-          />
-        </Grid> */}
         <Grid item xs={12}>
           <form
             onSubmit={(e) => onSubmit(e)}

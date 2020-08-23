@@ -120,6 +120,9 @@ export const getUserProfile = (userId, setLoading) => async (
                 user {
                   id
                   imageUrl
+                  firstName
+                  lastName
+                  githubUsername
                 }
                 categoryId
                 createdAt
@@ -151,6 +154,9 @@ export const getUserProfile = (userId, setLoading) => async (
                 user {
                   id
                   imageUrl
+                  firstName
+                  lastName
+                  githubUsername
                 }
                 description
                 reactions {

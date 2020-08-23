@@ -9,6 +9,7 @@ import {
   DELETE_POST,
   EDIT_POST,
 } from "./types";
+import { useHistory } from "react-router-dom";
 import { hera } from "hera-js";
 import { arrayToObject } from "../../utils/commonFunction";
 import Swal from "sweetalert2";
@@ -78,7 +79,7 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,
-      errors: errors[0].message,  
+      errors: errors[0].message,
     });
   }
 };
@@ -149,15 +150,18 @@ export const getAllPublicPost = (setLoading) => async (dispatch, getState) => {
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,
-      errors: errors[0].message,  
+      errors: errors[0].message,
     });
   }
 };
 
-export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
-  dispatch,
-  getState
-) => {
+export const addNewPost = (
+  bodyText,
+  title,
+  categoryId,
+  status,
+  history
+) => async (dispatch, getState) => {
   const {
     token,
     user: { id: userId },
@@ -228,6 +232,7 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
       showConfirmButton: false,
       timer: 1500,
     });
+    history.push(`/user-profile/${userId}`);
   } else {
     console.log(errors);
     logoutDispatch(dispatch, errors);
@@ -239,10 +244,7 @@ export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
 };
 
 //LOGIN User
-export const getPostById = (
-  setLoading,
-  id,
-) => async (dispatch, getState) => {
+export const getPostById = (setLoading, id) => async (dispatch, getState) => {
   const {
     token,
     user: { id: userId },
