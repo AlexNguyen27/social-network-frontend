@@ -1,17 +1,15 @@
-import { GET_LECTURE_DETAIL, UNAUTHENTICATE } from "../actions/types";
+import { UNAUTHENTICATE, GET_REACTION_TYPE } from "../actions/types";
 
 const initialState = {
-  lecture: {
-    lecture_detail: {},
-  },
+  reactionTypes: {},
 };
 
 export default function (state = initialState, action) {
-  const { type, lecture_detail } = action;
+  const { type, reactionTypes } = action;
   switch (type) {
-    case GET_LECTURE_DETAIL:
+    case GET_REACTION_TYPE:
       return {
-        lecture_detail,
+        reactionTypes: { ...reactionTypes },
       };
     case UNAUTHENTICATE:
       return initialState;

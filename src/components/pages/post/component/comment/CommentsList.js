@@ -6,77 +6,92 @@ import { makeStyles, formatMs } from "@material-ui/core/styles";
 import TreeView from "@material-ui/lab/TreeView";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import EditIcon from "@material-ui/icons/Edit";
 import TreeItem from "@material-ui/lab/TreeItem";
-import { Paper, Typography, Divider, Grid } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Divider,
+  Grid,
+  IconButton,
+} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import FolderIcon from "@material-ui/icons/Folder";
+import Delete from "@material-ui/icons/Delete";
 import { Button } from "reactstrap";
 import TextFieldInputWithHeader from "../../../../custom/TextFieldInputWithheader";
 import { GET_ERRORS } from "../../../../../store/actions/types";
+import {
+  addComment,
+  deleteComment,
+} from "../../../../../store/actions/comment";
+import Swal from "sweetalert2";
+import EditReportModal from "../../../report/component/EditReportModal";
+import EditCommentModal from "./EditCommentModal";
 
-const data = {
-  id: "root",
-  name: "Parent",
-  children: [
-    {
-      id: "1",
-      name: "Child - 1",
-    },
-    {
-      id: "3",
-      name: "Child - 3",
-      children: [
-        {
-          id: "4",
-          name: "Child - 4",
-        },
-      ],
-    },
-  ],
-};
+// const data = {
+//   id: "root",
+//   name: "Parent",
+//   children: [
+//     {
+//       id: "1",
+//       name: "Child - 1",
+//     },
+//     {
+//       id: "3",
+//       name: "Child - 3",
+//       children: [
+//         {
+//           id: "4",
+//           name: "Child - 4",
+//         },
+//       ],
+//     },
+//   ],
+// };
 
-const data1 = [
-  {
-    id: "1",
-    name: "Parent",
-    children: [
-      {
-        id: "21",
-        name: "Child - 1",
-      },
-      {
-        id: "23",
-        name: "Child - 3",
-        children: [
-          {
-            id: "4",
-            name: "Child - 4",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Parent",
-    children: [
-      {
-        id: "33",
-        name: "Child - 1",
-      },
-      {
-        id: "22",
-        name: "Child - 3",
-        children: [
-          {
-            id: "12",
-            name: "Child - 4",
-          },
-        ],
-      },
-    ],
-  },
-];
+// const data1 = [
+//   {
+//     id: "1",
+//     name: "Parent",
+//     children: [
+//       {
+//         id: "21",
+//         name: "Child - 1",
+//       },
+//       {
+//         id: "23",
+//         name: "Child - 3",
+//         children: [
+//           {
+//             id: "4",
+//             name: "Child - 4",
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   {
+//     id: "2",
+//     name: "Parent",
+//     children: [
+//       {
+//         id: "33",
+//         name: "Child - 1",
+//       },
+//       {
+//         id: "22",
+//         name: "Child - 3",
+//         children: [
+//           {
+//             id: "12",
+//             name: "Child - 4",
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ];
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -87,15 +102,59 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  btnDelete: {
+    fontSize: "12px !important",
+    padding: 0,
+    marginTop: "5px",
+    marginBottom: "10px",
+    marginRight: "10px",
+  },
+  iconSize: {
+    fontSize: "16px !important",
+    marginRight: "2px",
+  },
 }));
 
-const CommentsList = ({ comments, errors }) => {
+const CommentsList = ({
+  comments,
+  errors,
+  addComment,
+  postId,
+  authId,
+  deleteComment,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [comment, setComment] = useState("");
+  const [onEditModel, setOnEditModal] = useState();
+  const [commentData, setCommentData] = useState();
 
   const onChange = (e) => {
     setComment(e.target.value);
+  };
+
+  const handleOnDelete = (commentId) => {
+    Swal.fire({
+      title: `Are you sure to delete this ?`,
+      text: "You won't be able to revert this!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        setLoading(true);
+        // deletePost(setLoading, postId);
+        deleteComment(setLoading, commentId);
+        console.log(commentId);
+      }
+    });
+  };
+
+  const handleOnEditComment = (commentData) => {
+    setOnEditModal(true);
+    setCommentData(commentData);
   };
 
   const renderTree = (nodes) => (
@@ -119,16 +178,33 @@ const CommentsList = ({ comments, errors }) => {
           >
             {moment(nodes.updatedAt).format("LLLL")}
           </Typography>
-          <TreeItem
-            style={{ fontSize: "12px" }}
-            key={nodes.id}
-            nodeId={nodes.id}
-            label={nodes.comment}
-          >
+          <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.comment}>
             {Array.isArray(nodes.children)
               ? nodes.children.map((node) => renderTree(node))
               : null}
-          </TreeItem>{" "}
+          </TreeItem>
+          {nodes.userId === authId ? (
+            <>
+              <IconButton
+                aria-label="detete"
+                className={classes.btnDelete}
+                onClick={() => handleOnDelete(nodes.id)}
+              >
+                <Delete className={classes.iconSize} />
+                Delete
+              </IconButton>
+              <IconButton
+                aria-label="detete"
+                className={classes.btnDelete}
+                onClick={() => handleOnEditComment(nodes)}
+              >
+                <EditIcon className={classes.iconSize} />
+                Edit
+              </IconButton>
+            </>
+          ) : (
+            <div className="mb-2"></div>
+          )}
         </Grid>
       </Grid>
     </>
@@ -173,7 +249,7 @@ const CommentsList = ({ comments, errors }) => {
 
     let error = {};
     if (comment.trim() === "") {
-      error.comment = "This field is required!";
+      error.comment = "Enter your comment!";
     }
 
     dispatch({
@@ -183,9 +259,9 @@ const CommentsList = ({ comments, errors }) => {
 
     if (JSON.stringify(error) === "{}") {
       setLoading(true);
-      // addComment(setLoading, commentId, userId, postId, parentId);
+      addComment(setLoading, comment, postId);
     }
-    setComment("")
+    setComment("");
   };
 
   const formatedComment = formatData(comments);
@@ -212,7 +288,7 @@ const CommentsList = ({ comments, errors }) => {
             <TextFieldInputWithHeader
               id="outlined-multiline-flexible"
               name="comment"
-              label="Comment"
+              label="Your Comment"
               fullWidth
               variant="outlined"
               value={comment}
@@ -223,6 +299,11 @@ const CommentsList = ({ comments, errors }) => {
         </Grid>
       </Grid>
       {formatedComment.map((item) => renderTree(item))}
+      <EditCommentModal
+        modal={onEditModel}
+        setModal={setOnEditModal}
+        commentData={commentData}
+      />
     </TreeView>
   );
 };
@@ -230,5 +311,8 @@ const CommentsList = ({ comments, errors }) => {
 const mapStateToProps = (state) => ({
   comments: state.post.selected_post.comments,
   errors: state.errors,
+  authId: state.auth.user.id,
 });
-export default connect(mapStateToProps, {})(CommentsList);
+export default connect(mapStateToProps, { addComment, deleteComment })(
+  CommentsList
+);

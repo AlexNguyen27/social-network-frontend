@@ -5,8 +5,11 @@ import {
   BASE_URL,
   LIKE_REACTION,
   EDIT_POST,
+  GET_REACTION_TYPE,
+  REACTION_SELECTED_POST,
 } from "./types";
 import { hera } from "hera-js";
+import { arrayToObject } from "../../utils/commonFunction";
 
 export const likeReaction = (
   postId,
@@ -52,10 +55,17 @@ export const likeReaction = (
       type: CLEAR_ERRORS,
     });
 
-    const { posts } = state.post;
+    const reactionTypes = state.reactionType.reactionTypes;
     // GET REACTION TYPE LIKE
-    const { reactionTypeId } =
-      posts[postId].reactions.length > 0 && posts[postId].reactions[0];
+    let reactionTypeId = "";
+    Object.keys(reactionTypes).map((key) => {
+      if (reactionTypes[key].name === "like") {
+        reactionTypeId = key;
+      }
+    });
+    const { posts } = state.post;
+    // REACTION AT SELECTED POST
+    const { selected_post } = state.post;
 
     if (data.createReaction.message.includes("Delete")) {
       dispatch({
@@ -68,8 +78,18 @@ export const likeReaction = (
 
       const { reactions } = posts[postId];
       const deletedReactionArr = reactions.filter(
-        (item) => item.userId !== userId && item.postId !== postId
+        (item) => item.userId !== userId
       );
+
+      if (JSON.stringify(selected_post) !== "{}") {
+        console.log("is reaction on selected post");
+        dispatch({
+          type: REACTION_SELECTED_POST,
+          isLike: false,
+          userId,
+        });
+      }
+
       dispatch({
         type: EDIT_POST,
         post: {
@@ -100,6 +120,8 @@ export const likeReaction = (
         userId,
         reactionTypeId,
       };
+      console.log(posts[postId]);
+      console.log(newReaction);
       dispatch({
         type: EDIT_POST,
         post: {
@@ -107,9 +129,60 @@ export const likeReaction = (
           reactions: [...posts[postId].reactions, newReaction],
         },
       });
+      if (JSON.stringify(selected_post) !== "{}") {
+        console.log("is create reaction on selected post");
+        const newReactonLike = {
+          userId,
+          postId,
+          reactionTypeId,
+        };
+        dispatch({
+          type: REACTION_SELECTED_POST,
+          isLike: true,
+          newReactonLike,
+        });
+      }
     }
   } else {
     console.log(errors);
+    logoutDispatch(dispatch, errors);
+    dispatch({
+      type: GET_ERRORS,
+      errors: errors[0].message,
+    });
+  }
+};
+
+export const getReactionTypes = (setLoading) => async (dispatch, getState) => {
+  const { token } = getState().auth;
+
+  const { data, errors } = await hera({
+    options: {
+      url: BASE_URL,
+      headers: {
+        token,
+        "Content-Type": "application/json",
+      },
+    },
+    query: `
+            query {
+              getReactionTypes {
+                id 
+                name
+              }
+            }
+        `,
+    variables: {},
+  });
+  if (!errors) {
+    const reactionTypes = arrayToObject(data.getReactionTypes);
+
+    dispatch({
+      type: GET_REACTION_TYPE,
+      reactionTypes,
+    });
+    setLoading(false);
+  } else {
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,

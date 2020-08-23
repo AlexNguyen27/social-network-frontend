@@ -74,8 +74,12 @@ button:focus {
   width: 0 !important;
 }
 
-.MuiTreeItem-label  {
-  padding: 0 0 20px 0 !important;
-  font-size: 20px !important;
+.MuiTreeItem-label {
+  /* padding: 0 0 20px 0 !important; */
+  font-size: 16px !important;
   background-color: none !important;
+}
+
+.MuiTreeItem-label:hover {
+  background-color: white !important;
 }

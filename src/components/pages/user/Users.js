@@ -24,7 +24,8 @@ const Users = ({ users, getUsers, location }) => {
           user.firstName && user.firstName.toLowerCase().match(searchText) ||
           user.lastName && user.lastName.toLowerCase().match(searchText) ||
           user.address && user.address.toLowerCase().match(searchText) ||
-          user.githubUsename && user.githubUsename.toLowerCase().match(searchText)
+          user.githubUsename && user.githubUsename.toLowerCase().match(searchText) || 
+          user.username && user.username.toLowerCase().match(searchText) 
         );
       });
       setUsersData(mockup);

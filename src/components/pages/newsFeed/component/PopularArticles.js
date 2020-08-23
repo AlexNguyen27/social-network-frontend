@@ -35,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
-  }
+    marginTop: "15px",
+    marginBottom: 0,
+  },
 }));
 const PopularArticles = () => {
   const classes = useStyles();

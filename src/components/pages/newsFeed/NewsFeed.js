@@ -8,6 +8,7 @@ import { getPosts } from "../../../store/actions/post";
 import { getUsers } from "../../../store/actions/user";
 import { getCategories } from "../../../store/actions/category";
 import PageLoader from "../../custom/PageLoader";
+import { getReactionTypes } from "../../../store/actions/like";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = ({ getPosts, role, getCategories, authUserId, getUsers, posts }) => {
+const NewsFeed = ({
+  getPosts,
+  getReactionTypes,
+  role,
+  getCategories,
+  authUserId,
+  getUsers,
+  posts,
+}) => {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(true);
@@ -30,10 +39,11 @@ const NewsFeed = ({ getPosts, role, getCategories, authUserId, getUsers, posts }
   useEffect(() => {
     getPosts(() => {});
     getCategories(() => {});
-    getUsers(setLoading);
+    getUsers(() => {});
+    getReactionTypes(setLoading);
   }, []);
 
-  const postsArr = posts && Object.keys(posts).map(key => posts[key]);
+  const postsArr = posts && Object.keys(posts).map((key) => posts[key]);
 
   return (
     <div className={classes.root}>
@@ -58,7 +68,9 @@ const NewsFeed = ({ getPosts, role, getCategories, authUserId, getUsers, posts }
                         <PostCard
                           post={item}
                           authUserId={authUserId}
-                          isCurrentAuth={item.user.id === authUserId || role === "admin"}
+                          isCurrentAuth={
+                            item.user.id === authUserId || role === "admin"
+                          }
                         />
                       </Grid>
                     ))}
@@ -76,8 +88,11 @@ const mapStateToProps = (state) => ({
   categories: state.category.categories,
   authUserId: state.auth.user.id,
   posts: state.post.posts,
-  role: state.auth.user.role
+  role: state.auth.user.role,
 });
-export default connect(mapStateToProps, { getPosts, getCategories, getUsers })(
-  NewsFeed
-);
+export default connect(mapStateToProps, {
+  getPosts,
+  getCategories,
+  getUsers,
+  getReactionTypes,
+})(NewsFeed);
