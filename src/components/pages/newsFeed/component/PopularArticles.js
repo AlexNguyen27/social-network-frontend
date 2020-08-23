@@ -51,7 +51,7 @@ const PopularArticles = ({ posts }) => {
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>
-        Popular Articles
+        Popular Articles (5)
       </Typography>
 
       <List
