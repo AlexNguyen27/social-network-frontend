@@ -64,10 +64,9 @@ export const likeReaction = (
         reactionTypeId = key;
       }
     });
-    const { posts } = state.post;
+    const { posts, selected_post } = state.post;
     // REACTION AT SELECTED POST
-    const { selected_post } = state.post;
-
+    console.log(data.createReaction);
     if (data.createReaction.message.includes("Delete")) {
       dispatch({
         type: LIKE_REACTION,
@@ -77,7 +76,7 @@ export const likeReaction = (
       setIsLiked(false);
       setTotalLike((prev) => prev - 1);
 
-      const { reactions } = posts[postId];
+      const { reactions = [] } = posts[postId] || selected_post;
       const deletedReactionArr = reactions.filter(
         (item) => item.userId !== userId
       );
@@ -122,13 +121,13 @@ export const likeReaction = (
         userId,
         reactionTypeId,
       };
-      console.log(posts[postId]);
-      console.log(newReaction);
+      const { reactions = [] } = posts[postId] || selected_post;
+
       dispatch({
         type: EDIT_POST,
         post: {
           ...posts[postId],
-          reactions: [...posts[postId].reactions, newReaction],
+          reactions: [...reactions, newReaction],
         },
       });
       if (JSON.stringify(selected_post) !== "{}") {

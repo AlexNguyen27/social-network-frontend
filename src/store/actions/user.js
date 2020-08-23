@@ -301,14 +301,17 @@ export const editUserInfo = (setLoading, userData) => async (
     },
   } = state;
   const { user } = state;
-
-  const gitHubInfo = await Axios.get(
-    `https://api.github.com/users/${userData.githubUsername}/repos?per_page=5&sort=created:asc`
-  );
+  let gitHubInfo = {};
   let imageUrl = BASE_IMAGE_URL;
-
-  if (gitHubInfo.data.length > 0) {
-    imageUrl = gitHubInfo.data[0].owner.avatar_url;
+  try {
+    gitHubInfo = await Axios.get(
+      `https://api.github.com/users/${userData.githubUsername}/repos?per_page=5&sort=created:asc`
+    );
+    if (gitHubInfo.data.length > 0) {
+      imageUrl = gitHubInfo.data[0].owner.avatar_url;
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   const { data, errors } = await hera({

@@ -23,6 +23,7 @@ import Colors from "../../../../constants/Colors";
 import { likeReaction } from "../../../../store/actions/like";
 import PopularArticles from "../../newsFeed/component/PopularArticles";
 import { getPopularPost } from "../../../../utils/commonFunction";
+import { BASE_IMAGE_URL } from "../../../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,7 @@ const ViewPost = ({
   );
 
   useEffect(() => {
+    setLoading(true);
     getPostById(setLoading, postId);
   }, [postId]);
 
@@ -121,10 +123,7 @@ const ViewPost = ({
             <Grid item xs={1} className="text-center">
               <img
                 className="userImage"
-                src={
-                  avatar ||
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT8yP_D9E4ioICCCVIu6Y0tIRDDZ6JCKEdFhA&usqp=CAU"
-                }
+                src={avatar || BASE_IMAGE_URL}
                 alt="user image"
               />
             </Grid>

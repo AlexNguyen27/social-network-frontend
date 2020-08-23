@@ -14,7 +14,7 @@ const StatisticsPost = ({ users, userId, role, userProfile }) => {
       (post) => post.reactions.length
     );
 
-  let postViews = [1000, 2000, 500, 2000, 300, 2000];
+  let postViews = [1000, 2000, 500, 2000, 300, 2000, 1000, 200, 2202, 23230, 2323];
 
   
   console.log(postViews);
