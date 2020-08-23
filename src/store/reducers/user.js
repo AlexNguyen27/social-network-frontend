@@ -3,12 +3,13 @@ import {
   UNAUTHENTICATE,
   DELETE_USER,
   EDIT_USER,
-  SAVE_CURRENT_USER
+  SAVE_CURRENT_USER,
+  GET_CURRENT_USER_AVATAR,
 } from "../actions/types";
 
 const initialState = {
   users: {},
-  current_user: {}
+  current_user: {},
 };
 
 export default function (state = initialState, action) {
@@ -22,7 +23,7 @@ export default function (state = initialState, action) {
       const { newUser, selectedId } = action;
       return {
         users: { ...state.users, [selectedId]: newUser },
-        current_user: newUser
+        current_user: newUser,
       };
     case DELETE_USER:
       const newUsers = state.users;
@@ -31,11 +32,19 @@ export default function (state = initialState, action) {
         users: newUsers,
       };
     case SAVE_CURRENT_USER:
-      const { currentUser } = action; 
+      const { currentUser } = action;
       return {
         ...state,
-        current_user: currentUser
-      }
+        current_user: currentUser,
+      };
+    case GET_CURRENT_USER_AVATAR:
+      return {
+        ...state,
+        current_user: {
+          ...state.current_user,
+          imageUrl: action.imageUrl,
+        },
+      };
     case UNAUTHENTICATE:
       return initialState;
     default:

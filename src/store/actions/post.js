@@ -82,6 +82,78 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
     });
   }
 };
+
+//LOGIN User
+export const getAllPublicPost = (setLoading) => async (dispatch, getState) => {
+  const { token } = getState().auth;
+
+  const { data, errors } = await hera({
+    options: {
+      url: BASE_URL,
+      headers: {
+        token,
+        "Content-Type": "application/json",
+      },
+    },
+    query: `
+            query {
+                getPosts(all: true) {
+                    id
+                    title
+                    description
+                    status
+                    imageUrl
+                    createdAt
+                    updatedAt
+                    categoryId
+                    userId
+                    comments{
+                        id
+                        comment
+                        userId
+                        parentId
+                        createdAt
+                        updatedAt
+                    }
+                    reactions {
+                        userId
+                        reactionTypeId
+                        postId
+                    }
+                    user {
+                      id 
+                      username
+                      firstName
+                      lastName
+                      imageUrl
+                    }  
+                    category {
+                      id 
+                      name
+                    }
+                }
+            }
+        `,
+    variables: {},
+  });
+  if (!errors) {
+    const posts = arrayToObject(data.getPosts);
+
+    dispatch({
+      type: GET_POSTS,
+      posts,
+    });
+    setLoading(false);
+  } else {
+    console.log(errors);
+    logoutDispatch(dispatch, errors);
+    dispatch({
+      type: GET_ERRORS,
+      errors: errors[0].message,  
+    });
+  }
+};
+
 export const addNewPost = ({ bodyText, title, categoryId, status }) => async (
   dispatch,
   getState

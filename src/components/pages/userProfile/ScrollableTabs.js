@@ -92,6 +92,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
               lastName: users[con.toUserId].lastName,
               githubUsername: users[con.toUserId].githubUsername,
               quote: users[con.toUserId].quote,
+              imageUrl: users[con.toUserId].imageUrl,
             };
         })
       : [];
@@ -145,31 +146,36 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
                   Add new post
                 </Button>
               )}
-              {(!user_profile || !user_profile.posts) ||
+              {/* {(!user_profile || user_profile && !user_profile.posts) ||
                 (user_profile.posts && !user_profile.posts.length && (
-                  <Typography
-                    variant="h6"
-                    className="text-center"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {" "}
-                    NO POSTS, MAY BE YOU SHOULD ADD SOME :D
-                  </Typography>
-                ))}
+                 
+                ))} */}
 
-              {user_profile.posts &&
+              {user_profile &&
+              user_profile.posts &&
+              user_profile.posts.length > 0 ? (
                 user_profile.posts.map((item) => (
                   <>
                     <Grid item style={{ marginBottom: "20px" }} key={item.id}>
                       <PostCard
                         post={item}
                         authUserId={authUserId}
-                        isCurrentAuth={isCurrentAuth || role ===  "admin"}
+                        isCurrentAuth={isCurrentAuth || role === "admin"}
                       />
                     </Grid>
                   </>
-                ))}
+                ))
+              ) : (
+                <Typography
+                  variant="h6"
+                  className="text-center"
+                  color="textSecondary"
+                  component="p"
+                >
+                  {" "}
+                  NO POSTS, MAY BE YOU SHOULD ADD SOME :D
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={5}>
               <SubUserInfo userInfo={user_profile} connections={connections} />
@@ -203,7 +209,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
             </Typography>
           ))}
         <Favorites
-          favoritePosts={user_profile && user_profile.userFavoritePosts || []}
+          favoritePosts={(user_profile && user_profile.userFavoritePosts) || []}
           userProfile={user_profile}
           authUserId={authUserId}
         />

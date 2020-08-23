@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
-    marginBottom: 0
+    marginBottom: 0,
   },
 }));
 
@@ -27,11 +27,33 @@ const data = [
   { name: "Funny" },
   { name: "Photography" },
 ];
-const CatergoryCard = ({ categories }) => {
+const CatergoryCard = ({ categories, posts, onClickCategory }) => {
   const classes = useStyles();
 
+  let postCategories = {};
+  // GET CATEGORY HAS ON POST
+  if (posts && categories) {
+    postCategories.news = {
+      id: "news",
+      name: "Home Page",
+    };
+
+    Object.keys(posts).map((key) => {
+      console.log(posts[key].categoryId);
+      if (categories[posts[key].categoryId]) {
+        postCategories[posts[key].categoryId] =
+          categories[posts[key].categoryId];
+      }
+    });
+    postCategories.all = {
+      id: "all",
+      name: "All Posts",
+    };
+  }
+
   const categoryArr =
-    categories && Object.keys(categories).map((cateId) => categories[cateId]);
+    postCategories &&
+    Object.keys(postCategories).map((cateId) => postCategories[cateId]);
 
   return (
     <>
@@ -46,7 +68,7 @@ const CatergoryCard = ({ categories }) => {
         {categoryArr &&
           categoryArr.length &&
           categoryArr.map((item) => (
-            <ListItem button divider>
+            <ListItem button divider onClick={() => onClickCategory(item.id)}>
               <ListItemText>{item.name}</ListItemText>
             </ListItem>
           ))}
@@ -57,5 +79,6 @@ const CatergoryCard = ({ categories }) => {
 
 const mapStateToProps = (state) => ({
   categories: state.category.categories,
+  posts: state.post.posts,
 });
 export default connect(mapStateToProps, {})(CatergoryCard);

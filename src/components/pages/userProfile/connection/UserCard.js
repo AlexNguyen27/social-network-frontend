@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Colors from "../../../../constants/Colors";
+import { BASE_IMAGE_URL } from "../../../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,14 +50,15 @@ export default function UserCard({ userInfo }) {
   const classes = useStyles();
   const history = useHistory();
 
-  const { firstName, lastName, quote } = userInfo || {};
+  console.log(userInfo);
+  const { firstName, lastName, quote, imageUrl } = userInfo || {};
   const userId = userInfo.userId || userInfo.id;
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
         <CardMedia
           className={classes.cover}
-          image="https://i.ytimg.com/vi/rEfNiR8A1Og/maxresdefault.jpg"
+          image={imageUrl || BASE_IMAGE_URL}
           title="Live from space album cover"
         />
       </Grid>

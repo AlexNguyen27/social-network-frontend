@@ -572,7 +572,9 @@ const DashBoard = ({
               <SearchIcon />
             </div>
             <InputBase
-              placeholder={match.path === "/people" ? "Search friends…" : "Search posts..."}
+              placeholder={
+                match.path === "/people" ? "Search friends…" : "Search posts..."
+              }
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -607,9 +609,8 @@ const DashBoard = ({
               <Avatar
                 alt="User Image"
                 src={
-                  user && user.image
-                    ? `${BASE_URL}/images/${user.image}`
-                    : "https://image.plo.vn/w653/Uploaded/2020/xpckxpiu/2020_05_31/lisa_goix.jpg"
+                  (user && user.imageUrl) ||
+                  "https://image.plo.vn/w653/Uploaded/2020/xpckxpiu/2020_05_31/lisa_goix.jpg"
                 }
               />
             </IconButton>

@@ -11,6 +11,7 @@ import {
   BASE_URL,
   GET_ERRORS,
   CLEAR_ERRORS,
+  BASE_IMAGE_URL,
 } from "../../../store/actions/types";
 import {
   capitalizeSnakeCase,
@@ -20,7 +21,7 @@ import {
 import PageLoader from "../../custom/PageLoader";
 import TextFieldInputWithHeader from "../../custom/TextFieldInputWithheader";
 import ImageIcon from "@material-ui/icons/Image";
-import { editUserInfo } from "../../../store/actions/user";
+import { editUserInfo, getGithubProfile } from "../../../store/actions/user";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +39,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
+const UserInfo = ({
+  current_user,
+  user,
+  errors,
+  location,
+  getGithubProfile,
+  editUserInfo,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -91,19 +99,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
   // };
 
   const setInit = () => {
-    if (current_user && JSON.stringify(current_user) !== "{}") {
-      // console.log('herer-------------------');
-      setformData({
-        username: current_user.username || "",
-        firstName: current_user.firstName || "",
-        lastName: current_user.lastName || "",
-        quote: current_user.quote || "",
-        email: current_user.email || "",
-        phone: current_user.phone || "",
-        address: current_user.address || "",
-        githubUsername: current_user.githubUsername || "",
-      });
-    } else {
+    if (window.location.pathname === "/user-info") {
       setformData({
         username: user.username || "",
         firstName: user.firstName || "",
@@ -114,38 +110,78 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
         address: user.address || "",
         githubUsername: user.githubUsername || "",
       });
+    } else {
+      setformData({
+        username: current_user.username || "",
+        firstName: current_user.firstName || "",
+        lastName: current_user.lastName || "",
+        quote: current_user.quote || "",
+        email: current_user.email || "",
+        phone: current_user.phone || "",
+        address: current_user.address || "",
+        githubUsername: current_user.githubUsername || "",
+      });
     }
   };
 
+  useEffect(() => {
+    setInit();
+    getGithubAvatar();
+  }, []);
+
+  const getGithubAvatar = () => {
+    if (current_user && JSON.stringify(current_user) !== "{}") {
+      getGithubProfile(current_user.id, current_user.githubUsername);
+    } else {
+      getGithubProfile(user.id, user.githubUsername);
+    }
+  };
+  const onSubmit = () => {
+    const formatData = trimObjProperties(formData);
+
+    let error = {};
+    Object.keys(formatData).map((key) => {
+      if (formatData[key].trim() === "") {
+        error[key] = "This field is required";
+      }
+    });
+    dispatch({
+      type: GET_ERRORS,
+      errors: error,
+    });
+
+    if (JSON.stringify(error) === "{}") {
+      editUserInfo(setLoading, formatData);
+      getGithubAvatar();
+    }
+  };
   useEffect(() => {
     setInit();
   }, []);
 
-  useEffect(() => {
-    setInit();
-  }, [current_user]);
+  // useEffect(() => {
+  //   getGithubAvatar();
+  // }, [current_user && current_user.imageUrl]);
 
-  const onSubmit = () => {
-    // console.log(formData);
-    const formatData = trimObjProperties(formData);
-    editUserInfo(setLoading, formatData);
-    if (!errors) {
-      onCancel();
-    }
-    // }
-  };
+  let imageUrl =
+    window.location.pathname === "/user-info"
+      ? user.imageUrl
+      : current_user.imageUrl;
+  if (!imageUrl) {
+    imageUrl = BASE_IMAGE_URL;
+  }
 
-  const handleCapture = ({ target }) => {
-    const fileName = target.files[0].name;
-    setLoading(true);
-    editUserInfo(setLoading, {}, target.files[0]);
-    if (target.accept.includes("image")) {
-      setImage({
-        name: fileName,
-        file: target.files[0],
-      });
-    }
-  };
+  // const handleCapture = ({ target }) => {
+  //   const fileName = target.files[0].name;
+  //   setLoading(true);
+  //   editUserInfo(setLoading, {}, target.files[0]);
+  //   if (target.accept.includes("image")) {
+  //     setImage({
+  //       name: fileName,
+  //       file: target.files[0],
+  //     });
+  //   }
+  // };
 
   const onCancel = () => {
     setIsEdit(false);
@@ -212,17 +248,13 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
               <Col xs="6">
                 <Paper className={classes.paper}>
                   <img
-                    src={
-                      current_user && current_user.image
-                        ? `${BASE_URL}/images/${current_user.image}`
-                        : "https://vcdn-giaitri.vnecdn.net/2020/03/27/lisa55_1200x0.jpg?"
-                    }
+                    src={imageUrl}
                     alt="Girl in a jacket"
                     width="100%"
                     height={400}
                   />
                 </Paper>
-                <Row style={{ marginTop: '20px', justifyContent: 'center'}}>
+                {/* <Row style={{ marginTop: '20px', justifyContent: 'center'}}>
                   <Button
                     variant="contained"
                     className="ml-3"
@@ -236,7 +268,7 @@ const UserInfo = ({ current_user, user, errors, editUserInfo }) => {
                       style={{ display: "none" }}
                     />
                   </Button>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
           </Grid>
@@ -251,4 +283,6 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
   errors: state.errors,
 });
-export default connect(mapStateToProps, { editUserInfo })(UserInfo);
+export default connect(mapStateToProps, { getGithubProfile, editUserInfo })(
+  UserInfo
+);
