@@ -74,11 +74,12 @@ const NewsFeed = ({
       return;
     }
     if (categoryId === "news") {
-      const toUsers =
+      let toUsers = [];
+      toUsers.push(authProfile.id);
+      toUsers =
         authProfile.followed.length > 0 &&
         authProfile.followed.map((item) => item.toUserId);
 
-      toUsers.push(authProfile.id);
       const followedUserPosts = [];
       Object.keys(posts).map((key) => {
         console.log(posts[key].userId);
