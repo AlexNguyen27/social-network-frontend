@@ -111,6 +111,7 @@ export const getUserProfile = (userId, setLoading) => async (
               address,
               githubUsername,
               imageUrl
+              totalFollowers
               posts {
                 id
                 title,

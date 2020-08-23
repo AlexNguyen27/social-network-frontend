@@ -2,15 +2,29 @@ import React from "react";
 import { connect } from "react-redux";
 import MultipleSummary from "../MultipleSummary";
 
-const StatisticsPost = ({ users, userId, role ,userProfile}) => {
+const StatisticsPost = ({ users, userId, role, userProfile }) => {
+  const postName =
+    userProfile &&
+    (role === "user" ? userProfile.posts : users[userId].posts).map(
+      (post) => post.title
+    );
+  const postReactionLike =
+    userProfile &&
+    (role === "user" ? userProfile.posts : users[userId].posts).map(
+      (post) => post.reactions.length
+    );
 
-  const postName = userProfile && (role === "user" ? userProfile.posts : users[userId].posts).map((post) => post.title);
-  const postReactionLike = userProfile && (role === "user" ? userProfile.posts : users[userId].posts).map((post) => post.reactions.length);
+  let postViews = [1000, 2000, 500, 2000, 300, 2000];
+
+  
+  console.log(postViews);
 
   return (
     <>
-      <h4 className="mt-4">Statistics User Post</h4>
-      <MultipleSummary name={postName} like={postReactionLike}/>
+      <h4 className="mt-4">Statistics Likes</h4>
+      <MultipleSummary name={postName} like={postReactionLike} />
+      <h4 className="mt-4">Statistics Views</h4>
+      <MultipleSummary name={postName} view={postViews.slice(0, postName.length)} />
     </>
   );
 };
@@ -18,6 +32,6 @@ const StatisticsPost = ({ users, userId, role ,userProfile}) => {
 const mapStateToProps = (state) => ({
   users: state.user.users,
   role: state.auth.user.role,
-  userProfile: state.user_profile.user_profile
+  userProfile: state.user_profile.user_profile,
 });
 export default connect(mapStateToProps, null)(StatisticsPost);

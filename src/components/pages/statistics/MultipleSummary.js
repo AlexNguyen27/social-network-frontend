@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 //   ],
 // };
 
-const MultipleSummary = ({ name, like }) => {
+const MultipleSummary = ({ name, like, view }) => {
   const classes = useStyles();
   // Array option of question
   // const options = [
@@ -56,7 +56,7 @@ const MultipleSummary = ({ name, like }) => {
   // let optionLabels = options.map((option) => option.text);
   // const totalAnswers = [65, 59, 80, 81, 56, 55, 40];
 
-  const totalAnswers = like;
+  const totalAnswers = like || view;
   // PIE CHART
   const dataPie = {
     labels: options,
@@ -69,7 +69,7 @@ const MultipleSummary = ({ name, like }) => {
     ],
   };
 
-  const lineName = "Likes";
+  const lineName = view ? "Views" : "Likes";
   // LINE CHART
   const dataLine = {
     labels: options,

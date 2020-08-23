@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import { green, pink } from "@material-ui/core/colors";
 import Colors from "../../../constants/Colors";
 import { followToUser } from "../../../store/actions/follow";
+import { BASE_IMAGE_URL } from "../../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,11 +65,14 @@ const AboutCard = ({
   );
 
   useEffect(() => {
-    setConnect( authProfile &&
-      authProfile.followed.find((item) => item.toUserId === userProfile.id))
-  }, [userProfile])
+    setConnect(
+      authProfile &&
+        authProfile.followed.find((item) => item.toUserId === userProfile.id)
+    );
+  }, [userProfile]);
 
-  const { imageUrl, firstName, lastName, quote } = userProfile || {};
+  const { imageUrl, firstName, lastName, quote, totalFollowers } =
+    userProfile || {};
 
   const handleOnFollow = () => {
     followToUser(userProfile.id, setConnect);
@@ -79,9 +83,7 @@ const AboutCard = ({
       <Grid container justify="center">
         <CardMedia
           className={classes.cover}
-          image={
-            imageUrl || "https://i.ytimg.com/vi/rEfNiR8A1Og/maxresdefault.jpg"
-          }
+          image={imageUrl || BASE_IMAGE_URL}
           title="Live from space album cover"
         />
       </Grid>
@@ -96,6 +98,12 @@ const AboutCard = ({
             className={classes.title}
           >
             {quote}
+          </Typography>
+          <Typography
+            variant="body1"
+            className={'font-italic font-weight-bold'}
+          >
+            Followed by {totalFollowers} {totalFollowers > 1 ? "users" : "user"}
           </Typography>
           {userProfile.id !== authId && (
             <Button
