@@ -2,6 +2,9 @@
 export const BASE_URL =
   process.env.REACT_APP_API_HOST || "http://localhost:9000/graphql";
 
+export const BASE_IMAGE_URL =
+  "https://avatars3.githubusercontent.com/u/11791361?v=4";
+
 export const AUTHENTICATE = "AUTHENTICATE";
 export const UNAUTHENTICATE = "UNAUTHENTICATE";
 
@@ -68,3 +71,6 @@ export const REACTION_SELECTED_POST = "REACTION_SELECTED_POST";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
+
+export const GET_GITHUB_AVATAR = "GET_GITHUB_AVATAR";
+export const GET_CURRENT_USER_AVATAR = "GET_CURRENT_USER_AVATAR";

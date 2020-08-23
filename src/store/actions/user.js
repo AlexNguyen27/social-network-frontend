@@ -7,11 +7,16 @@ import {
   BASE_URL,
   GET_USER_PROFILE,
   GET_FRIEND_PROFILE,
+  EDIT_USER_INFO,
+  GET_GITHUB_AVATAR,
+  GET_CURRENT_USER_AVATAR,
+  BASE_IMAGE_URL,
 } from "./types";
 import { arrayToObject } from "../../utils/commonFunction";
 import { hera } from "hera-js";
 import Swal from "sweetalert2";
 import logoutDispatch from "../../utils/logoutDispatch";
+import Axios from "axios";
 
 // GET majors data
 export const getUsers = (setLoading) => async (dispatch, getState) => {
@@ -260,7 +265,7 @@ export const updatePassword = (
       error.newPassword = message;
     } else if (message.includes("Confirm password")) {
       error.confirmPassword = message;
-    }else {
+    } else {
       Swal.fire({
         position: "center",
         type: "Error",
@@ -289,6 +294,15 @@ export const editUserInfo = (setLoading, userData) => async (
     },
   } = state;
   const { user } = state;
+
+  const gitHubInfo = await Axios.get(
+    `https://api.github.com/users/${userData.githubUsername}/repos?per_page=5&sort=created:asc`
+  );
+  let imageUrl = BASE_IMAGE_URL;
+
+  if (gitHubInfo.data.length > 0) {
+    imageUrl = gitHubInfo.data[0].owner.avatar_url;
+  }
 
   const { data, errors } = await hera({
     options: {
@@ -320,6 +334,7 @@ export const editUserInfo = (setLoading, userData) => async (
       info: {
         id: user.current_user ? user.current_user.id : userId,
         ...userData,
+        imageUrl,
       },
     },
   });
@@ -331,7 +346,12 @@ export const editUserInfo = (setLoading, userData) => async (
       selectedId: res.id,
       newUser: res,
     });
-
+    if (res.id === userId) {
+      dispatch({
+        type: EDIT_USER_INFO,
+        newUser: res,
+      });
+    }
     dispatch({
       type: CLEAR_ERRORS,
     });
@@ -418,29 +438,33 @@ export const deleteUser = (setLoading, userId) => async (
   }
 };
 
-// TODO: NOT WOKRING YET
-export const getGithubProfile = (setLoading) => async (dispatch) => {
-  // try {
-  //   const allCoursesArray = await axios.get(
-  //     `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`,
-  //     {
-  //       headers: {
-  //         "user-agent": "node.js",
-  //         Authorization: `token ${config.get("githubToken")}`,
-  //       },
-  //     }
-  //   );
-  //   const allCoursesToObject = arrayToObject(allCoursesArray.data.data);
-  //   dispatch({
-  //     type: GET_COURSES,
-  //     all_courses: allCoursesToObject,
-  //   });
-  //   setLoading(false);
-  // } catch (error) {
-  //   logoutUser(dispatch, error);
-  //   dispatch({
-  //     type: GET_ERRORS,
-  //     errors: error.response.data,
-  //   });
-  // }
+export const getGithubProfile = (userId, githubUsername) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const state = getState();
+    const gitHubInfo = await Axios.get(
+      `https://api.github.com/users/${githubUsername}/repos?per_page=5&sort=created:asc`
+    );
+
+    if (gitHubInfo.data.length > 0) {
+      if (state.auth.user.id === userId) {
+        dispatch({
+          type: GET_GITHUB_AVATAR,
+          imageUrl: gitHubInfo.data[0].owner.avatar_url,
+        });
+      }
+      // UPDATE CURRENT USER DATA
+      if (state.auth.isAdmin) {
+        dispatch({
+          type: GET_CURRENT_USER_AVATAR,
+          imageUrl: gitHubInfo.data[0].owner.avatar_url,
+        });
+      }
+    }
+    console.log(gitHubInfo);
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -3,10 +3,10 @@ import CatergoryCard from "./CategoryCard";
 import PopularArticles from "./PopularArticles";
 import Archives from "./Archives";
 
-const SubNewsFeed = () => {
+const SubNewsFeed = ({ onClickCategory }) => {
   return (
     <>
-      <CatergoryCard />
+      <CatergoryCard onClickCategory={onClickCategory} />
       <PopularArticles />
       {/* <Archives /> */}
     </>

@@ -2,6 +2,7 @@
 import logoutDispatch from "../../utils/logoutDispatch";
 import { GET_ERRORS, CLEAR_ERRORS, AUTHENTICATE, BASE_URL } from "./types";
 import { hera } from "hera-js";
+import axios from "axios";
 // import jwt_decode from "jwt-decode";
 
 import Swal from "sweetalert2";
@@ -37,24 +38,9 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
       password,
     },
   });
-
-  // console.log(data);
-  // console.log("erer----------------", errors);
-
   if (errors) {
-    // console.log("eror------------------", errors);
     // If login fails, set user info to null
     logoutDispatch(dispatch, errors);
-    // if (errors.message === "Login fail") {
-    //   errors.message = "Wrong username or password!";
-    // } else if (
-    //   errors.messageKey === "msg.pleaseEnterAllRequiredFields"
-    // ) {
-    //   errors.message = "This field is required!";
-    // }
-
-    const formatedErr = {};
-
     // Set errors
     dispatch({
       type: GET_ERRORS,
@@ -62,7 +48,7 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
     });
   } else {
     const resData = data.login;
-    const { token } = resData;
+    const { token, githubUsername } = resData;
 
     // const decoded = jwt_decode(token);
 
@@ -76,6 +62,23 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
       userData.isAdmin = true;
     }
 
+    try {
+      const gitHubInfo = await axios.get(
+        `https://api.github.com/users/${githubUsername}/repos?per_page=5&sort=created:asc`
+      );
+
+      if (gitHubInfo.data.length > 0) {
+        userData.imageUrl = gitHubInfo.data[0].owner.avatar_url;
+      }
+      console.log("gitHubInfo--------------------", gitHubInfo);
+    } catch (error) {
+      console.log(error);
+      // logoutUser(dispatch, error);
+      // dispatch({
+      //   type: GET_ERRORS,
+      //   errors: error.response.data,
+      // });
+    }
     dispatch({
       type: AUTHENTICATE,
       user: {
@@ -85,7 +88,6 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
       },
       token,
     });
-
   }
 };
 
@@ -138,16 +140,16 @@ export const signUpUser = (isAuthenticated, history, userData) => async (
 
     const formatedError = {};
     const error = errors[0].message;
-    if (error.includes('Password')) {
+    if (error.includes("Password")) {
       formatedError.password = error;
     }
-    if (error.includes('Username')) {
+    if (error.includes("Username")) {
       formatedError.username = error;
     }
 
     dispatch({
       type: GET_ERRORS,
-      errors: {...formatedError},
+      errors: { ...formatedError },
     });
   } else {
     dispatch({
