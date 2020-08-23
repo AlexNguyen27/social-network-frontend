@@ -16,9 +16,6 @@ const StatisticsPost = ({ users, userId, role, userProfile }) => {
 
   let postViews = [1000, 2000, 500, 2000, 300, 2000, 1000, 200, 2202, 23230, 2323];
 
-  
-  console.log(postViews);
-
   return (
     <>
       <h4 className="mt-4">Statistics Likes</h4>

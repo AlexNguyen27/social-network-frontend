@@ -32,7 +32,6 @@ const EditCommentModal = ({
   const [comment, setComment] = useState(
     commentData ? commentData.comment : ""
   );
-  console.log(commentData);
   const initFormData = () => {
     setComment(commentData ? commentData.comment : "");
   };
@@ -59,7 +58,6 @@ const EditCommentModal = ({
         errors: error,
       });
     } else {
-      console.log(commentData);
       updateComment(setLoading, commentData.id, comment);
     }
   };

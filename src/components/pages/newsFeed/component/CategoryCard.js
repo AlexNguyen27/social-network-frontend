@@ -39,7 +39,6 @@ const CatergoryCard = ({ categories, posts, onClickCategory }) => {
     };
 
     Object.keys(posts).map((key) => {
-      console.log(posts[key].categoryId);
       if (categories[posts[key].categoryId]) {
         postCategories[posts[key].categoryId] =
           categories[posts[key].categoryId];

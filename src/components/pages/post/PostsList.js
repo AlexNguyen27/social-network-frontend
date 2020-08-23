@@ -134,15 +134,6 @@ const PostsList = ({
               overflowX: "auto",
             },
           }}
-          components={{
-            onRowAdd: (props) => {
-              return (
-                <Button onClick={() => console.log("click")}>
-                  Hello World
-                </Button>
-              );
-            },
-          }}
           actions={[
             {
               icon: () => <Edit />,

@@ -145,9 +145,7 @@ const CommentsList = ({
     }).then((result) => {
       if (result.value) {
         setLoading(true);
-        // deletePost(setLoading, postId);
         deleteComment(setLoading, commentId);
-        console.log(commentId);
       }
     });
   };

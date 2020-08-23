@@ -50,7 +50,6 @@ export default function UserCard({ userInfo }) {
   const classes = useStyles();
   const history = useHistory();
 
-  console.log(userInfo);
   const { firstName, lastName, quote, imageUrl } = userInfo || {};
   const userId = userInfo.userId || userInfo.id;
   return (

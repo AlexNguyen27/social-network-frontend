@@ -66,7 +66,6 @@ export const likeReaction = (
     });
     const { posts, selected_post } = state.post;
     // REACTION AT SELECTED POST
-    console.log(data.createReaction);
     if (data.createReaction.message.includes("Delete")) {
       dispatch({
         type: LIKE_REACTION,
@@ -82,7 +81,6 @@ export const likeReaction = (
       );
 
       if (JSON.stringify(selected_post) !== "{}") {
-        console.log("is reaction on selected post");
         dispatch({
           type: REACTION_SELECTED_POST,
           isLike: false,
@@ -131,7 +129,6 @@ export const likeReaction = (
         },
       });
       if (JSON.stringify(selected_post) !== "{}") {
-        console.log("is create reaction on selected post");
         const newReactonLike = {
           userId,
           postId,
@@ -145,7 +142,6 @@ export const likeReaction = (
       }
     }
   } else {
-    console.log(errors);
     logoutDispatch(dispatch, errors);
     dispatch({
       type: GET_ERRORS,

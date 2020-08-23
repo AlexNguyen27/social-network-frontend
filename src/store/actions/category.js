@@ -57,8 +57,6 @@ export const getCategories = (setLoading) => async (dispatch, getState) => {
 };
 
 export const addCategory = (setLoading, name, status) => async (dispatch, getState) => {
-  console.log("add new category---------------");
-
   const { token } = getState().auth;
 
   const { data, errors } = await hera({

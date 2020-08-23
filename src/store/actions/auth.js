@@ -70,14 +70,8 @@ export const loginUser = ({ username, password }) => async (dispatch) => {
       if (gitHubInfo.data.length > 0) {
         userData.imageUrl = gitHubInfo.data[0].owner.avatar_url;
       }
-      console.log("gitHubInfo--------------------", gitHubInfo);
     } catch (error) {
       console.log(error);
-      // logoutUser(dispatch, error);
-      // dispatch({
-      //   type: GET_ERRORS,
-      //   errors: error.response.data,
-      // });
     }
     dispatch({
       type: AUTHENTICATE,

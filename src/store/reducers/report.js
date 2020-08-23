@@ -33,7 +33,6 @@ export default function (state = initialState, action) {
       );
       const newArr = [...state.reports];
       newArr[reportedIndex] = { ...newArr[reportedIndex], ...report };
-      console.log(newArr);
       return {
         ...state,
         reports: [...newArr],
