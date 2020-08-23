@@ -14,7 +14,9 @@ export function getPopularPost(o, n) {
   var keys = Object.keys(o).map((key) => o[key]);
   console.log(keys);
   keys.sort(function (a, b) {
-    return b.reactions.length - a.reactions.length;
+    if (b.reactions && a.reactions) {
+      return b.reactions.length - a.reactions.length;
+    }
   });
   return keys.slice(0, n);
 }

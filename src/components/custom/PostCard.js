@@ -113,15 +113,17 @@ const PostCard = ({
         githubUsername: post.user.githubUsername,
       };
     }
-    likeReaction(
-      id,
-      categoryId,
-      title,
-      description,
-      setIsLiked,
-      setTotalLike,
-      userInfo
-    );
+    if (status === "public") {
+      likeReaction(
+        id,
+        categoryId,
+        title,
+        description,
+        setIsLiked,
+        setTotalLike,
+        userInfo
+      );
+    }
   };
 
   useEffect(() => {
