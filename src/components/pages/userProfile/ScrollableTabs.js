@@ -145,7 +145,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
                   Add new post
                 </Button>
               )}
-              {(!user_profile && !user_profile.posts) ||
+              {(!user_profile || !user_profile.posts) ||
                 (user_profile.posts && !user_profile.posts.length && (
                   <Typography
                     variant="h6"

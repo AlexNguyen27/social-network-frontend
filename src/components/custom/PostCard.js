@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import moment from "moment";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -85,9 +85,14 @@ const PostCard = ({
     status,
     createdAt,
     comments,
-    user: { imageUrl = "" },
     reactions,
   } = post || {};
+  const [loading, setLoading] = useState(false);
+
+  let imageUrl = "";
+  if (post && post.user && post.user.imageUrl) {
+    imageUrl = post.user.imageUrl;
+  }
 
   const [isLiked, setIsLiked] = useState(
     authProfile && authProfile.userFavoritePosts.find((item) => item.id === id)
@@ -111,7 +116,6 @@ const PostCard = ({
     setAnchorEl(null);
   };
 
-  const [loading, setLoading] = useState(false);
   const handleOnDelete = (postId) => {
     Swal.fire({
       title: `Are you sure to delete ?`,
@@ -189,12 +193,12 @@ const PostCard = ({
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            style={{ color: isLiked ? Colors.like : "" }}
+            style={{ color: isLiked || liked ? Colors.like : "" }}
             aria-label="add to favorites"
             onClick={() => handleOnLike()}
           >
             <FavoriteIcon />
-            <span className="like">{totalLike}</span>
+            <span className="like">{liked ? '' : totalLike }</span>
           </IconButton>
           <IconButton aria-label="comment">
             <ChatIcon />

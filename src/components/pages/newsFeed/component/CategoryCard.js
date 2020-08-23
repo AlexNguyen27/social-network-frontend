@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
+    marginBottom: 0
   },
 }));
 

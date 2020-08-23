@@ -143,10 +143,11 @@ const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end",
   },
   header: {
     background: Colors.light_purple,
@@ -215,9 +216,9 @@ const DashBoard = ({
   // get user profile after get into dashboard
   useEffect(() => {
     getUserProfile(user.id, setLoading);
-  }, [])
+  }, []);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -389,7 +390,7 @@ const DashBoard = ({
       case "/people":
         return (
           <>
-            <Users location={location}/>
+            <Users location={location} />
           </>
         );
       case "/user-info":
@@ -561,14 +562,17 @@ const DashBoard = ({
           <div
             className={classes.search}
             style={{
-              display: match.path === "/people" ? "block" : "none",
+              display:
+                match.path === "/people" || match.path === "/news-feed"
+                  ? "block"
+                  : "none",
             }}
           >
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search friends…"
+              placeholder={match.path === "/people" ? "Search friends…" : "Search posts..."}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -636,13 +640,13 @@ const DashBoard = ({
       >
         <div className={classes.drawerHeader}>
           <strong>DEV TROOPS</strong>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
               <ChevronRightIcon />
             )}
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>
@@ -688,4 +692,6 @@ const DashBoard = ({
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
-export default connect(mapStateToProps, { logoutUser, getUserProfile })(DashBoard);
+export default connect(mapStateToProps, { logoutUser, getUserProfile })(
+  DashBoard
+);
