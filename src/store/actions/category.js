@@ -167,7 +167,7 @@ export const deleteCatgory = (setLoading, id) => async (dispatch, getState) => {
     Swal.fire({
       position: "center",
       type: "Warning",
-      title: "Error",
+      title: "Can't delete this category cuz it has posts!",
       showConfirmButton: false,
       timer: 1500,
     });

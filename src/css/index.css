@@ -79,3 +79,9 @@ button:focus {
 .MuiTreeItem-label:hover {
   background-color: white !important;
 }
+
+@media (min-width: 1280px) {
+  .MuiContainer-maxWidthLg {
+    max-width: 1500px !important;
+  }
+}
