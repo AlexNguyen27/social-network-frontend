@@ -20,6 +20,7 @@ import SubUserInfo from "./SubUserInfo";
 import Connection from "./connection/Connection";
 import Favorites from "./favorite/Favorites";
 import Albums from "./albums/Albums";
+import { albums } from "../../../mockup/albums";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -79,6 +80,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
+    console.log(newValue, "--------------------------");
     setValue(newValue);
   };
 
@@ -124,10 +126,30 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
           textColor="primary"
           centered
         >
-          <Tab label="Posts" icon={<SubjectIcon />} {...a11yProps(0)} />
-          <Tab label="Connections" icon={<PeopleAltIcon />} {...a11yProps(1)} />
-          <Tab label="Favorites" icon={<FavoriteIcon />} {...a11yProps(2)} />
-          <Tab label="Albums" icon={<PhotoLibraryIcon />} {...a11yProps(3)} />
+          <Tab
+            label={`Posts (${user_profile ? user_profile.posts.length : 0})`}
+            icon={<SubjectIcon />}
+            {...a11yProps(0)}
+          />
+          <Tab
+            label={`Connections (${
+              user_profile ? user_profile.followed.length : 0
+            })`}
+            icon={<PeopleAltIcon />}
+            {...a11yProps(1)}
+          />
+          <Tab
+            label={`Favorites (${
+              user_profile ? user_profile.userFavoritePosts.length : 0
+            })`}
+            icon={<FavoriteIcon />}
+            {...a11yProps(2)}
+          />
+          <Tab
+            label={`Albums (${albums.length})`}
+            icon={<PhotoLibraryIcon />}
+            {...a11yProps(3)}
+          />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>

@@ -1,16 +1,19 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
+import { connect } from "react-redux";
+
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
 import EventIcon from "@material-ui/icons/Event";
 import moment from "moment";
 import PersonIcon from "@material-ui/icons/Person";
+import { getPopularPost } from "../../../../utils/commonFunction";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -39,66 +42,71 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 0,
   },
 }));
-const PopularArticles = () => {
+const PopularArticles = ({ posts }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const popularPosts = getPopularPost(posts, 5);
+  console.log(popularPosts);
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>
         Popular Articles
       </Typography>
+
       <List
         component="nav"
         className={classes.root}
         aria-label="mailbox folders"
       >
-        {[0, 1, 2].map((item) => (
-          <>
-            <ListItem button>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <ButtonBase className={classes.image}>
-                    <img
-                      className={classes.img}
-                      alt="complex"
-                      src="https://media1.tenor.com/images/140709d2e805f45737247a0c6a0164de/tenor.gif?itemid=17694777g"
-                    />
-                  </ButtonBase>
-                </Grid>
-                <Grid item xs={12} sm container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs>
-                      <Typography variant="body1" gutterBottom>
-                        Even the all-powerful Pointing has no control
-                      </Typography>
-                      <div>
-                        <Typography variant="caption" color="textSecondary">
-                          <EventIcon />
-                          {moment().format("MMM Do YYYY")}
+        {posts &&
+          popularPosts.map((item) => (
+            <>
+              <ListItem
+                button
+                onClick={() => history.push(`/view-post/${item.id}`)}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={3} sm container>
+                    <Grid item xs container direction="column" spacing={2}>
+                      <Grid item xs>
+                        <Typography variant="body1" gutterBottom>
+                          {item.title}
                         </Typography>
-                      </div>
-                      <Typography variant="caption" color="textSecondary">
-                        <PersonIcon />
-                        Dave Lewis
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography
-                        variant="caption"
-                        style={{ cursor: "pointer" }}
-                      >
-                        Like
-                      </Typography>
+                        <div>
+                          <Typography variant="caption" color="textSecondary">
+                            <EventIcon />
+                            {moment(item.createdAt).format("MMM Do YYYY")}
+                          </Typography>
+                        </div>
+                        <Typography variant="caption" color="textSecondary">
+                          <PersonIcon />
+                          {item.user.firstName} {item.user.lastName}
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography
+                          variant="caption"
+                          style={{ cursor: "pointer" }}
+                        >
+                          {item.reactions.length}{" "}
+                          {item.reactions.length > 1 ? `Likes` : `Like`}
+                        </Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </ListItem>
-            <Divider />
-          </>
-        ))}
+              </ListItem>
+              <Divider />
+            </>
+          ))}
       </List>
     </>
   );
 };
 
-export default PopularArticles;
+const mapStateToProps = (state) => ({
+  categories: state.category.categories,
+  posts: state.post.posts,
+});
+export default connect(mapStateToProps, {})(PopularArticles);

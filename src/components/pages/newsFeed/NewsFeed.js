@@ -34,12 +34,18 @@ const NewsFeed = ({
   getAllPublicPost,
   authUserId,
   getUsers,
+  location,
   posts,
 }) => {
+  console.log("lcasdf-----------------", location);
   const classes = useStyles();
   const history = useHistory();
   const [postsArr, setPostsArr] = useState(
     posts && Object.keys(posts).map((key) => posts[key])
+  );
+
+  const [noti, setNoti] = useState(
+    "NO POSTS, ADD SOME FRIENDS OR YOUR OWN POST :D"
   );
 
   const [loading, setLoading] = useState(true);
@@ -50,27 +56,19 @@ const NewsFeed = ({
     getUsers(() => {});
     getReactionTypes(setLoading);
 
-    // let followedUser = [];
-    if (authProfile) {
-      const toUsers =
-        authProfile.followed.length > 0 &&
-        authProfile.followed.map((item) => item.toUserId);
-
-      const followedUserPosts = [];
-      Object.keys(posts).map((key) => {
-        console.log(posts[key].userId);
-        for (let i = 0; i < toUsers.length; i++) {
-          if (posts[key].userId === toUsers[i]) {
-            followedUserPosts.push(posts[key]);
-          }
-        }
-      });
-      // console.log(followedUserPosts);
-      setPostsArr(followedUserPosts);
-    }
+    // if (authProfile) {
+    //   console.log('herer--------------------------------')
+    // }
   }, []);
 
+  useEffect(() => {
+    onClickCategory("news");
+  }, [authProfile]);
+
   const onClickCategory = (categoryId) => {
+    if (!authProfile) {
+      return;
+    }
     if (categoryId === "all") {
       setPostsArr(posts && Object.keys(posts).map((key) => posts[key]));
       return;
@@ -104,7 +102,31 @@ const NewsFeed = ({
     setPostsArr(test);
   };
 
-  // console.log("--------------------", authProfile);
+  useEffect(() => {
+    let searchText = location.searchText;
+    console.log(searchText);
+    const allPostArr = Object.keys(posts).map((key) => posts[key]);
+    if (searchText && searchText.trim() !== "") {
+      searchText = location.searchText.toLowerCase();
+      const mockup = (allPostArr || []).filter((post) => {
+        return (
+          post.title.toLowerCase().match(searchText) ||
+          post.description.toLowerCase().match(searchText) ||
+          post.user.username.toLowerCase().match(searchText) ||
+          post.user.firstName.toLowerCase().match(searchText) ||
+          post.user.lastName.toLowerCase().match(searchText)
+        );
+      });
+      if (!mockup.length) {
+        setNoti("NO POST FOUND");
+      }
+      setPostsArr(mockup);
+    } else {
+      onClickCategory("news");
+    }
+  }, [location]);
+
+  console.log("--------------------", postsArr);
   return (
     <div className={classes.root}>
       <PageLoader loading={loading}>
@@ -128,7 +150,7 @@ const NewsFeed = ({
                           post={item}
                           authUserId={authUserId}
                           isCurrentAuth={
-                            item.user.id === authUserId || role === "admin"
+                            item.userId === authUserId || role === "admin"
                           }
                         />
                       </Grid>
@@ -141,8 +163,7 @@ const NewsFeed = ({
                         color="textSecondary"
                         component="p"
                       >
-                        {" "}
-                        NO POSTS, ADD SOME FRIENDS OR YOUR OWN POST :D
+                        {noti}
                       </Typography>
                       <div className="text-center mt-4">
                         <Button
@@ -153,7 +174,7 @@ const NewsFeed = ({
                             history.push("/people");
                           }}
                         >
-                          FIND Friends
+                          FIND FRIENDS
                         </Button>
                       </div>
                     </>

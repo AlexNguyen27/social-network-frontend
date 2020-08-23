@@ -2,31 +2,27 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getPostById } from "../../../../store/actions/post";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import ViewText from "../../../custom/ViewText";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Divider, Paper } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import CommentsList from "./comment/CommentsList";
 import PageTitle from "../../../custom/PageTitle";
 import PageLoader from "../../../custom/PageLoader";
 import clsx from "clsx";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
+import PersonIcon from "@material-ui/icons/Person";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ChatIcon from "@material-ui/icons/Chat";
-import Visibility from "@material-ui/icons/Visibility";
+import EventIcon from '@material-ui/icons/Event';
 import Colors from "../../../../constants/Colors";
 import { likeReaction } from "../../../../store/actions/like";
+import PopularArticles from "../../newsFeed/component/PopularArticles";
+import { getPopularPost } from "../../../../utils/commonFunction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,10 +48,12 @@ const ViewPost = ({
   userProfile,
   getPostById,
   selectedPost,
+  posts,
   likeReaction,
 }) => {
   const [loading, setLoading] = useState(true);
   const classes = useStyles();
+  const history = useHistory();
   const [expanded, setExpanded] = React.useState(false);
   const [isLiked, setIsLiked] = useState(
     userProfile &&
@@ -100,6 +98,8 @@ const ViewPost = ({
     );
     setTotalLike(reactions && reactions.length);
   }, [handleOnLike]);
+
+  const popularPosts = getPopularPost(posts, 8);
 
   return (
     <PageLoader loading={loading}>
@@ -192,6 +192,76 @@ const ViewPost = ({
             </Collapse>
           </Grid>
         </Grid>
+        <Grid item xs={12}>
+          <Typography
+          className="mt-4 mb-2"
+          variant="h5" 
+          >More from Dev Troops</Typography>
+          <Divider />
+
+          <Grid
+            container
+            style={{ cursor: "pointer" }}
+            className="mt-3 mb-4"
+            spacing="3"
+          >
+            {popularPosts &&
+              popularPosts.length > 0 &&
+              popularPosts.map((item) => (
+                <>
+                  <Grid
+                    item
+                    className="p-3"
+                    xs={3}
+                    onClick={() => history.push(`/view-post/${item.id}`)}
+                  >
+                    <Paper style={{ background: '#f9f9f9'}}>
+                      <Grid container spacing={2} className="p-3">
+                        <Grid item xs={3} sm container>
+                          <Grid container direction="column">
+                            <Grid item>
+                              <Typography variant="h6" gutterBottom>
+                                {item.title}
+                              </Typography>
+                              <div>
+                                <Typography
+                                  variant="caption"
+                                  color="textSecondary"
+                                >
+                                  <EventIcon />
+                                  {moment(item.createdAt).format("MMM Do YYYY")}
+                                </Typography>
+                              </div>
+                              <Typography
+                                variant="caption"
+                                color="textSecondary"
+                              >
+                                <PersonIcon />
+                                {item.user.firstName && item.user.lastName
+                                  ? item.user.firstName +
+                                    " " +
+                                    item.user.lastName
+                                  : item.user.username}
+                              </Typography>
+                            </Grid>
+                            <Grid item className="mt-2">
+                              <Typography
+                                variant="caption"
+                                className="ml-2"
+                              >
+                                {item.reactions.length}{" "}
+                                {item.reactions.length > 1 ? `Likes` : `Like`}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
+                </>
+              ))}
+          </Grid>
+        </Grid>
       </Grid>
     </PageLoader>
   );
@@ -201,6 +271,7 @@ const mapStateToProps = (state) => ({
   categories: state.category.categories,
   selectedPost: state.post.selected_post,
   userProfile: state.user_profile.user_profile,
+  posts: state.post.posts,
 });
 export default connect(mapStateToProps, { getPostById, likeReaction })(
   ViewPost

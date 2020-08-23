@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     margin: 0,
-    maxWidth: 1500,
+    maxWidth: "1500px !important",
   },
   appBar: {
     background: Colors.purple,
@@ -378,7 +378,7 @@ const DashBoard = ({
       case "/news-feed":
         return (
           <>
-            <NewsFeed />
+            <NewsFeed location={location} />
           </>
         );
       case "/add-new-post":
@@ -524,7 +524,7 @@ const DashBoard = ({
   };
 
   const setSearchText = (search) => {
-    if (match.path === "/people") {
+    if (match.path === "/people" || match.path === '/news-feed') {
       history.push({
         pathname: `${window.location.pathname}`,
         search: `?search=${search}`,

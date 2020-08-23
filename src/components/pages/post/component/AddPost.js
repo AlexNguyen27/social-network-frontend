@@ -4,6 +4,7 @@ import PageTitle from "../../../custom/PageTitle";
 import TextEditor from "../../../custom/TextEditor";
 import Button from "@material-ui/core/Button";
 import { Row } from "reactstrap";
+import { useHistory } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import DropdownV2 from "../../../custom/DropdownV2";
 import { addNewPost } from "../../../../store/actions/post";
@@ -22,17 +23,18 @@ const status = [
 ];
 
 const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
+  const history = useHistory();
   // IF THERE IS PRE-DEFINED PAGE CONTENTS, INITIALIZE BLOG DATA WITH IT
   const [blogData, setBlogData] = useState(preDefinedPageContents || blogData1);
   // DESTRUCTURE BLOG DATA
   const { textBody, pageId, pageName } = blogData || {};
 
   const categoryArr = Object.keys(categories).map((key) => categories[key]);
-  
+
   // status: 0: private, 1: public
   const [selectedDropdownData, setSelectedDropdownData] = useState({
     selectedCategoryIndex: categoryArr[0].id,
-    selectedStatusIndex: 'public',
+    selectedStatusIndex: "public",
   });
 
   const { selectedCategoryIndex, selectedStatusIndex } = selectedDropdownData;
@@ -71,12 +73,13 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
   const handleOnSubmit = () => {
     // console.log("blogData", blogData);
     // console.log(selectedDropdownData);
-    addNewPost({
-      bodyText: textBody,
-      title: pageName,
-      categoryId: selectedCategoryIndex,
-      status: selectedStatusIndex,
-    });
+    addNewPost(
+      textBody,
+      pageName,
+      selectedCategoryIndex,
+      selectedStatusIndex,
+      history
+    );
   };
 
   return (
