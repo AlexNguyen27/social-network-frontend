@@ -168,11 +168,6 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
                   Add new post
                 </Button>
               )}
-              {/* {(!user_profile || user_profile && !user_profile.posts) ||
-                (user_profile.posts && !user_profile.posts.length && (
-                 
-                ))} */}
-
               {user_profile &&
               user_profile.posts &&
               user_profile.posts.length > 0 ? (
@@ -219,22 +214,26 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
         <Connection connections={connections} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        {!user_profile.userFavoritePosts ||
-          (!user_profile.userFavoritePosts.length && (
-            <Typography
-              variant="h6"
-              className="text-center"
-              component="p"
-              color="textSecondary"
-            >
-              NO FAVORITE POSTS
-            </Typography>
-          ))}
-        <Favorites
-          favoritePosts={(user_profile && user_profile.userFavoritePosts) || []}
-          userProfile={user_profile}
-          authUserId={authUserId}
-        />
+        {user_profile &&
+        user_profile.userFavoritePosts &&
+        user_profile.userFavoritePosts.length > 0 ? (
+          <Favorites
+            favoritePosts={
+              (user_profile && user_profile.userFavoritePosts) || []
+            }
+            userProfile={user_profile}
+            authUserId={authUserId}
+          />
+        ) : (
+          <Typography
+            variant="h6"
+            className="text-center"
+            component="p"
+            color="textSecondary"
+          >
+            NO FAVORITE POSTS
+          </Typography>
+        )}
       </TabPanel>
       <TabPanel value={value} index={3}>
         <Albums />
