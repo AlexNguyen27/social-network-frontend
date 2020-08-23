@@ -65,7 +65,7 @@ const ReportsList = ({ getReports, deleteReport, reports, users }) => {
       { title: "Author", field: "username", editable: "never" },
       { title: "Reason", field: "reason", editable: "never" },
       { title: "Status", field: "status", lookup: REPORT_STATUS_OBJECT },
-      { title: "Total Reporters", field: "totalReporters", editable: "never" },
+      // { title: "Total Reporters", field: "totalReporters", editable: "never" },
       {
         title: "Created at",
         field: "createdAt",

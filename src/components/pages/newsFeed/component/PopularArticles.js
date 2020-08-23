@@ -47,7 +47,6 @@ const PopularArticles = ({ posts }) => {
   const history = useHistory();
 
   const popularPosts = getPopularPost(posts, 5);
-  console.log(popularPosts);
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>

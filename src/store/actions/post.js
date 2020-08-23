@@ -397,7 +397,6 @@ export const updatePost = (setLoading, postData) => async (
   dispatch,
   getState
 ) => {
-  console.log("-updatePost----------", postData);
   const { token } = getState().auth;
 
   const { id, title, description, status, categoryId } = postData;

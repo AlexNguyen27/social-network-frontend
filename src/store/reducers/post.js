@@ -56,7 +56,6 @@ export default function (state = initialState, action) {
         selected_post: post,
       };
     case REACTION_SELECTED_POST:
-      console.log("chagne selected post reaction");
       const { isLike, newReactonLike, userId } = action;
       const { reactions } = state.selected_post;
       let newReactions;
@@ -94,7 +93,6 @@ export default function (state = initialState, action) {
       const selectedIndex = oldCommentArr.findIndex(
         (item) => item.id === editComment.id
       );
-      console.log("sected index ---------", selectedIndex);
       oldCommentArr[selectedIndex] = editComment;
       return {
         ...state,

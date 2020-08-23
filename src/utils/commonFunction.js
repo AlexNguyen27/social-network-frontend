@@ -12,7 +12,6 @@ export const arrayToObject = (array) => {
 
 export function getPopularPost(o, n) {
   var keys = Object.keys(o).map((key) => o[key]);
-  console.log(keys);
   keys.sort(function (a, b) {
     if (b.reactions && a.reactions) {
       return b.reactions.length - a.reactions.length;

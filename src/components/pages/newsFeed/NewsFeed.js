@@ -37,7 +37,6 @@ const NewsFeed = ({
   location,
   posts,
 }) => {
-  console.log("lcasdf-----------------", location);
   const classes = useStyles();
   const history = useHistory();
   const [postsArr, setPostsArr] = useState(
@@ -74,15 +73,14 @@ const NewsFeed = ({
       return;
     }
     if (categoryId === "news") {
-      let toUsers = [];
-      toUsers.push(authProfile.id);
-      toUsers =
-        authProfile.followed.length > 0 &&
-        authProfile.followed.map((item) => item.toUserId);
-
+      let toUsers =
+        authProfile.followed.length > 0 ?
+        authProfile.followed.map((item) => item.toUserId) : [];
+      if (toUsers) {
+        toUsers.push(authProfile.id);
+      }
       const followedUserPosts = [];
       Object.keys(posts).map((key) => {
-        console.log(posts[key].userId);
         for (let i = 0; i < toUsers.length; i++) {
           if (posts[key].userId === toUsers[i]) {
             followedUserPosts.push(posts[key]);
@@ -105,7 +103,6 @@ const NewsFeed = ({
 
   useEffect(() => {
     let searchText = location.searchText;
-    console.log(searchText);
     const allPostArr = Object.keys(posts).map((key) => posts[key]);
     if (searchText && searchText.trim() !== "") {
       searchText = location.searchText.toLowerCase();
