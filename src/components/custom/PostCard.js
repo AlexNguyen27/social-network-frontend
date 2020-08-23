@@ -103,7 +103,25 @@ const PostCard = ({
 
   // update reaction of post
   const handleOnLike = () => {
-    likeReaction(id, categoryId, title, description, setIsLiked, setTotalLike);
+    let userInfo = {};
+    if (post.user) {
+      userInfo = {
+        id: post.user.id,
+        imageUrl: post.user.imageUrl,
+        firstName: post.user.firstName,
+        lastName: post.user.lastName,
+        githubUsername: post.user.githubUsername,
+      };
+    }
+    likeReaction(
+      id,
+      categoryId,
+      title,
+      description,
+      setIsLiked,
+      setTotalLike,
+      userInfo
+    );
   };
 
   useEffect(() => {

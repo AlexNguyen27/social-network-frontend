@@ -17,7 +17,8 @@ export const likeReaction = (
   title,
   description,
   setIsLiked,
-  setTotalLike
+  setTotalLike,
+  userInfo
 ) => async (dispatch, getState) => {
   const state = getState();
   const {
@@ -104,6 +105,7 @@ export const likeReaction = (
         categoryId,
         title,
         description,
+        user: userInfo,
       };
       // FOR FAVORITE TABSS
       dispatch({

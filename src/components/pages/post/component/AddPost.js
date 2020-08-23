@@ -124,7 +124,7 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
         onChange={onChangeEditor}
         placeholder="Enter text here"
       />
-      <Grid container justify="center">
+      <Grid container justify="center" className="mt-4">
         <Button
           variant="contained"
           color="primary"

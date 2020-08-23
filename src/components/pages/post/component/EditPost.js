@@ -132,7 +132,7 @@ const EditPost = ({
           onChange={onChangeEditor}
           placeholder="Enter body blog here"
         />
-        <Grid container justify="center">
+        <Grid container justify="center" className="mt-4">
           <Button
             variant="contained"
             color="primary"

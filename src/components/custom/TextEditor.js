@@ -63,7 +63,7 @@ const TextEditor = ({ className, style, value, placeholder, onChange }) => {
       <div>
         <Button
           component="span"
-          className="rawButton"
+          className="rawButton d-none"
           onClick={() => {
             handleClickShowRaw();
           }}
@@ -85,7 +85,7 @@ const TextEditor = ({ className, style, value, placeholder, onChange }) => {
 
       {/* TEXTAREA FOR RAW */}
       <textarea
-        className={"raw-editor"}
+        className={"raw-editor d-none"}
         onChange={e => {
           handleChangeRaw(e.target.value);
           onChange(e.target.value);

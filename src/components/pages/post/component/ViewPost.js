@@ -18,7 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ChatIcon from "@material-ui/icons/Chat";
-import EventIcon from '@material-ui/icons/Event';
+import EventIcon from "@material-ui/icons/Event";
 import Colors from "../../../../constants/Colors";
 import { likeReaction } from "../../../../store/actions/like";
 import PopularArticles from "../../newsFeed/component/PopularArticles";
@@ -81,13 +81,24 @@ const ViewPost = ({
   const totalComments = comments ? comments.length : 0;
 
   const handleOnLike = () => {
+    let userInfo = {};
+    if (selectedPost.user) {
+      userInfo = {
+        id: selectedPost.user.id,
+        imageUrl: selectedPost.user.imageUrl,
+        firstName: selectedPost.user.firstName,
+        lastName: selectedPost.user.lastName,
+        githubUsername: selectedPost.user.githubUsername,
+      };
+    }
     likeReaction(
       selectedPost.id,
       categoryId,
       title,
       description,
       setIsLiked,
-      setTotalLike
+      setTotalLike,
+      userInfo
     );
   };
 
@@ -193,10 +204,9 @@ const ViewPost = ({
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <Typography
-          className="mt-4 mb-2"
-          variant="h5" 
-          >More from Dev Troops</Typography>
+          <Typography className="mt-4 mb-2" variant="h5">
+            More from Dev Troops
+          </Typography>
           <Divider />
 
           <Grid
@@ -215,7 +225,7 @@ const ViewPost = ({
                     xs={3}
                     onClick={() => history.push(`/view-post/${item.id}`)}
                   >
-                    <Paper style={{ background: '#f9f9f9'}}>
+                    <Paper style={{ background: "#f9f9f9" }}>
                       <Grid container spacing={2} className="p-3">
                         <Grid item xs={3} sm container>
                           <Grid container direction="column">
@@ -245,10 +255,7 @@ const ViewPost = ({
                               </Typography>
                             </Grid>
                             <Grid item className="mt-2">
-                              <Typography
-                                variant="caption"
-                                className="ml-2"
-                              >
+                              <Typography variant="caption" className="ml-2">
                                 {item.reactions.length}{" "}
                                 {item.reactions.length > 1 ? `Likes` : `Like`}
                               </Typography>
