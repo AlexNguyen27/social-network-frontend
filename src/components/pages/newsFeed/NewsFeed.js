@@ -105,14 +105,14 @@ const NewsFeed = ({
     let searchText = location.searchText;
     const allPostArr = Object.keys(posts).map((key) => posts[key]);
     if (searchText && searchText.trim() !== "") {
-      searchText = location.searchText.toLowerCase();
+      searchText = searchText && location.searchText.toLowerCase();
       const mockup = (allPostArr || []).filter((post) => {
         return (
-          post.title.toLowerCase().match(searchText) ||
-          post.description.toLowerCase().match(searchText) ||
+          post.title && post.title.toLowerCase().match(searchText) ||
+          post.description && post.description.toLowerCase().match(searchText) ||
           post.user.username.toLowerCase().match(searchText) ||
-          post.user.firstName.toLowerCase().match(searchText) ||
-          post.user.lastName.toLowerCase().match(searchText)
+          post.user.firstName && post.user.firstName.toLowerCase().match(searchText) ||
+          post.user.lastName && post.user.lastName.toLowerCase().match(searchText)
         );
       });
       if (!mockup.length) {

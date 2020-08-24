@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flex: "1 0 auto",
     paddingBottom: "0px !important",
+    height: '100%'
   },
   cover: {
     borderRadius: "130px",
@@ -61,8 +62,8 @@ export default function UserCard({ userInfo }) {
           title="Live from space album cover"
         />
       </Grid>
-      <Grid container justify="center" style={{ textAlign: "center" }}>
-        <CardContent className={classes.content}>
+      <Grid container justify="center" style={{ textAlign: "center" }} className="userCard">
+        <CardContent className={classes.content} >
           <Typography component="h5" variant="h5" className={classes.title}>
             {firstName} {lastName}
           </Typography>

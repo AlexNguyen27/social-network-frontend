@@ -85,3 +85,7 @@ button:focus {
     max-width: 1500px !important;
   }
 }
+
+.userCard .MuiPaper-rounded {
+  height: 100%;
+}

@@ -70,7 +70,7 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
     quote,
     posts,
     followed,
-  } = userInfo;
+  } = userInfo || {};
 
   return (
     <>

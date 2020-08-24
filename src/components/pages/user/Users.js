@@ -50,7 +50,7 @@ const Users = ({ users, getUsers, location }) => {
         >
           {usersData && usersData.length > 0 ? (
             usersData.map((user) => (
-              <Grid item key={user.id} xs={4}>
+              <Grid item key={user.id} xs={4} className="userCard">
                 <UserCard userInfo={user} />
               </Grid>
             ))
