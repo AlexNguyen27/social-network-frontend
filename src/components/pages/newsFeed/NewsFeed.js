@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NewsFeed = ({
-  getPosts,
+  selectedPost,
   authProfile,
   getReactionTypes,
   role,
@@ -50,14 +50,14 @@ const NewsFeed = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllPublicPost(() => {});
-    getCategories(() => {});
-    getUsers(() => {});
-    getReactionTypes(setLoading);
-
-    // if (authProfile) {
-    //   console.log('herer--------------------------------')
-    // }
+    getAllPublicPost(setLoading).then(() => {
+      setLoading(true);
+      getCategories(setLoading).then(() => {
+        setLoading(true);
+        getUsers(setLoading);
+        getReactionTypes(setLoading);
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -74,8 +74,9 @@ const NewsFeed = ({
     }
     if (categoryId === "news") {
       let toUsers =
-        authProfile.followed.length > 0 ?
-        authProfile.followed.map((item) => item.toUserId) : [];
+        authProfile.followed.length > 0
+          ? authProfile.followed.map((item) => item.toUserId)
+          : [];
       if (toUsers) {
         toUsers.push(authProfile.id);
       }
@@ -87,7 +88,6 @@ const NewsFeed = ({
           }
         }
       });
-      // console.log(followedUserPosts);
       setPostsArr(followedUserPosts);
       return;
     }
@@ -108,11 +108,14 @@ const NewsFeed = ({
       searchText = searchText && location.searchText.toLowerCase();
       const mockup = (allPostArr || []).filter((post) => {
         return (
-          post.title && post.title.toLowerCase().match(searchText) ||
-          post.description && post.description.toLowerCase().match(searchText) ||
+          (post.title && post.title.toLowerCase().match(searchText)) ||
+          (post.description &&
+            post.description.toLowerCase().match(searchText)) ||
           post.user.username.toLowerCase().match(searchText) ||
-          post.user.firstName && post.user.firstName.toLowerCase().match(searchText) ||
-          post.user.lastName && post.user.lastName.toLowerCase().match(searchText)
+          (post.user.firstName &&
+            post.user.firstName.toLowerCase().match(searchText)) ||
+          (post.user.lastName &&
+            post.user.lastName.toLowerCase().match(searchText))
         );
       });
       if (!mockup.length) {
@@ -128,8 +131,8 @@ const NewsFeed = ({
   return (
     <div className={classes.root}>
       <PageLoader loading={loading}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={10}>
             <div style={{ margin: "0px " }}>
               <Grid
                 container
@@ -191,6 +194,7 @@ const mapStateToProps = (state) => ({
   categories: state.category.categories,
   authUserId: state.auth.user.id,
   posts: state.post.posts,
+  selectedPost: state.post.selected_post,
   role: state.auth.user.role,
   authProfile: state.user_profile.user_profile,
 });

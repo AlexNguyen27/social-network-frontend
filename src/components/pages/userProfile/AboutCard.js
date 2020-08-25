@@ -71,13 +71,15 @@ const AboutCard = ({
     );
   }, [userProfile]);
 
-  const { imageUrl, firstName, lastName, quote, totalFollowers } =
+  const { imageUrl, username, firstName, lastName, quote, totalFollowers } =
     userProfile || {};
 
   const handleOnFollow = () => {
     followToUser(userProfile.id, setConnect);
   };
 
+  const userName =
+  firstName && lastName ? firstName + " " + lastName : username; 
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
@@ -90,7 +92,7 @@ const AboutCard = ({
       <Grid container justify="center" style={{ textAlign: "center" }}>
         <CardContent className={classes.content}>
           <Typography component="h4" variant="h4" className={classes.title}>
-            {firstName} {lastName}
+            {userName}
           </Typography>
           <Typography
             variant="subtitle1"

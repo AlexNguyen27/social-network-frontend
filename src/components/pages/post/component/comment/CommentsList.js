@@ -8,6 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import EditIcon from "@material-ui/icons/Edit";
 import TreeItem from "@material-ui/lab/TreeItem";
+import { useHistory } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -125,6 +126,7 @@ const CommentsList = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const [comment, setComment] = useState("");
   const [onEditModel, setOnEditModal] = useState();
   const [commentData, setCommentData] = useState();
@@ -160,6 +162,8 @@ const CommentsList = ({
       <Grid container spacing={1}>
         <Grid item>
           <Avatar
+            onClick={() => history.push(`/user-profile/${nodes.userId}`)}
+            style={{ cursor: 'pointer'}}
             alt="Remy Sharp"
             src={nodes.user.imageUrl || BASE_IMAGE_URL}
           />

@@ -47,7 +47,7 @@ button:focus {
 }
 
 .editMode .ql-editor {
-  height: 600px !important;
+  min-height: 600px !important;
 }
 
 .userImage {

@@ -33,6 +33,7 @@ import { BASE_IMAGE_URL } from "../../store/actions/types";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    height: '100%'
   },
   media: {
     height: 0,

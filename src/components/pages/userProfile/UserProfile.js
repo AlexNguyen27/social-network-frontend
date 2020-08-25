@@ -44,7 +44,7 @@ const UserProfile = ({
   return (
     <div className={classes.root}>
       <PageLoader loading={loading}>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justify="center">
           <Grid item xs={12}>
             <AboutCard userProfile={userProfile} />
           </Grid>

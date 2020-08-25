@@ -172,8 +172,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -drawerWidth,
   },
   contentShift: {
+    // backgroundColor: "#F2F3F5",
     backgroundColor: "white",
-
     // background: Colors.accent,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -524,7 +524,7 @@ const DashBoard = ({
   };
 
   const setSearchText = (search) => {
-    if (match.path === "/people" || match.path === '/news-feed') {
+    if (match.path === "/people" || match.path === "/news-feed") {
       history.push({
         pathname: `${window.location.pathname}`,
         search: `?search=${search}`,
