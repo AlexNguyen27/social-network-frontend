@@ -67,7 +67,7 @@ const Login = ({
               value={username}
               onChange={onChange}
               error={errors.message}
-              placeholder="Enter Staff ID"
+              placeholder="Enter Username"
             />
 
             <TextFieldInputWithHeader

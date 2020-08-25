@@ -28,6 +28,7 @@ import { likeReaction } from "../../store/actions/like";
 import ReportModal from "../pages/post/component/ReportModal";
 import { deletePost } from "../../store/actions/post";
 import { Typography } from "@material-ui/core";
+import { BASE_IMAGE_URL } from "../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -168,7 +169,7 @@ const PostCard = ({
               onClick={() => history.push(`/user-profile/${post.userId}`)}
               aria-label="recipe"
               className={classes.avatar}
-              src={imageUrl || "../../images/no_image.jpg"}
+              src={imageUrl || BASE_IMAGE_URL}
             ></Avatar>
           }
           action={

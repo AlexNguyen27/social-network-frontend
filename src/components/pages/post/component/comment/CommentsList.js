@@ -166,7 +166,10 @@ const CommentsList = ({
         </Grid>
         <Grid item>
           <Typography variant="caption" component="span">
-            {nodes.user.firstName} {nodes.user.lastName}
+            {nodes.user.firstName && nodes.user.lastName
+              ? nodes.user.firstName + " " + nodes.user.lastName
+              : nodes.user.username}
+
             {" | "}
           </Typography>
           <Typography
