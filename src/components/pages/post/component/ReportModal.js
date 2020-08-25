@@ -74,7 +74,7 @@ const ReportModal = ({
                 <TextFieldInputWithHeader
                   id="outlined-multiline-flexible"
                   name="reason"
-                  label="Reason you report this post"
+                  label="Enter reason you report this post"
                   fullWidth
                   multiline
                   rows={4}

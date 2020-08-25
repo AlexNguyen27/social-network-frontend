@@ -75,6 +75,7 @@ const ViewPost = ({
     description,
     categoryId,
     user: {
+      id: userId,
       firstName,
       lastName,
       githubUsername,
@@ -126,154 +127,172 @@ const ViewPost = ({
 
   return (
     <PageLoader loading={loading}>
-      <PageTitle title={title} center editMode="false" />
-      <Grid container>
-        <Grid item xs={12}>
-          <Grid container justify="flex-start">
-            <Grid item xs={1} className="text-center">
-              <img
-                className="userImage"
-                src={avatar || BASE_IMAGE_URL}
-                alt="user image"
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <Grid item>
-                <Typography variant="h6">{userName}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="subtitle2">
-                  <a
-                    className="aSubText"
-                    target="_blank"
-                    href={`https://github.com/${githubUsername}`}
-                  >
-                    <GitHubIcon className="mr-1" /> {githubUsername}
-                  </a>
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography
-                  variant="subtitle2"
-                  style={{ color: "#888", marginTop: "5px" }}
+      <Grid container justify="center">
+        <Grid item xs={10}>
+          <PageTitle title={title} center editMode="false" />
+          <Grid container>
+            <Grid item xs={12}>
+              <Grid container justify="flex-start">
+                <Grid
+                  item
+                  xs={1}
+                  className="text-center"
+                  onClick={() => history.push(`/user-profile/${userId}`)}
                 >
-                  {moment(updatedAt).format("MMMM Do YYYY, h:mm:ss A")}
-                </Typography>
+                  <img
+                    className="userImage"
+                    src={avatar || BASE_IMAGE_URL}
+                    alt="user image"
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <Grid item>
+                    <Typography variant="h6">{userName}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="subtitle2">
+                      <a
+                        className="aSubText"
+                        target="_blank"
+                        href={`https://github.com/${githubUsername}`}
+                      >
+                        <GitHubIcon className="mr-1" /> {githubUsername}
+                      </a>
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ color: "#888", marginTop: "5px" }}
+                    >
+                      {moment(updatedAt).format("MMMM Do YYYY, h:mm:ss A")}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <hr className="mb-0" />
-          <ViewText textBody={description} className="viewMode" />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={5}>
-              <IconButton
-                style={{ color: isLiked ? Colors.like : "" }}
-                aria-label="add to favorites"
-                onClick={() => handleOnLike()}
-              >
-                <FavoriteIcon />
-                <span className="like">{totalLike}</span>
-              </IconButton>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded,
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label="Show more comment"
-              >
-                <ChatIcon />
-                <span className="like">{totalComments}</span>
-              </IconButton>
+            <Grid item xs={12}>
+              <hr className="mb-0" />
+              <ViewText textBody={description} className="viewMode" />
             </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container>
-            <Collapse
-              in={true}
-              timeout="auto"
-              style={{ width: "100%" }}
-              unmountOnExit
-            >
-              <Typography
-                variant="h6"
-                style={{ color: "#888", margin: "10px 10px 0 10px" }}
-              >
-                Comments
-              </Typography>
-              <CommentsList postId={postId} />
-            </Collapse>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography className="mt-4 mb-2" variant="h5">
-            More from Dev Troops
-          </Typography>
-          <Divider />
-
-          <Grid
-            container
-            style={{ cursor: "pointer" }}
-            className="mt-3 mb-4"
-            spacing="3"
-          >
-            {popularPosts &&
-              popularPosts.length > 0 &&
-              popularPosts.map((item) => (
-                <>
-                  <Grid
-                    item
-                    className="p-3"
-                    xs={3}
-                    onClick={() => history.push(`/view-post/${item.id}`)}
+            <Grid item xs={12}>
+              <Grid container>
+                <Grid item xs={5}>
+                  <IconButton
+                    style={{ color: isLiked ? Colors.like : "" }}
+                    aria-label="add to favorites"
+                    onClick={() => handleOnLike()}
                   >
-                    <Paper style={{ background: "#f9f9f9", height: "100%" }}>
-                      <Grid container spacing={2} className="p-3">
-                        <Grid item xs={3} sm container>
-                          <Grid container direction="column">
-                            <Grid item>
-                              <Typography variant="h6" gutterBottom>
-                                {item.title}
-                              </Typography>
-                              <div>
-                                <Typography
-                                  variant="caption"
-                                  color="textSecondary"
-                                >
-                                  <EventIcon />
-                                  {moment(item.createdAt).format("MMM Do YYYY")}
-                                </Typography>
-                              </div>
-                              <Typography
-                                variant="caption"
-                                color="textSecondary"
-                              >
-                                <PersonIcon />
-                                {item.user.firstName && item.user.lastName
-                                  ? item.user.firstName +
-                                    " " +
-                                    item.user.lastName
-                                  : item.user.username}
-                              </Typography>
-                            </Grid>
-                            <Grid item className="mt-2">
-                              <Typography variant="caption" className="ml-2">
-                                {item.reactions.length}{" "}
-                                {item.reactions.length > 1 ? `Likes` : `Like`}
-                              </Typography>
+                    <FavoriteIcon />
+                    <span className="like">{totalLike}</span>
+                  </IconButton>
+                  <IconButton
+                    className={clsx(classes.expand, {
+                      [classes.expandOpen]: expanded,
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="Show more comment"
+                  >
+                    <ChatIcon />
+                    <span className="like">{totalComments}</span>
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container>
+                <Collapse
+                  in={true}
+                  timeout="auto"
+                  style={{ width: "100%" }}
+                  unmountOnExit
+                >
+                  <Typography
+                    variant="h6"
+                    style={{ color: "#888", margin: "10px 10px 0 10px" }}
+                  >
+                    Comments
+                  </Typography>
+                  <CommentsList postId={postId} />
+                </Collapse>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className="mt-4 mb-2" variant="h5">
+                More from Dev Troops
+              </Typography>
+              <Divider />
+
+              <Grid
+                container
+                style={{ cursor: "pointer" }}
+                className="mt-3 mb-4"
+                spacing="3"
+              >
+                {popularPosts &&
+                  popularPosts.length > 0 &&
+                  popularPosts.map((item) => (
+                    <>
+                      <Grid
+                        item
+                        className="p-3"
+                        xs={3}
+                        onClick={() => history.push(`/view-post/${item.id}`)}
+                      >
+                        <Paper
+                          style={{ background: "#f9f9f9", height: "100%" }}
+                        >
+                          <Grid container spacing={2} className="p-3">
+                            <Grid item xs={3} sm container>
+                              <Grid container direction="column">
+                                <Grid item>
+                                  <Typography variant="h6" gutterBottom>
+                                    {item.title}
+                                  </Typography>
+                                  <div>
+                                    <Typography
+                                      variant="caption"
+                                      color="textSecondary"
+                                    >
+                                      <EventIcon />
+                                      {moment(item.createdAt).format(
+                                        "MMM Do YYYY"
+                                      )}
+                                    </Typography>
+                                  </div>
+                                  <Typography
+                                    variant="caption"
+                                    color="textSecondary"
+                                  >
+                                    <PersonIcon />
+                                    {item.user.firstName && item.user.lastName
+                                      ? item.user.firstName +
+                                        " " +
+                                        item.user.lastName
+                                      : item.user.username}
+                                  </Typography>
+                                </Grid>
+                                <Grid item className="mt-2">
+                                  <Typography
+                                    variant="caption"
+                                    className="ml-2"
+                                  >
+                                    {item.reactions.length}{" "}
+                                    {item.reactions.length > 1
+                                      ? `Likes`
+                                      : `Like`}
+                                  </Typography>
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </Paper>
                       </Grid>
-                    </Paper>
-                  </Grid>
-                </>
-              ))}
+                    </>
+                  ))}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

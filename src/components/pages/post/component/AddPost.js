@@ -119,7 +119,7 @@ const AddPost = ({ preDefinedPageContents, categories, addNewPost }) => {
 
       <hr className="mb-0" />
       <TextEditor
-        className="blog"
+        className="blog editMode"
         value={textBody}
         onChange={onChangeEditor}
         placeholder="Enter text here"

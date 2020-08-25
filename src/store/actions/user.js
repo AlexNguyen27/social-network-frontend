@@ -120,6 +120,7 @@ export const getUserProfile = (userId, setLoading) => async (
                 userId
                 user {
                   id
+                  username
                   imageUrl
                   firstName
                   lastName

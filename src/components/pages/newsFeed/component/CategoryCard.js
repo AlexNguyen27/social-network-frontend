@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     maxWidth: 360,
+    padding: 0,
     backgroundColor: theme.palette.background.paper,
   },
   header: {
@@ -37,17 +38,16 @@ const CatergoryCard = ({ categories, posts, onClickCategory }) => {
       id: "news",
       name: "News Feed",
     };
-
+    postCategories.all = {
+      id: "all",
+      name: "All Posts",
+    };
     Object.keys(posts).map((key) => {
       if (categories[posts[key].categoryId]) {
         postCategories[posts[key].categoryId] =
           categories[posts[key].categoryId];
       }
     });
-    postCategories.all = {
-      id: "all",
-      name: "All Posts",
-    };
   }
 
   const categoryArr =
