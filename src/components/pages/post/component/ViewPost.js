@@ -74,7 +74,13 @@ const ViewPost = ({
     title,
     description,
     categoryId,
-    user: { firstName, lastName, githubUsername, imageUrl: avatar } = {},
+    user: {
+      firstName,
+      lastName,
+      githubUsername,
+      imageUrl: avatar,
+      username,
+    } = {},
     comments,
     reactions,
     updatedAt,
@@ -87,6 +93,7 @@ const ViewPost = ({
     if (selectedPost.user) {
       userInfo = {
         id: selectedPost.user.id,
+        username: selectedPost.user.username,
         imageUrl: selectedPost.user.imageUrl,
         firstName: selectedPost.user.firstName,
         lastName: selectedPost.user.lastName,
@@ -114,6 +121,9 @@ const ViewPost = ({
 
   const popularPosts = getPopularPost(posts, 8);
 
+  const userName =
+    firstName && lastName ? firstName + " " + lastName : username;
+
   return (
     <PageLoader loading={loading}>
       <PageTitle title={title} center editMode="false" />
@@ -129,9 +139,7 @@ const ViewPost = ({
             </Grid>
             <Grid item xs={8}>
               <Grid item>
-                <Typography variant="h6">
-                  {firstName} {lastName}
-                </Typography>
+                <Typography variant="h6">{userName}</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="subtitle2">
@@ -224,7 +232,7 @@ const ViewPost = ({
                     xs={3}
                     onClick={() => history.push(`/view-post/${item.id}`)}
                   >
-                    <Paper style={{ background: "#f9f9f9" }}>
+                    <Paper style={{ background: "#f9f9f9", height: "100%" }}>
                       <Grid container spacing={2} className="p-3">
                         <Grid item xs={3} sm container>
                           <Grid container direction="column">

@@ -140,7 +140,7 @@ const Signup = ({ errors, auth: { isAuthenticated }, history, signUpUser }) => {
                 color="primary"
                 type="submit"
               >
-                Sign up
+                REGISTER
               </Button>
             </div>
           </form>

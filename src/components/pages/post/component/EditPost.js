@@ -127,7 +127,7 @@ const EditPost = ({
 
         <hr className="mb-0" />
         <TextEditor
-          className="blog"
+          className="blog editMode"
           value={description}
           onChange={onChangeEditor}
           placeholder="Enter body blog here"

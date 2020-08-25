@@ -51,8 +51,10 @@ export default function UserCard({ userInfo }) {
   const classes = useStyles();
   const history = useHistory();
 
-  const { firstName, lastName, quote, imageUrl } = userInfo || {};
+  const { firstName, lastName, quote, imageUrl, username } = userInfo || {};
   const userId = userInfo.userId || userInfo.id;
+  const userName =
+  firstName && lastName ? firstName + " " + lastName : username;
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
@@ -65,7 +67,7 @@ export default function UserCard({ userInfo }) {
       <Grid container justify="center" style={{ textAlign: "center" }} className="userCard">
         <CardContent className={classes.content} >
           <Typography component="h5" variant="h5" className={classes.title}>
-            {firstName} {lastName}
+            {userName}
           </Typography>
           <Typography
             variant="subtitle1"
