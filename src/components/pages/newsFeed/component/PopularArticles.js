@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "italic",
     marginLeft: "12px",
     marginTop: "30px",
-    marginBottom: '5px',
+    marginBottom: "5px",
   },
   item: {
     // border: "1px solid #e3e3e3",
@@ -87,7 +87,9 @@ const PopularArticles = ({ posts }) => {
                         </div>
                         <Typography variant="caption" color="textSecondary">
                           <PersonIcon />
-                          {item.user.firstName} {item.user.lastName}
+                          {item.user.firstName || item.user.lastName
+                            ? item.user.firstName + " " + item.user.lastName
+                            : item.user.username}
                         </Typography>
                       </Grid>
                       <Grid item>

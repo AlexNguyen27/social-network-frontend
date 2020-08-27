@@ -33,6 +33,7 @@ export const getPosts = (setLoading) => async (dispatch, getState) => {
                     title
                     description
                     status
+                    view
                     imageUrl
                     createdAt
                     updatedAt
@@ -104,6 +105,7 @@ export const getAllPublicPost = (setLoading) => async (dispatch, getState) => {
                     description
                     status
                     imageUrl
+                    view
                     createdAt
                     updatedAt
                     categoryId
@@ -265,6 +267,7 @@ export const getPostById = (setLoading, id) => async (dispatch, getState) => {
                     title
                     description
                     status
+                    view
                     imageUrl
                     createdAt
                     updatedAt
@@ -421,6 +424,7 @@ export const updatePost = (setLoading, postData) => async (
           title
           status
           description
+          view
           category {
             id
             name

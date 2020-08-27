@@ -74,6 +74,7 @@ const ViewPost = ({
     title,
     description,
     categoryId,
+    view,
     user: {
       id: userId,
       firstName,
@@ -178,6 +179,9 @@ const ViewPost = ({
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={5}>
+                  <span className="like" style={{ color: Colors.green }}>
+                    {view} {view > 1 ? "views" : "view"}
+                  </span>
                   <IconButton
                     style={{ color: isLiked ? Colors.like : "" }}
                     aria-label="add to favorites"
@@ -193,6 +197,7 @@ const ViewPost = ({
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
                     aria-label="Show more comment"
+                    style={{ color: Colors.comment }}
                   >
                     <ChatIcon />
                     <span className="like">{totalComments}</span>
@@ -210,10 +215,11 @@ const ViewPost = ({
                 >
                   <Typography
                     variant="h6"
-                    style={{ color: "#888", margin: "0px 10px 15px 10px" }}
+                    style={{ color: "#888", margin: "0px 10px 10px 0px" }}
                   >
-                    Comments
+                    All Comments
                   </Typography>
+                  {/* <hr className="mt-0"/> */}
                   <CommentsList postId={postId} />
                 </Collapse>
               </Grid>
@@ -240,9 +246,7 @@ const ViewPost = ({
                         xs={3}
                         onClick={() => history.push(`/view-post/${item.id}`)}
                       >
-                        <Paper
-                          style={{ height: "100%" }}
-                        >
+                        <Paper style={{ height: "100%" }}>
                           <Grid container spacing={2} className="p-3">
                             <Grid item xs={3} sm container>
                               <Grid container direction="column">

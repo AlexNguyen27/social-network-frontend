@@ -49,6 +49,7 @@ export const getUsers = (setLoading) => async (dispatch, getState) => {
               posts{
                 id
                 title
+                view
                 reactions {
                   userId
                   postId
@@ -118,6 +119,7 @@ export const getUserProfile = (userId, setLoading) => async (
                 description
                 status
                 userId
+                view
                 user {
                   id
                   username
@@ -153,6 +155,7 @@ export const getUserProfile = (userId, setLoading) => async (
                 userId
                 categoryId
                 title
+                view
                 user {
                   id
                   imageUrl
