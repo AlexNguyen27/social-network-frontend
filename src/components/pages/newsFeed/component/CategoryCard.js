@@ -17,7 +17,12 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
-    marginBottom: 0,
+    marginBottom: '5px',
+  },
+  item: {
+    // border: "1px solid #e3e3e3",
+    boxShadow:
+      "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
   },
 }));
 
@@ -67,7 +72,12 @@ const CatergoryCard = ({ categories, posts, onClickCategory }) => {
         {categoryArr &&
           categoryArr.length &&
           categoryArr.map((item) => (
-            <ListItem button divider onClick={() => onClickCategory(item.id)}>
+            <ListItem
+              className={classes.item}
+              button
+              divider
+              onClick={() => onClickCategory(item.id)}
+            >
               <ListItemText>{item.name}</ListItemText>
             </ListItem>
           ))}

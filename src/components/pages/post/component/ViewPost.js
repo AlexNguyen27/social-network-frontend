@@ -210,7 +210,7 @@ const ViewPost = ({
                 >
                   <Typography
                     variant="h6"
-                    style={{ color: "#888", margin: "10px 10px 0 10px" }}
+                    style={{ color: "#888", margin: "0px 10px 15px 10px" }}
                   >
                     Comments
                   </Typography>
@@ -219,7 +219,7 @@ const ViewPost = ({
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Typography className="mt-4 mb-2" variant="h5">
+              <Typography className="mb-2" variant="h5">
                 More from Dev Troops
               </Typography>
               <Divider />
@@ -241,7 +241,7 @@ const ViewPost = ({
                         onClick={() => history.push(`/view-post/${item.id}`)}
                       >
                         <Paper
-                          style={{ background: "#f9f9f9", height: "100%" }}
+                          style={{ height: "100%" }}
                         >
                           <Grid container spacing={2} className="p-3">
                             <Grid item xs={3} sm container>

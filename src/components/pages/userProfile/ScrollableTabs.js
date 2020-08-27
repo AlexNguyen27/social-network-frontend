@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   containRoot: {
     flexGrow: 1,
+    background: "#fafafa",
   },
   paper: {
     padding: theme.spacing(2),
