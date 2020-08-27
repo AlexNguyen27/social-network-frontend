@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import moment from "moment";
-import PageLoader from "../../../../custom/PageLoader";
 import { makeStyles, formatMs } from "@material-ui/core/styles";
 import TreeView from "@material-ui/lab/TreeView";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import EditIcon from "@material-ui/icons/Edit";
 import TreeItem from "@material-ui/lab/TreeItem";
 import { useHistory } from "react-router-dom";
 import {
@@ -17,9 +15,6 @@ import {
   IconButton,
 } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
-import FolderIcon from "@material-ui/icons/Folder";
-import Delete from "@material-ui/icons/Delete";
-import { Button } from "reactstrap";
 import TextFieldInputWithHeader from "../../../../custom/TextFieldInputWithheader";
 import { GET_ERRORS, BASE_IMAGE_URL } from "../../../../../store/actions/types";
 import {
@@ -27,72 +22,14 @@ import {
   deleteComment,
 } from "../../../../../store/actions/comment";
 import Swal from "sweetalert2";
-import EditReportModal from "../../../report/component/EditReportModal";
 import EditCommentModal from "./EditCommentModal";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-// const data = {
-//   id: "root",
-//   name: "Parent",
-//   children: [
-//     {
-//       id: "1",
-//       name: "Child - 1",
-//     },
-//     {
-//       id: "3",
-//       name: "Child - 3",
-//       children: [
-//         {
-//           id: "4",
-//           name: "Child - 4",
-//         },
-//       ],
-//     },
-//   ],
-// };
+const options = ["Edit", "Delete"];
+const ITEM_HEIGHT = 48;
 
-// const data1 = [
-//   {
-//     id: "1",
-//     name: "Parent",
-//     children: [
-//       {
-//         id: "21",
-//         name: "Child - 1",
-//       },
-//       {
-//         id: "23",
-//         name: "Child - 3",
-//         children: [
-//           {
-//             id: "4",
-//             name: "Child - 4",
-//           },
-//         ],
-//       },
-//     ],
-//   },
-//   {
-//     id: "2",
-//     name: "Parent",
-//     children: [
-//       {
-//         id: "33",
-//         name: "Child - 1",
-//       },
-//       {
-//         id: "22",
-//         name: "Child - 3",
-//         children: [
-//           {
-//             id: "12",
-//             name: "Child - 4",
-//           },
-//         ],
-//       },
-//     ],
-//   },
-// ];
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -109,10 +46,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "5px",
     marginBottom: "10px",
     marginRight: "10px",
+    textDecoration: "underline",
   },
   iconSize: {
     fontSize: "16px !important",
     marginRight: "2px",
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
   },
 }));
 
@@ -128,14 +70,21 @@ const CommentsList = ({
   const dispatch = useDispatch();
   const history = useHistory();
   const [comment, setComment] = useState("");
+  const [replyComment, setReplyComment] = useState("");
   const [onEditModel, setOnEditModal] = useState();
   const [commentData, setCommentData] = useState();
+  const [isReplyId, setIsReplyId] = useState();
 
   const onChange = (e) => {
     setComment(e.target.value);
   };
 
-  const handleOnDelete = (commentId) => {
+  const onChangeReplyComment = (e) => {
+    setReplyComment(e.target.value);
+  };
+
+  const handleOnDelete = () => {
+    setAnchorEl(null);
     Swal.fire({
       title: `Are you sure to delete this ?`,
       text: "You won't be able to revert this!",
@@ -147,14 +96,26 @@ const CommentsList = ({
     }).then((result) => {
       if (result.value) {
         setLoading(true);
-        deleteComment(setLoading, commentId);
+        deleteComment(setLoading, commentData.id);
       }
     });
   };
 
-  const handleOnEditComment = (commentData) => {
+  const handleOnEditComment = () => {
+    setAnchorEl(null);
     setOnEditModal(true);
+  };
+
+  const handleOnReplyComment = (commentData) => {
+    setIsReplyId(commentData.id);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event, commentData) => {
     setCommentData(commentData);
+    setAnchorEl(event.currentTarget);
   };
 
   const renderTree = (nodes) => (
@@ -162,53 +123,123 @@ const CommentsList = ({
       <Grid container spacing={1}>
         <Grid item>
           <Avatar
+            className={classes.small}
             onClick={() => history.push(`/user-profile/${nodes.userId}`)}
-            style={{ cursor: 'pointer'}}
+            style={{ cursor: "pointer" }}
             alt="Remy Sharp"
             src={nodes.user.imageUrl || BASE_IMAGE_URL}
           />
         </Grid>
-        <Grid item>
-          <Typography variant="caption" component="span">
-            {nodes.user.firstName && nodes.user.lastName
-              ? nodes.user.firstName + " " + nodes.user.lastName
-              : nodes.user.username}
+        <Grid item style={{ width: "80%" }}>
+          <Grid container justify="flex-start">
+            <Grid item>
+              <Typography
+                variant="body1"
+                component="span"
+                style={{ fontWeight: "bold", color: "#4d4c7d" }}
+              >
+                {nodes.user.firstName && nodes.user.lastName
+                  ? nodes.user.firstName + " " + nodes.user.lastName
+                  : nodes.user.username}
+              </Typography>
+            </Grid>
+            {nodes.userId === authId && (
+              <Grid item>
+                <div>
+                  <IconButton
+                    aria-label="more"
+                    aria-controls="long-menu"
+                    aria-haspopup="true"
+                    className="p-0"
+                    onClick={(e) => handleClick(e, nodes)}
+                  >
+                    <MoreVertIcon style={{ width: "20px" }} />
+                  </IconButton>
+                  <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={open}
+                    onClose={() => setAnchorEl(null)}
+                    PaperProps={{
+                      style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                        width: "20ch",
+                        padding: "0px",
+                      },
+                    }}
+                  >
+                    <MenuItem
+                      key="Edit"
+                      onClick={() => {
+                        handleOnEditComment(nodes);
+                      }}
+                    >
+                      Edit
+                    </MenuItem>
+                    <MenuItem
+                      key="Delete"
+                      onClick={() => {
+                        handleOnDelete();
+                      }}
+                    >
+                      Delete
+                    </MenuItem>
+                  </Menu>
+                </div>
+              </Grid>
+            )}
+          </Grid>
 
-            {" | "}
-          </Typography>
           <Typography
-            variant="caption"
+            variant="body1"
             component="span"
-            style={{ color: "#888" }}
+            className="pt-2 pb-2"
+            style={{ color: "#393e46" }}
           >
-            {moment(nodes.updatedAt).format("LLLL")}
+            <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.comment}>
+              {Array.isArray(nodes.children)
+                ? nodes.children.map((node) => renderTree(node))
+                : null}
+            </TreeItem>
           </Typography>
-          <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.comment}>
-            {Array.isArray(nodes.children)
-              ? nodes.children.map((node) => renderTree(node))
-              : null}
-          </TreeItem>
-          {nodes.userId === authId ? (
-            <>
+          <Grid container justify="flex-start">
+            <Grid item>
               <IconButton
                 aria-label="detete"
                 className={classes.btnDelete}
-                onClick={() => handleOnDelete(nodes.id)}
+                onClick={() => handleOnReplyComment(nodes)}
               >
-                <Delete className={classes.iconSize} />
-                Delete
+                Reply
               </IconButton>
-              <IconButton
-                aria-label="detete"
-                className={classes.btnDelete}
-                onClick={() => handleOnEditComment(nodes)}
+            </Grid>
+            <Grid item style={{ marginTop: "4px" }}>
+              <Typography variant="caption" style={{ color: "#393e46" }}>
+                <span className="mr-2 mt-2">&spades;</span>
+                {moment(nodes.updatedAt).format("DD/MM/YYYY HH:MM:ss")}
+              </Typography>
+            </Grid>
+          </Grid>
+
+          {isReplyId === nodes.id && (
+            <Grid item xs={12}>
+              <form
+                onSubmit={(e) => onSubmitReplyComment(e)}
+                className={classes.formRoot}
+                autoComplete="off"
               >
-                <EditIcon className={classes.iconSize} />
-                Edit
-              </IconButton>
-            </>
-          ) : (
-            <div className="mb-3"></div>
+                <TextFieldInputWithHeader
+                  id="outlined-multiline-flexible"
+                  name="comment"
+                  label="Enter your reply comment"
+                  fullWidth
+                  variant="outlined"
+                  value={replyComment}
+                  onChange={onChangeReplyComment}
+                  error={errors.replyComment}
+                />
+              </form>
+            </Grid>
           )}
         </Grid>
       </Grid>
@@ -231,13 +262,14 @@ const CommentsList = ({
       const node = comment;
       if (node.parentId) {
         const parent = map[node.parentId];
-        const latestNo = parent.no;
-        if (parent.children) {
-          // node.no = `${latestNo}.${parent.children.length + 1}`;
-          parent.children = [...parent.children, node];
-        } else {
-          // node.no = `${latestNo}.${1}`;
-          parent.children = [node];
+        if (parent) {
+          if (parent && parent.children) {
+            // node.no = `${latestNo}.${parent.children.length + 1}`;
+            parent.children = [...parent.children, node];
+          } else {
+            // node.no = `${latestNo}.${1}`;
+            parent.children = [node];
+          }
         }
       } else {
         // node.no = String.fromCharCode(indexChar + 65);
@@ -269,15 +301,40 @@ const CommentsList = ({
     setComment("");
   };
 
+  const onSubmitReplyComment = (e) => {
+    e.preventDefault();
+
+    let error = {};
+    if (replyComment.trim() === "") {
+      error.replyComment = "Enter your comment!";
+    }
+
+    dispatch({
+      type: GET_ERRORS,
+      errors: error,
+    });
+
+    if (JSON.stringify(error) === "{}") {
+      setLoading(true);
+      addComment(setLoading, replyComment, postId, isReplyId);
+    }
+    setReplyComment("");
+  };
+
   const formatedComment = formatData(comments);
 
+  const idComments = formatedComment.map(
+    (item) => item.children && item.children.length > 0 && item.id
+  );
   return (
     <TreeView
       className={classes.root}
       defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpanded={["root"]}
+      defaultExpanded={[...idComments].filter(Boolean)}
       defaultExpandIcon={<ChevronRightIcon />}
     >
+      {formatedComment.map((item) => renderTree(item))}
+
       <Grid container className="mb-3">
         <Grid item xs={12}>
           <form
@@ -288,7 +345,7 @@ const CommentsList = ({
             <TextFieldInputWithHeader
               id="outlined-multiline-flexible"
               name="comment"
-              label="Your Comment"
+              label="Enter your Comment"
               fullWidth
               variant="outlined"
               value={comment}
@@ -298,7 +355,6 @@ const CommentsList = ({
           </form>
         </Grid>
       </Grid>
-      {formatedComment.map((item) => renderTree(item))}
       <EditCommentModal
         modal={onEditModel}
         setModal={setOnEditModal}

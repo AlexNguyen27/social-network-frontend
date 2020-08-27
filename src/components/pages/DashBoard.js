@@ -162,7 +162,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
   content: {
-    backgroundColor: "white",
+    backgroundColor: "#fafafa",
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -172,9 +172,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -drawerWidth,
   },
   contentShift: {
-    // backgroundColor: "#F2F3F5",
-    backgroundColor: "white",
-    // background: Colors.accent,
+    backgroundColor: "#fafafa",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

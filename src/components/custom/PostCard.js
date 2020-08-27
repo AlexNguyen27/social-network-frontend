@@ -33,7 +33,7 @@ import { BASE_IMAGE_URL } from "../../store/actions/types";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    height: '100%'
+    height: "100%",
   },
   media: {
     height: 0,
@@ -213,6 +213,7 @@ const PostCard = ({
         <Typography
           variant="subtitle1"
           color="colorPrimary"
+          style={{ fontSize: "18px" }}
           component="p"
           className="ml-3"
         >

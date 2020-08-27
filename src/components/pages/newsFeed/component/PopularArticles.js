@@ -39,8 +39,13 @@ const useStyles = makeStyles((theme) => ({
   header: {
     fontStyle: "italic",
     marginLeft: "12px",
-    marginTop: "15px",
-    marginBottom: 0,
+    marginTop: "30px",
+    marginBottom: '5px',
+  },
+  item: {
+    // border: "1px solid #e3e3e3",
+    boxShadow:
+      "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
   },
 }));
 const PopularArticles = ({ posts }) => {
@@ -64,6 +69,7 @@ const PopularArticles = ({ posts }) => {
             <>
               <ListItem
                 button
+                className={classes.item}
                 onClick={() => history.push(`/view-post/${item.id}`)}
               >
                 <Grid container spacing={2}>

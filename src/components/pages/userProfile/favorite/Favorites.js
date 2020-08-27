@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   containRoot: {
     flexGrow: 1,
-    padding: "24px 0px",
+    background: "#fafafa",
   },
   paper: {
     padding: theme.spacing(2),

@@ -89,3 +89,7 @@ button:focus {
 .userCard .MuiPaper-rounded {
   height: 100%;
 }
+
+.MuiCollapse-container .MuiTreeItem-group .MuiCollapse-entered {
+  width: 100% !important;
+}
