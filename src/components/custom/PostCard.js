@@ -226,39 +226,54 @@ const PostCard = ({
           />
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton
-            style={{ color: isLiked || liked ? Colors.like : "" }}
-            aria-label="add to favorites"
-            onClick={() => handleOnLike()}
-          >
-            <FavoriteIcon />
-            <span className="like">{liked ? "" : totalLike}</span>
-          </IconButton>
-          <IconButton aria-label="comment">
-            <ChatIcon />
-            <span className="like">{totalComments}</span>
-          </IconButton>
+          <span className="like" style={{ color: Colors.green }}>
+            {post.view} {post.view > 1 ? "views" : "view"}
+          </span>
+          <Tooltip title="Like">
+            <IconButton
+              style={{ color: isLiked || liked ? Colors.like : "" }}
+              aria-label="add to favorites"
+              onClick={() => handleOnLike()}
+            >
+              <FavoriteIcon />
+              <span className="like">{liked ? "" : totalLike}</span>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Comment">
+            <IconButton aria-label="comment" style={{ color: Colors.comment }}>
+              <ChatIcon />
+              <span className="like">{totalComments}</span>
+            </IconButton>
+          </Tooltip>
+
           {isCurrentAuth && (
             <>
-              <IconButton
-                aria-label="edit"
-                onClick={
-                  () => post && history.push(`/edit-post/${id}`)
-                  // window.open(`/edit-post/${id}`, "_blank")
-                }
-              >
-                <EditIcon />
-              </IconButton>
-              {window.location.pathname.includes("user-profile") && (
+              <Tooltip title="Edit">
                 <IconButton
-                  aria-label="detete"
-                  onClick={() => handleOnDelete(id)}
+                  aria-label="edit"
+                  style={{ color: Colors.edit }}
+                  onClick={
+                    () => post && history.push(`/edit-post/${id}`)
+                    // window.open(`/edit-post/${id}`, "_blank")
+                  }
                 >
-                  <Delete />
+                  <EditIcon />
                 </IconButton>
+              </Tooltip>
+
+              {window.location.pathname.includes("user-profile") && (
+                <Tooltip title="Delete">
+                  <IconButton
+                    aria-label="detete"
+                    onClick={() => handleOnDelete(id)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
               )}
             </>
           )}
+
           <IconButton
             className={classes.expand}
             style={{ fontSize: "16px" }}

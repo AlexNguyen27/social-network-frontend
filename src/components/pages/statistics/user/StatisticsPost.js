@@ -14,14 +14,21 @@ const StatisticsPost = ({ users, userId, role, userProfile }) => {
       (post) => post.reactions.length
     );
 
-  let postViews = [1000, 2000, 500, 2000, 300, 2000, 1000, 200, 2202, 23230, 2323];
+  let postViews =
+    userProfile &&
+    (role === "user" ? userProfile.posts : users[userId].posts).map(
+      (post) => post.view
+    );
 
   return (
     <>
       <h4 className="mt-4">Statistics Likes</h4>
       <MultipleSummary name={postName} like={postReactionLike} />
       <h4 className="mt-4">Statistics Views</h4>
-      <MultipleSummary name={postName} view={postViews.slice(0, postName.length)} />
+      <MultipleSummary
+        name={postName}
+        view={postViews.slice(0, postName.length)}
+      />
     </>
   );
 };
