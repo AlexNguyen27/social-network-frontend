@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: "20px",
     backgroundColor: Colors.light_purple,
+    height: '100%'
   },
   details: {
     display: "flex",
