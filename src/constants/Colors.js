@@ -17,4 +17,5 @@ export default {
   like: "#e84a5f",
   edit: "#dd2c00",
   comment: "#776d8a",
+  background: '#fafafa'
 };

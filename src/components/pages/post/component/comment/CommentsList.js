@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formRoot: {
     "& .MuiTextField-root": {
-      margin: theme.spacing(1),
+      // margin: theme.spacing(1),
     },
   },
   btnDelete: {

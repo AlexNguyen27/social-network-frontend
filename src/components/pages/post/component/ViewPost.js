@@ -174,7 +174,7 @@ const ViewPost = ({
             </Grid>
             <Grid item xs={12}>
               <hr className="mb-0" />
-              <ViewText textBody={description} className="viewMode" />
+              <ViewText textBody={description} className="viewMode viewPost" />
             </Grid>
             <Grid item xs={12}>
               <Grid container>
@@ -210,12 +210,12 @@ const ViewPost = ({
                 <Collapse
                   in={true}
                   timeout="auto"
-                  style={{ width: "100%", marginLeft: "8px" }}
+                  style={{ width: "100%" }}
                   unmountOnExit
                 >
                   <Typography
                     variant="h6"
-                    style={{ color: "#888", margin: "0px 10px 10px 0px" }}
+                    style={{ color: "#888", margin: "5px 10px 10px 0px" }}
                   >
                     All Comments
                   </Typography>
@@ -225,7 +225,7 @@ const ViewPost = ({
               </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Typography className="mb-2" variant="h5">
+              <Typography className="mb-2 mt-1" variant="h5">
                 More from Dev Troops
               </Typography>
               <Divider />
