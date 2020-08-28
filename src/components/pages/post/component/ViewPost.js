@@ -210,7 +210,7 @@ const ViewPost = ({
                 <Collapse
                   in={true}
                   timeout="auto"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", marginLeft: "8px" }}
                   unmountOnExit
                 >
                   <Typography

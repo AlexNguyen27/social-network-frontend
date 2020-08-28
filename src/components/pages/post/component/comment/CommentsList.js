@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: "100%",
+ 
   },
   formRoot: {
     "& .MuiTextField-root": {
@@ -120,7 +121,7 @@ const CommentsList = ({
 
   const renderTree = (nodes) => (
     <>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} >
         <Grid item>
           <Avatar
             className={classes.small}
