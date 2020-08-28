@@ -127,7 +127,6 @@ const NewsFeed = ({
     }
   }, [location]);
 
-  console.log("--------------------", postsArr);
   return (
     <div className={classes.root}>
       <PageLoader loading={loading}>
