@@ -52,11 +52,11 @@ const PopularArticles = ({ posts }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const popularPosts = getPopularPost(posts, 9);
+  const popularPosts = getPopularPost(posts, 7);
   return (
     <>
       <Typography variant="h5" gutterBottom className={classes.header}>
-        Popular Articles (9)
+        Popular Articles
       </Typography>
 
       <List

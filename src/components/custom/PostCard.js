@@ -219,9 +219,9 @@ const PostCard = ({
         >
           {title}
         </Typography>
-        <CardContent>
+        <CardContent className="p-0">
           <ViewText
-            textBody={truncateMultilineString(description, 200)}
+            textBody={truncateMultilineString(description, 350)}
             className="viewMode"
           />
         </CardContent>

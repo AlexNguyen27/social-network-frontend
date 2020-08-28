@@ -21,6 +21,7 @@ import Connection from "./connection/Connection";
 import Favorites from "./favorite/Favorites";
 import Albums from "./albums/Albums";
 import { albums } from "../../../mockup/albums";
+import Colors from "../../../constants/Colors";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
   containRoot: {
     flexGrow: 1,
-    background: "#fafafa",
+    background: Colors.background,
   },
   paper: {
     padding: theme.spacing(2),
@@ -208,6 +209,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
             className="text-center"
             component="p"
             color="textSecondary"
+            style={{ background: Colors.background }}
           >
             NO CONNECTIONS
           </Typography>
@@ -230,6 +232,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
             variant="h6"
             className="text-center"
             component="p"
+            style={{ background: Colors.background }}
             color="textSecondary"
           >
             NO FAVORITE POSTS
