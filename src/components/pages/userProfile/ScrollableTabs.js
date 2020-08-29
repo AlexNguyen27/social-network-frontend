@@ -101,21 +101,6 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
         })
       : [];
 
-  // const favoritePosts =
-  //   user_profile && user_profile.userFavoritePosts.length > 0
-  //     ? user_profile.userFavoritePosts.map((item) => ({
-  //         title: item.title,
-  //         description: item.description,
-  //         status: item.status,
-  //         createdAt: item.createdAt,
-  //         comments: (posts[item.id] && posts[item.id].comments) || [],
-  //         reactions: (posts[item.id] && posts[item.id].reactions) || [],
-  //         id: item.id,
-  //       }))
-  //     : [];
-  // const favoritePosts = [];
-  // console.log(favoritePosts);
-
   const isCurrentAuth = user_profile && authUserId === user_profile.id;
 
   return (
@@ -179,7 +164,7 @@ const ScrollableTabs = ({ users, user_profile, authUserId, role }) => {
                       <PostCard
                         post={item}
                         authUserId={authUserId}
-                        isCurrentAuth={isCurrentAuth || role === "admin"}
+                        isCurrentAuth={isCurrentAuth}
                       />
                     </Grid>
                   </>

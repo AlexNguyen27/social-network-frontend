@@ -103,9 +103,9 @@ const AboutCard = ({
           </Typography>
           <Typography
             variant="body1"
-            className={'font-italic font-weight-bold'}
+            className={'font-weight-bold'}
           >
-            Followed by {totalFollowers} {totalFollowers > 1 ? "users" : "user"}
+            ({totalFollowers} {totalFollowers > 1 ? "Followers" : "Follower"})
           </Typography>
           {userProfile.id !== authId && (
             <Button

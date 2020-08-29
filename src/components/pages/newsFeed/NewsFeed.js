@@ -150,7 +150,7 @@ const NewsFeed = ({
                           post={item}
                           authUserId={authUserId}
                           isCurrentAuth={
-                            item.userId === authUserId || role === "admin"
+                            item.userId === authUserId
                           }
                         />
                       </Grid>
