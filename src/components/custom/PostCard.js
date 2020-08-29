@@ -285,7 +285,7 @@ const PostCard = ({
             onClick={() => post && history.push(`/view-post/${id}`)}
             aria-label="show more"
           >
-            SEE MORE
+            MORE
           </IconButton>
         </CardActions>
       </Card>

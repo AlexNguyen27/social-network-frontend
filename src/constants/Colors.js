@@ -6,7 +6,7 @@ export default {
   star: "#ffd31d",
   orange: "#ec823a",
   red: "red",
-  view: "#79d70f",
+  view: "#0b8457",
   green: "#06623b",
   statusBar: "#bb596b",
   light_blue: "#f8b24f",
@@ -17,5 +17,7 @@ export default {
   like: "#e84a5f",
   edit: "#dd2c00",
   comment: "#776d8a",
-  background: '#fafafa'
+  background: '#fafafa',
+  statistic: '#a6dcef',
+  report: '#421b9b'
 };

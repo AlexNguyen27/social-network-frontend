@@ -33,6 +33,7 @@ import Visibility from "@material-ui/icons/Visibility";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
+import Colors from "../../../constants/Colors";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -147,7 +148,15 @@ const UsersList = ({
           }}
           actions={[
             {
-              icon: () => <Edit />,
+              icon: () => <Visibility style={{ color: Colors.view }} />,
+              tooltip: "View user profile",
+              onClick: (event, rowData) => {
+                history.push(`user-profile/${rowData.id}`);
+                // Do save operation
+              },
+            },
+            {
+              icon: () => <Edit style={{ color: Colors.orange }}/>,
               tooltip: "Edit User",
               onClick: (event, rowData) => {
                 // console.log("edit---", rowData);
@@ -160,7 +169,7 @@ const UsersList = ({
               },
             },
             {
-              icon: () => <Delete />,
+              icon: () => <Delete style={{ color: Colors.red }}/>,
               tooltip: "Delete User",
               onClick: (event, rowData) => {
                 Swal.fire({
@@ -179,16 +188,8 @@ const UsersList = ({
                 });
               },
             },
-            {
-              icon: () => <Visibility />,
-              tooltip: "View user profile",
-              onClick: (event, rowData) => {
-                history.push(`user-profile/${rowData.id}`);
-                // Do save operation
-              },
-            },
             rowData => ({
-              icon: (props) => <EqualizerTwoToneIcon />,
+              icon: (props) => <EqualizerTwoToneIcon  />,
               tooltip: "Statictis",
               onClick: (event, rowData) => {
                 history.push(`statistics/${rowData.id}`);

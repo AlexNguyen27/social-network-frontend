@@ -32,6 +32,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 
 import PageLoader from "../../custom/PageLoader";
 import Swal from "sweetalert2";
+import Colors from "../../../constants/Colors";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -41,7 +42,9 @@ const tableIcons = {
   DetailPanel: forwardRef((props, ref) => (
     <ChevronRight {...props} ref={ref} />
   )),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Edit: forwardRef((props, ref) => (
+    <Edit {...props} ref={ref} style={{ color: Colors.orange }} />
+  )),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -70,8 +73,11 @@ const CategoriesList = ({
       {
         title: "Name",
         field: "name",
-        
-        validate: rowData => rowData.name === '' ? { isValid: false, helperText: 'Name cannot be empty' } : true,
+
+        validate: (rowData) =>
+          rowData.name === ""
+            ? { isValid: false, helperText: "Name cannot be empty" }
+            : true,
       },
       {
         title: "Status",
@@ -121,7 +127,7 @@ const CategoriesList = ({
           }}
           actions={[
             {
-              icon: () => <Delete />,
+              icon: () => <Delete style={{ color: Colors.red }} />,
               tooltip: "Delete Category",
               onClick: (event, rowData) => {
                 Swal.fire({
@@ -153,7 +159,7 @@ const CategoriesList = ({
                 }, 1000);
               }),
             onRowUpdate: (newData, oldData) =>
-              new Promise((resolve,reject) => {
+              new Promise((resolve, reject) => {
                 setTimeout(() => {
                   resolve();
                   // edit categories

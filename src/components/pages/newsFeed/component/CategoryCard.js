@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   header: {
-    fontStyle: "italic",
     marginLeft: "12px",
     marginBottom: '5px',
   },

@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "100%",
   },
   header: {
-    fontStyle: "italic",
     marginLeft: "12px",
     marginTop: "30px",
     marginBottom: "5px",
