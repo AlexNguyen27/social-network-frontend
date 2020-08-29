@@ -7,7 +7,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { green, pink } from "@material-ui/core/colors";
+import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 import Colors from "../../../constants/Colors";
 import { followToUser } from "../../../store/actions/follow";
 import { BASE_IMAGE_URL } from "../../../store/actions/types";
@@ -79,7 +79,7 @@ const AboutCard = ({
   };
 
   const userName =
-  firstName && lastName ? firstName + " " + lastName : username; 
+    firstName && lastName ? firstName + " " + lastName : username;
   return (
     <Card className={classes.root}>
       <Grid container justify="center">
@@ -101,11 +101,11 @@ const AboutCard = ({
           >
             {quote}
           </Typography>
-          <Typography
-            variant="body1"
-            className={'font-weight-bold'}
-          >
-            ({totalFollowers} {totalFollowers > 1 ? "Followers" : "Follower"})
+          <Typography variant="body1" className="font-weight-bold">
+            <PeopleAltIcon />{" "}
+            <span style={{ paddingTop: "14px" }}>
+              {totalFollowers} {totalFollowers > 1 ? "Followers" : "Follower"}
+            </span>
           </Typography>
           {userProfile.id !== authId && (
             <Button

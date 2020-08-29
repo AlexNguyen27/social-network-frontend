@@ -30,6 +30,7 @@ import Swal from "sweetalert2";
 import { getPosts, deletePost } from "../../../store/actions/post";
 import { Button } from "@material-ui/core";
 import { getCategories } from "../../../store/actions/category";
+import Colors from "../../../constants/Colors";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -112,7 +113,7 @@ const PostsList = ({
       createdAt: getDateTime(post.createdAt),
       updatedAt: getDateTime(post.updatedAt),
       categoryName: post.category ? post.category.name : "",
-      username: post.user ? post.user.username : '',
+      username: post.user ? post.user.username : "",
       totalLike: post.reactions ? post.reactions.length : 0,
     };
   });
@@ -136,7 +137,15 @@ const PostsList = ({
           }}
           actions={[
             {
-              icon: () => <Edit />,
+              icon: () => <Visibility style={{ color: Colors.view }} />,
+              tooltip: "View Post",
+              onClick: (event, rowData) => {
+                // window.open(`view-post/${rowData.id}`, "_blank");
+                history.push(`/view-post/${rowData.id}`);
+              },
+            },
+            {
+              icon: () => <Edit style={{ color: Colors.orange }} />,
               tooltip: "Edit Post",
               onClick: (event, rowData) => {
                 // window.open(`edit-post/${rowData.id}`, "_blank");
@@ -144,7 +153,7 @@ const PostsList = ({
               },
             },
             {
-              icon: () => <Delete />,
+              icon: () => <Delete style={{ color: Colors.red }} />,
               tooltip: "Delete Post",
               onClick: (event, rowData) => {
                 Swal.fire({
@@ -161,14 +170,6 @@ const PostsList = ({
                     deletePost(setLoading, rowData.id);
                   }
                 });
-              },
-            },
-            {
-              icon: () => <Visibility />,
-              tooltip: "View Post",
-              onClick: (event, rowData) => {
-                // window.open(`view-post/${rowData.id}`, "_blank");
-                history.push(`/view-post/${rowData.id}`);
               },
             },
             {

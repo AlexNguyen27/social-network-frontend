@@ -31,6 +31,7 @@ import Swal from "sweetalert2";
 import { getReports, deleteReport } from "../../../store/actions/report";
 import EditReportModal from "./component/EditReportModal";
 import ViewReport from "./component/ViewReport";
+import Colors from "../../../constants/Colors";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -144,14 +145,21 @@ const ReportsList = ({ getReports, deleteReport, reports, users }) => {
           }}
           actions={[
             {
-              icon: () => <Edit />,
+              icon: () => <Visibility style={{ color: Colors.view }}/>,
+              tooltip: "View Report",
+              onClick: (event, rowData) => {
+                onViewReport(rowData);
+              },
+            },
+            {
+              icon: () => <Edit style={{ color: Colors.orange }}/>,
               tooltip: "Edit Reported Post",
               onClick: (event, rowData) => {
                 onEditReport(rowData);
               },
             },
             {
-              icon: () => <Delete />,
+              icon: () => <Delete style={{ color: Colors.red }}/>,
               tooltip: "Delete Report",
               onClick: (event, rowData) => {
                 Swal.fire({
@@ -172,14 +180,7 @@ const ReportsList = ({ getReports, deleteReport, reports, users }) => {
               },
             },
             {
-              icon: () => <Visibility />,
-              tooltip: "View Report",
-              onClick: (event, rowData) => {
-                onViewReport(rowData);
-              },
-            },
-            {
-              icon: () => <ChromeReaderModeIcon />,
+              icon: () => <ChromeReaderModeIcon style={{ color: Colors.comment }}/>,
               tooltip: "View reported post",
               onClick: (event, rowData) => {
                 history.push(`view-post/${rowData.postId}`);

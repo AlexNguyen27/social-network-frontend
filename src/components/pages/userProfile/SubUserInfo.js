@@ -18,6 +18,7 @@ import CallIcon from "@material-ui/icons/Call";
 import HomeIcon from "@material-ui/icons/Home";
 import { Fragment } from "react";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import { BASE_IMAGE_URL } from "../../../store/actions/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -163,9 +164,7 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
           <Fragment key={item.userId}>
             <Grid container>
               <Grid item xs={2}>
-                <Avatar className={classes.avatar}>
-                  <ImageIcon />
-                </Avatar>
+                <Avatar className={classes.avatar} src={item.imageUrl || BASE_IMAGE_URL}/>
               </Grid>
               <Grid item xs={10}>
                 <Typography>
