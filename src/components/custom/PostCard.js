@@ -239,12 +239,17 @@ const PostCard = ({
               <span className="like">{liked ? "" : totalLike}</span>
             </IconButton>
           </Tooltip>
-          <Tooltip title="Comment">
-            <IconButton aria-label="comment" style={{ color: Colors.comment }}>
-              <ChatIcon />
-              <span className="like">{totalComments}</span>
-            </IconButton>
-          </Tooltip>
+          {!liked && (
+            <Tooltip title="Comment">
+              <IconButton
+                aria-label="comment"
+                style={{ color: Colors.comment }}
+              >
+                <ChatIcon />
+                <span className="like">{totalComments}</span>
+              </IconButton>
+            </Tooltip>
+          )}
 
           {isCurrentAuth && (
             <>

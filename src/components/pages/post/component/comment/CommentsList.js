@@ -223,7 +223,7 @@ const CommentsList = ({
           </Grid>
 
           {isReplyId === nodes.id && (
-            <Grid item xs={12}>
+            <Grid item xs={12} className="mb-3">
               <form
                 onSubmit={(e) => onSubmitReplyComment(e)}
                 className={classes.formRoot}
