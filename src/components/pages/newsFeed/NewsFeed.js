@@ -56,7 +56,9 @@ const NewsFeed = ({
       getCategories(setLoading).then(() => {
         setLoading(true);
         getUsers(setLoading);
-        getReactionTypes(setLoading);
+        getReactionTypes(setLoading).then(() => {
+          onClickCategory("news");
+        });
       });
     });
   }, []);
