@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     marginLeft: "12px",
-    marginBottom: '5px',
+    marginBottom: "5px",
   },
   item: {
     // border: "1px solid #e3e3e3",
@@ -32,7 +32,12 @@ const data = [
   { name: "Funny" },
   { name: "Photography" },
 ];
-const CatergoryCard = ({ categories, posts, onClickCategory }) => {
+const CatergoryCard = ({
+  categories,
+  posts,
+  onClickCategory,
+  selectedCategoryId,
+}) => {
   const classes = useStyles();
 
   let postCategories = {};
@@ -73,11 +78,22 @@ const CatergoryCard = ({ categories, posts, onClickCategory }) => {
           categoryArr.map((item) => (
             <ListItem
               className={classes.item}
+              style={{
+                background: item.id === selectedCategoryId ? "#f4eeff" : "",
+              }}
               button
               divider
               onClick={() => onClickCategory(item.id)}
             >
-              <ListItemText>{item.name}</ListItemText>
+              <ListItemText>
+                <span
+                  style={{
+                    fontWeight: item.id === selectedCategoryId ? "bold" : "",
+                  }}
+                >
+                  {item.name}
+                </span>
+              </ListItemText>
             </ListItem>
           ))}
       </List>

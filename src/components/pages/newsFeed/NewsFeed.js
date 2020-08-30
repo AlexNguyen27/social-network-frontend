@@ -46,6 +46,7 @@ const NewsFeed = ({
   const [noti, setNoti] = useState(
     "NO POSTS, ADD SOME FRIENDS OR YOUR OWN POST :D"
   );
+  const [selectedCategoryId, setSelectedCategoryId] = useState("news");
 
   const [loading, setLoading] = useState(true);
 
@@ -68,6 +69,7 @@ const NewsFeed = ({
     if (!authProfile) {
       return;
     }
+    setSelectedCategoryId(categoryId);
     if (categoryId === "all") {
       setPostsArr(posts && Object.keys(posts).map((key) => posts[key]));
       return;
@@ -140,7 +142,10 @@ const NewsFeed = ({
                 className={classes.containRoot}
               >
                 <Grid item xs={4}>
-                  <SubNewsFeed onClickCategory={onClickCategory} />
+                  <SubNewsFeed
+                    onClickCategory={onClickCategory}
+                    selectedCategoryId={selectedCategoryId}
+                  />
                 </Grid>
                 <Grid item xs={8}>
                   {postsArr && postsArr.length > 0 ? (
@@ -149,9 +154,7 @@ const NewsFeed = ({
                         <PostCard
                           post={item}
                           authUserId={authUserId}
-                          isCurrentAuth={
-                            item.userId === authUserId
-                          }
+                          isCurrentAuth={item.userId === authUserId}
                         />
                       </Grid>
                     ))

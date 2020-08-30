@@ -182,24 +182,29 @@ const PostCard = ({
                   </IconButton>
                 </Tooltip>
               )}
-              <IconButton
-                aria-controls="simple-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={() => handleOnReportPost()}>
-                  Report this post
-                </MenuItem>
-              </Menu>
+              {!isCurrentAuth && (
+                <>
+                  <IconButton
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={() => handleOnReportPost()}>
+                      Report this post
+                    </MenuItem>
+                  </Menu>
+                </>
+              )}
             </>
           }
           title={

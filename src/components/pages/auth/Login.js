@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Redirect, withRouter, matchPath } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import { Button, Container } from "@material-ui/core";
@@ -11,6 +11,7 @@ import Landing from "../../layout/Landing";
 
 // ACTION
 import { loginUser } from "../../../store/actions/auth";
+import { GET_ERRORS } from "../../../store/actions/types";
 const Login = ({
   errors,
   history,
@@ -18,6 +19,7 @@ const Login = ({
   auth: { isAuthenticated, isAdmin },
   match,
 }) => {
+  const dispatch = useDispatch();
   // FORM DATA STATE
   const [formData, setFormData] = useState({
     username: "",
@@ -29,9 +31,29 @@ const Login = ({
   // Click button Login
   const onSubmit = (e) => {
     e.preventDefault();
+    const error = {};
 
-    const { username, password } = formData;
-    loginUser({ username, password });
+    Object.keys(formData).map((key) => {
+      // console.log("-------------------", formData);
+      // console.log(key);
+      if (!formData[key] || (formData[key] && formData[key].trim() === "")) {
+        error[key] = "This field is required";
+      }
+
+      // if (!error[key] && key === "email" && !validateEmail(formData[key])) {
+      //   error[key] = "Email is invalid";
+      // }
+    });
+
+    dispatch({
+      type: GET_ERRORS,
+      errors: error,
+    });
+
+    if (JSON.stringify(error) === "{}") {
+      const { username, password } = formData;
+      loginUser({ username, password });
+    }
   };
 
   // Save on change input value
@@ -46,7 +68,7 @@ const Login = ({
     if (isAdmin) {
       return <Redirect to="/users-list" />;
     }
-    if (match.path === '/news-feed') {
+    if (match.path === "/news-feed") {
       return <Redirect to="/news-feed" />;
     }
     return <Redirect to="/news-feed" />;
@@ -66,7 +88,7 @@ const Login = ({
               fullWidth
               value={username}
               onChange={onChange}
-              error={errors.message}
+              error={errors.username || errors.message}
               placeholder="Enter Username"
             />
 
@@ -76,7 +98,7 @@ const Login = ({
               placeholder="Enter Password"
               type="password"
               value={password}
-              error={errors.message}
+              error={errors.password || errors.message}
               className="mt-0"
               fullWidth
               onChange={onChange}
