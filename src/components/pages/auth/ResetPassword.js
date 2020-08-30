@@ -12,7 +12,7 @@ import Landing from "../../layout/Landing";
 // ACTION
 import { loginUser } from "../../../store/actions/auth";
 import { GET_ERRORS } from "../../../store/actions/types";
-const Login = ({
+const ResetPassword = ({
   errors,
   history,
   loginUser,
@@ -22,11 +22,15 @@ const Login = ({
   const dispatch = useDispatch();
   // FORM DATA STATE
   const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+    email: "",
   });
 
-  const { username, password } = formData;
+  const { email } = formData;
+
+  const validateEmail = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   // Click button Login
   const onSubmit = (e) => {
@@ -34,16 +38,14 @@ const Login = ({
     const error = {};
 
     Object.keys(formData).map((key) => {
-      // console.log("-------------------", formData);
-      // console.log(key);
       if (!formData[key] || (formData[key] && formData[key].trim() === "")) {
         error[key] = "This field is required";
       }
-
-      // if (!error[key] && key === "email" && !validateEmail(formData[key])) {
-      //   error[key] = "Email is invalid";
-      // }
     });
+
+    if (JSON.stringify(error) === "{}" && !validateEmail(email)) {
+      error.email = "Email is invalid!";
+    }
 
     dispatch({
       type: GET_ERRORS,
@@ -51,8 +53,9 @@ const Login = ({
     });
 
     if (JSON.stringify(error) === "{}") {
-      const { username, password } = formData;
-      loginUser({ username, password });
+      const { email } = formData;
+      console.log(email);
+      //   resetPassword({ email });
     }
   };
 
@@ -64,41 +67,20 @@ const Login = ({
     });
   };
 
-  if (isAuthenticated) {
-    if (isAdmin) {
-      return <Redirect to="/users-list" />;
-    }
-    if (match.path === "/news-feed") {
-      return <Redirect to="/news-feed" />;
-    }
-    return <Redirect to="/news-feed" />;
-  }
-
   return (
     <Fragment>
       <Landing />
       <Grid container justify="center">
         <Grid item xs={12} sm={4}>
           <form onSubmit={(e) => onSubmit(e)}>
-            <PageTitle title="Login" center="true" />
+            <PageTitle title="Forgot password" center="true" />
             <TextFieldInputWithHeader
-              header="Username"
-              name="username"
-              className="mt-0"
-              fullWidth
-              value={username}
-              onChange={onChange}
-              error={errors.username || errors.message}
-              placeholder="Enter Username"
-            />
-
-            <TextFieldInputWithHeader
-              header="Password"
-              name="password"
-              placeholder="Enter Password"
-              type="password"
-              value={password}
-              error={errors.password || errors.message}
+              header="Email address"
+              name="email"
+              placeholder="Enter Your email address"
+              type="email"
+              value={email}
+              error={errors.email}
               className="mt-0"
               fullWidth
               onChange={onChange}
@@ -111,7 +93,7 @@ const Login = ({
                   color="primary"
                   type="submit"
                 >
-                  Login
+                  Send
                 </Button>
               </Grid>
             </Grid>
@@ -120,9 +102,9 @@ const Login = ({
             <p
               style={{ color: "blue", cursor: "pointer" }}
               className="mt-3 text-decoration-underline"
-              onClick={() => history.push('reset-password')}
+              onClick={() => history.push("login")}
             >
-              Forgot password?
+              Don't need to reset password? Login here.
             </p>
           </div>
         </Grid>
@@ -135,4 +117,6 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
   auth: state.auth,
 });
-export default connect(mapStateToProps, { loginUser })(withRouter(Login));
+export default connect(mapStateToProps, { loginUser })(
+  withRouter(ResetPassword)
+);

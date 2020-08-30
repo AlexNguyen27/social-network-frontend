@@ -10,14 +10,16 @@ import Signup from "../pages/auth/Signup";
 // import Courses from '../pages/courses/Courses';
 import DashBoard from "../pages/DashBoard";
 import ProtectedRoute from "../custom/ProtectedRoute";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 const RouterList = (props) => {
   return (
-    <Container >
+    <Container>
       <Switch>
         <Route exact path="/" component={Login} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
+        <Route exact path="/reset-password" component={ResetPassword} />
         {/* Admin */}
         <ProtectedRoute exact path="/edit-user/:userId" component={DashBoard} />
         <ProtectedRoute

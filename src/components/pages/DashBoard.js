@@ -207,6 +207,8 @@ const DashBoard = ({
     //   logoutUser();
     // }
   }
+  const [drawerId, setDrawerId] = useState(isAdmin ? "usersList" : "newsFeed");
+
   const classes = useStyles();
   const theme = useTheme();
 
@@ -227,7 +229,6 @@ const DashBoard = ({
   };
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [drawerId, setDrawerId] = useState("allCourses");
   const [modalChangePassword, setModalChangePassword] = useState(false);
 
   const menuId = "primary-search-account-menu";
@@ -648,6 +649,7 @@ const DashBoard = ({
           </IconButton> */}
         </div>
         <Divider />
+        {console.log(drawerId)}
         <List>
           {(isAdmin ? navList3 : navList1).map((item) => (
             <ListItem
@@ -658,7 +660,13 @@ const DashBoard = ({
               onClick={() => setDrawerId(item.key)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemText>
+                <span
+                  style={{ fontWeight: drawerId === item.key ? "bold" : "" }}
+                >
+                  {item.title}
+                </span>
+              </ListItemText>
             </ListItem>
           ))}
         </List>
