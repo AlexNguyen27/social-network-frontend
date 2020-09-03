@@ -172,11 +172,11 @@ const SubUserInfo = ({ userInfo, users, connections }) => {
                 </Typography>
                 <Typography variant="caption">
                   <a
-                    href={`https://github.com/${githubUsername}`}
+                    href={`https://github.com/${item.githubUsername}`}
                     target="_blank"
                     className="aSubText"
                   >
-                    {githubUsername}
+                    {item.githubUsername}
                   </a>
                 </Typography>
               </Grid>
